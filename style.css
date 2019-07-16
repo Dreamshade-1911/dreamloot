@@ -16,7 +16,7 @@ body {
 
 .infopanel {
     background-color: #242424;
-    border: 2px solid #2c2c2c;
+    border: 2px solid #333333;
     border-radius: 10px;
     padding: 2px 2px 8px;
 }
@@ -32,7 +32,7 @@ body {
     padding: 5px 0px;
 }
 
-.infopanel button {
+.normal-btn {
     color: #ccd9df;
     background-color: #29414b;
     border: 1px solid #34515c;
@@ -42,10 +42,70 @@ body {
     transition-duration: 0.2s;
 }
 
-.infopanel button:hover {
+.normal-btn:hover {
+    color: #ccd9df;
     background-color: #3c6469;
     border-color: #51939e;
 }
+
+
+/* Modal panels */
+
+.modalpanel {
+    color: #ccd9df;
+    background-color: #242424;
+    border: 2px solid #333333;
+    border-radius: 10px;
+}
+
+.modalpanel-header {
+    background-color: #263841;
+    color: inherit;
+    border-style: none;
+    border-radius: inherit;
+    border-radius: 6px;
+    padding: 6px;
+}
+
+.modalpanel-header h4 {
+    margin: auto;
+}
+
+.modal-btn {
+    color: #ccd9df;
+    background-color: #29414b;
+    border: 1px solid #34515c;
+    border-radius: 6px;
+    padding: 8px 6px;
+    margin: 4px 2px;
+    font-size: 16;
+    min-width: 80px;
+    transition-duration: 0.2s;
+}
+
+.modal-btn:hover {
+    color: #ccd9df;
+    background-color: #3c6469;
+    border-color: #51939e;
+}
+
+.modal-btn-close {
+    background-color: #b83535;
+    color: #ffc5c5;
+    border: 1px solid #e45656;
+    border-radius: 8px;
+    padding: 0px 12px 2px;
+    font-size: 30px;
+    transition-duration: 0.2s;
+}
+
+.modal-btn-close:hover {
+    background-color: #ee3f3f;
+    border: 1px solid #ff6b6b;
+}
+
+
+/* Misc */
 
 small {
     color: #777777;
