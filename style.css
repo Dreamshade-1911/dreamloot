@@ -1,0 +1,52 @@
+html {
+    font-family: sans-serif;
+    color: #cecece;
+}
+
+body {
+    background-color: #1a1a1a;
+}
+
+.title {
+    color: #cecece;
+    text-align: center;
+    font-weight: 600;
+    margin: 20px;
+}
+
+.infopanel {
+    background-color: #242424;
+    border: 2px solid #2c2c2c;
+    border-radius: 10px;
+    padding: 2px 2px 8px;
+}
+
+.infopanel h1 {
+    background-color: #263841;
+    color: #ccd9df;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0px 0px 15px;
+    border-radius: 6px;
+    padding: 5px 0px;
+}
+
+.infopanel button {
+    color: #ccd9df;
+    background-color: #29414b;
+    border: 1px solid #34515c;
+    border-radius: 6px;
+    padding: 0px 6px 2px 6px;
+    margin: 4px 2px;
+    transition-duration: 0.2s;
+}
+
+.infopanel button:hover {
+    background-color: #3c6469;
+    border-color: #51939e;
+}
+
+small {
+    color: #777777;
+}

@@ -1,0 +1,57 @@
+{
+    "locations": [
+        "Ab'Dendriel",
+        "Abukir",
+        "Carlin",
+        "Garrogat",
+        "Thais",
+        "Kazordoon",
+        "Osaris",
+        "Venore",
+        "Yehsha",
+        "Blue Djinn",
+        "Green Djinn"
+    ],
+
+    "npcs": [
+        { "name": "Briasol", "location": "Ab'Dendriel" },
+        { "name": "Shanar", "location": "Ab'Dendriel" },
+        { "name": "Cornelia", "location": "Carlin" },
+        { "name": "Rowenna", "location": "Carlin" },
+        { "name": "Leunaurd", "location": "Garrogat" },
+        { "name": "Risdarick", "location": "Garrogat" },
+        { "name": "Hanna", "location": "Thais" },
+        { "name": "Hardek", "location": "Thais" },
+        { "name": "Sam", "location": "Thais" },
+        { "name": "Turvy", "location": "Thais" },
+        { "name": "Kroox", "location": "Kazordoon" },
+        { "name": "Hasain", "location": "Osaris" },
+        { "name": "Horif", "location": "Osaris" },
+        { "name": "Ishina", "location": "Osaris" },
+        { "name": "Odemara", "location": "Venore" },
+        { "name": "Yanni", "location": "Venore" },
+        { "name": "Aadim", "location": "Yehsha" },
+        { "name": "Asha", "location": "Yehsha" },
+        { "name": "Noranim", "location": "Yehsha" },
+        { "name": "Nah'Bob", "location": "Blue Djinn" },
+        { "name": "Haroun", "location": "Blue Djinn" },
+        { "name": "Alesar", "location": "Green Djinn" },
+        { "name": "Yaman", "location": "Green Djinn" }
+    ],
+
+    "items": [
+        { "name": "Broad Sword", "price": 500, "weight": 52.5, "stackable": false, "sellto": ["Nah'Bob"] },
+        { "name": "Double Axe", "price": 260, "weight": 70, "stackable": false, "sellto": ["Rowenna", "Uzgod", "Horif", "Aadim"] },
+        { "name": "Dragon Hammer", "price": 2000, "weight": 97, "stackable": false, "sellto": ["Alesar"] },
+        { "name": "Dragon Shield", "price": 4000, "weight": 60, "stackable": false, "sellto": ["Nah'Bob"] },
+        { "name": "Plate Armor", "price": 400, "weight": 120, "stackable": false, "sellto": ["Shanar", "Risdarick", "Sam", "Turvy", "Yanni"] },
+        { "name": "Plate Legs", "price": 115, "weight": 50, "stackable": false, "sellto": ["Shanar", "Kroox", "Hardek"] },
+        { "name": "Serpent Sword", "price": 900, "weight": 41, "stackable": false, "sellto": ["Alesar"] },
+        { "name": "Small Diamond", "price": 300, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
+        { "name": "Steel Helmet", "price": 293, "weight": 46, "stackable": false, "sellto": ["Cornelia", "Kroox", "Hasain", "Noranim"] }
+    ],
+
+    "creatures": [
+        { "name": "Dragon", "items": ["Broad Sword", "Double Axe", "Dragon Hammer", "Dragon Shield", "Plate Legs", "Serpent Sword", "Small Diamond", "Steel Helmet"] }
+    ]
+}

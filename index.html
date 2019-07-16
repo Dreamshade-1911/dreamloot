@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DreamLoot</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="preload" type="json" href="db.json" as="fetch"/>
+</head>
+
+<body>
+    <div class="container-fluid" style="margin-top:15px; padding:0px 5%">
+        <h1 class="title">DreamLoot</h1>
+        <p style="color:#e02929; text-align:center">This page shall NEVER ask for your account information! It has no integration with any medivia website or service.</p>
+        <div class="row">
+            <div class="col-md-5 infopanel">
+                <h1>Loot Table</h1>
+                <div align="center">
+                    <button>Add Item</button><button>Add Creature Items</button><button>Clear</button>
+                    <div id="lootlist" class="itemlist"></div>
+                </div>
+            </div>
+            <div class="col-md-7 infopanel">
+                <h1>Loot Info</h1>
+                <div align="center">
+                </div>
+            </div>
+        </div>
+            <p style="margin:15px"><small>You can use hotkeys to make your job easier, check it out:<br>
+            <kbd>ctrl + i</kbd> Adds an item to the list.<br>
+            <kbd>ctrl + m</kbd> Adds all items from a monster to the list.<br>
+            <kbd>ctrl + d</kbd> Clears the item list.</small></p>
+    </div>
+</body>
+</html>
