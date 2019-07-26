@@ -3,74 +3,25 @@
 <head>
     <title>DreamLoot</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="scripts.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="preload" type="json" href="db.json" as="fetch"/>
 </head>
 
 <body onload="init()">
-    <!-- Modal Panel for "Add Item" -->
-    <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content modalpanel">
-                <div class="modal-header modalpanel-header">
-                    <h4 class="modal-title" id="addItemModalTitle">Add Item</h4>
-                    <button type="button" class="modal-btn-close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="margin:auto">
-                    <label id="item_name">Item name: </label>
-                    <input type="text" class="input"></input>
-                </div>
-                <div class="modal-footer" style="border-color:#333333">
-                    <p style="margin:auto"><small>You can also press <kbd>enter</kbd> when you're done!</small></p>
-                    <button type="button" class="btn btn-primary modal-btn">Add</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Panel for "Add Creature Items" -->
-    <div class="modal fade" id="addCreatureItemsModal" tabindex="-1" role="dialog" aria-labelledby="addCreatureItemsModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content modalpanel">
-                    <div class="modal-header modalpanel-header">
-                        <h4 class="modal-title" id="addCreatureItemsModalTitle">Add creature items</h4>
-                        <button type="button" class="modal-btn-close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" style="margin:auto">
-                        <label id="creature_name">Creature name: </label>
-                        <input type="text" class="input"></input>
-                    </div>
-                    <div class="modal-footer" style="border-color:#333333">
-                        <p style="margin:auto"><small>You can also press <kbd>enter</kbd> when you're done!</small></p>
-                        <button type="button" class="btn btn-primary modal-btn">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <!-- Main website interface -->
-    <div class="container-fluid" style="margin-top:15px; padding:0px 5%">
+    <div style="margin-top:15px; padding:0px 5%">
         <h1 class="title">DreamLoot</h1>
-        <p style="color:#e02929; text-align:center">This page shall NEVER ask for your account information! It has no integration with any medivia website or service.</p>
-        <div class="row">
-            <div class="col-md-5 infopanel">
+        <p style="color:#c22222; text-align:center">This page shall NEVER ask for your account information! It has no integration with any medivia website or service.</p>
+        <div class="main-grid" >
+            <div class="infopanel">
                 <h1>Loot Table</h1>
                 <div align="center">
-                    <button class="btn normal-btn">Clear</button><button class="btn normal-btn" data-toggle="modal" data-target="#addCreatureItemsModal">Add creature items</button><button class="btn normal-btn" data-toggle="modal" data-target="#addItemModal">Add item</button>
+                    <button>Add creature items</button><button>Clear</button>
                     <div id="lootlist"></div>
                 </div>
             </div>
-            <div class="col-md-7 infopanel">
+            <div class="infopanel">
                 <h1>Loot Info</h1>
                 <div align="center">
                 </div>
@@ -78,7 +29,6 @@
         </div>
 
         <p style="margin:15px"><small>You can use hotkeys to make your job easier, check it out:<br>
-        <kbd>ctrl + i</kbd> Adds an item to the list.<br>
         <kbd>ctrl + m</kbd> Adds all items from a creature to the list.<br>
         <kbd>ctrl + d</kbd> Clears the item list.</small></p>
 

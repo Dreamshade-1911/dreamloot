@@ -1,14 +1,62 @@
+:root {
+    --main-text-color: #dbdbdb;
+    --main-text-highlight-color: white;
+    --secondary-text-color: #777777;
+    --accent-color: #233a44;
+    --accent-color-darker: #202b30;
+}
+
+/* Default website style */
+
 html {
     font-family: sans-serif;
-    color: #cecece;
+    color: var(--main-text-color);
 }
 
 body {
     background-color: #1a1a1a;
 }
 
+button {
+    color: var(--main-text-color);
+    background-color: var(--accent-color);
+    border: 1px solid #34515c;
+    border-radius: 6px;
+    padding: 3px 6px 4px;
+    margin: 4px 2px;
+    transition-duration: 0.2s;
+}
+
+button:hover {
+    color: var(--main-text-highlight-color);
+    background-color: #3c6469;
+    border-color: #51939e;
+}
+
+small {
+    color: var(--secondary-text-color);
+}
+
+kbd {
+    color: var(--main-text-highlight-color);
+    background-color: var(--accent-color-darker);
+    border-color: var(--accent-color-darker);
+    border-style: solid;
+    border-width: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Grid */
+
+.main-grid {
+    display: grid;
+    grid-gap: 10px;
+    grid-template: auto / auto auto;
+}
+
+/* Classes for specific elements */
+
 .title {
-    color: #cecece;
     text-align: center;
     font-weight: 600;
     margin: 20px;
@@ -22,91 +70,11 @@ body {
 }
 
 .infopanel h1 {
-    background-color: #263841;
-    color: #ccd9df;
+    background-color: var(--accent-color);
     font-size: 22px;
     font-weight: 600;
     text-align: center;
     margin: 0px 0px 15px;
     border-radius: 6px;
     padding: 5px 0px;
-}
-
-.normal-btn {
-    color: #ccd9df;
-    background-color: #29414b;
-    border: 1px solid #34515c;
-    border-radius: 6px;
-    padding: 0px 6px 2px 6px;
-    margin: 4px 2px;
-    transition-duration: 0.2s;
-}
-
-.normal-btn:hover {
-    color: #ccd9df;
-    background-color: #3c6469;
-    border-color: #51939e;
-}
-
-
-/* Modal panels */
-
-.modalpanel {
-    color: #ccd9df;
-    background-color: #242424;
-    border: 2px solid #333333;
-    border-radius: 10px;
-}
-
-.modalpanel-header {
-    background-color: #263841;
-    color: inherit;
-    border-style: none;
-    border-radius: inherit;
-    border-radius: 6px;
-    padding: 6px;
-}
-
-.modalpanel-header h4 {
-    margin: auto;
-}
-
-.modal-btn {
-    color: #ccd9df;
-    background-color: #29414b;
-    border: 1px solid #34515c;
-    border-radius: 6px;
-    padding: 8px 6px;
-    margin: 4px 2px;
-    font-size: 16;
-    min-width: 80px;
-    transition-duration: 0.2s;
-}
-
-.modal-btn:hover {
-    color: #ccd9df;
-    background-color: #3c6469;
-    border-color: #51939e;
-}
-
-.modal-btn-close {
-    background-color: #b83535;
-    color: #ffc5c5;
-    border: 1px solid #e45656;
-    border-radius: 8px;
-    padding: 0px 12px 2px;
-    font-size: 30px;
-    transition-duration: 0.2s;
-}
-
-.modal-btn-close:hover {
-    background-color: #ee3f3f;
-    border: 1px solid #ff6b6b;
-}
-
-
-/* Misc */
-
-small {
-    color: #777777;
 }
