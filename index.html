@@ -5,34 +5,53 @@
     <meta charset="utf-8">
     <script src="scripts.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
-    <link rel="preload" type="json" href="db.json" as="fetch"/>
 </head>
 
 <body onload="init()">
-    <!-- Main website interface -->
-    <div style="margin-top:15px; padding:0px 5%">
+    <div style="margin-top: 15px; padding: 0px 2%">
         <h1 class="title">DreamLoot</h1>
-        <p style="color:#c22222; text-align:center">This page shall NEVER ask for your account information! It has no integration with any medivia website or service.</p>
-        <div class="main-grid" >
+        <p style="color: #c22222; text-align: center">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
+        <div class="main-grid">
+            <!-- LootTable Infopanel -->
             <div class="infopanel">
                 <h1>Loot Table</h1>
-                <div align="center">
-                    <button>Add creature items</button><button>Clear</button>
-                    <div id="lootlist"></div>
-                </div>
+                <table id="loottb">
+                    <thead>
+                        <tr>
+                            <th>Item name</th>
+                            <th style="width: 80px">Quantity</th>
+                            <th style="width: 120px">Item Price</th>
+                        </tr>
+                        <tr>
+                            <td><label>Gold Coin</label></td>
+                            <td><input type="text" id="loottb_gold_itemquantity" autofocus></td>
+                            <td><label>1</label></td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <center style="margin-top: 4px">
+                    <button>Add creature items</button><button onclick="loottable_clear()">Clear</button>
+                </center>
             </div>
+            <!-- HuntInfo Infopanel -->
             <div class="infopanel">
-                <h1>Loot Info</h1>
-                <div align="center">
-                </div>
+                <h1>Hunt Info</h1>
             </div>
         </div>
 
-        <p style="margin:15px"><small>You can use hotkeys to make your job easier, check it out:<br>
-        <kbd>ctrl + m</kbd> Adds all items from a creature to the list.<br>
-        <kbd>ctrl + d</kbd> Clears the item list.</small></p>
+        <p style="margin: 15px"><small>You can use hotkeys to make your job easier, check it out:<br>
+            <kbd>Tab</kbd> Select next input box<br>
+            <kbd>&uarr;</kbd> Previous autocomplete suggestion<br>
+            <kbd>&darr;</kbd> Next autocomplete suggestion<br>
+            <kbd>Ctrl + &uarr;</kbd> Select previous item in the table<br>
+            <kbd>Ctrl + &darr;</kbd> Select next item in the table<br>
+            <kbd>Ctrl + M</kbd> Adds all items from a creature to the list<br>
+            <kbd>Ctrl + D</kbd> Clears the item list<br>
+            <kbd>Ctrl + 1-9</kbd> Split profit to x amount of people</small>
+        </p>
 
-        <footer class="footer" style="text-align:center"><small>You can check out the source-code of this project and contribute at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.<br>Dreamshade @ Pendulum</small></footer>
+        <footer style="text-align: center"><small>You can check out the source-code of this project and contribute at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.<br>Dreamshade @ Pendulum</small></footer>
     </div>
 </body>
 </html>

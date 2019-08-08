@@ -2,11 +2,14 @@
     --main-text-color: #dbdbdb;
     --main-text-highlight-color: white;
     --secondary-text-color: #777777;
+    --panel-background: #242424;
+    --border-highlight: #313131;
     --accent-color: #233a44;
+    --accent-color-lighter: #335463;
     --accent-color-darker: #202b30;
 }
 
-/* Default website style */
+/* Default styles */
 
 html {
     font-family: sans-serif;
@@ -15,6 +18,10 @@ html {
 
 body {
     background-color: #1a1a1a;
+}
+
+label {
+    font-size: 10pt;
 }
 
 button {
@@ -46,12 +53,22 @@ kbd {
     border-radius: 4px;
 }
 
-/* Grid */
+/* @Cleanup: unused, maybe we used it in the future?
+    if not, delete it. */
+h4 {
+    background-color: #2b2b2b;
+    padding: 4px;
+    margin: 0px;
+    border: 2px solid #2b2b2b;
+    border-radius: 6px;
+}
+
+/* Grid related */
 
 .main-grid {
     display: grid;
     grid-gap: 10px;
-    grid-template: auto / auto auto;
+    grid-template: auto / minmax(400px, auto) minmax(400px, auto);
 }
 
 /* Classes for specific elements */
@@ -63,10 +80,15 @@ kbd {
 }
 
 .infopanel {
-    background-color: #242424;
-    border: 2px solid #333333;
+    background-color: var(--panel-background);
+    border: 2px solid #202020;
     border-radius: 10px;
     padding: 2px 2px 8px;
+    transition-duration: 0.2s;
+}
+
+.infopanel:focus-within {
+    border-color: #313131;
 }
 
 .infopanel h1 {
@@ -77,4 +99,40 @@ kbd {
     margin: 0px 0px 15px;
     border-radius: 6px;
     padding: 5px 0px;
+}
+
+#loottb {
+    width: 100%;
+}
+
+#loottb th, td {
+    text-align: center;
+    padding: 4px 5px 6px;
+    border-bottom: 2px solid var(--border-highlight);
+}
+
+#loottb td {
+    color: var(--secondary-text-color);
+}
+
+#loottb input {
+    width: 100%;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 10pt;
+    background-color: var(--panel-background);
+    color: var(--main-text-color);
+    border: 2px solid var(--panel-background);
+    border-radius: 4px;
+    transition-duration: 0.2s;
+}
+
+#loottb input:hover {
+    background-color: #2b2b2b;
+    border-color: var(--accent-color);
+}
+
+#loottb input:focus {
+    background-color: var(--border-highlight);
+    border-color: var(--accent-color-lighter);
 }
