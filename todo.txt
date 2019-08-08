@@ -1,0 +1,5 @@
+** Fix **
+* Automatic focus on the Gold Coin Quantity input when loading the page is bugged.
+
+** Implement **
+* Autocomplete on Loot Table input fields.
