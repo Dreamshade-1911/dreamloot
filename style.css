@@ -101,6 +101,8 @@ h4 {
     padding: 5px 0px;
 }
 
+/* @Cleanup: Change the loottb styles to be generic so we can use tables with same style on other places */
+
 #loottb {
     width: 100%;
 }

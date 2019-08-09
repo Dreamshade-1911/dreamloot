@@ -18,7 +18,7 @@ function init() {
 
 function loottable_add_row() {
     let row_id = "loottb_item" + loottable_lastitemid;
-    loottable.getElementsByTagName("tbody")[0].innerHTML += '<tr id="' + row_id + '"><td><input type="text" id="' + row_id + '_itemname"></td><td><input type="text" id="' + row_id + '_itemquantity"></td><td><input type="text" id="' + row_id + '_itemprice"></td></tr>';
+    loottable.getElementsByTagName("tbody")[0].innerHTML += '<tr id="' + row_id + '"><td><input type="text" id="' + row_id + '_itemname" oninput="autocomplete_itemname(\'' + row_id + '_itemname\')"></td><td><input type="text" id="' + row_id + '_itemquantity"></td><td><input type="text" id="' + row_id + '_itemprice"></td></tr>';
     loottable_lastitemid++;
 }
 
@@ -30,4 +30,19 @@ function loottable_clear() {
     var gold_quant = document.getElementById("loottb_gold_itemquantity");
     gold_quant.value = "";
     gold_quant.focus();
+}
+
+function autocomplete_itemname(element_id) {
+    let caller_element = document.getElementById(element_id);
+    if (caller_element.value == "") return;
+    let callerlen = caller_element.value.length;
+    for (let i = 0; i < mediviadb.items.length; i++) {
+        if (callerlen > mediviadb.items[i].name.length)
+            continue;
+        if (caller_element.value.toLowerCase() == mediviadb.items[i].name.substr(0, callerlen).toLowerCase()) {
+            caller_element.value = mediviadb.items[i].name;
+            caller_element.setSelectionRange(callerlen, mediviadb.items[i].name.length);
+            break;
+        }
+    }
 }
