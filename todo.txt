@@ -1,5 +1,6 @@
 ** Fix **
-* Automatic focus on the Gold Coin Quantity input when loading the page is bugged.
 
 ** Implement **
-* Autocomplete on Loot Table input fields.
+* Autocomplete the item price when pressing enter to complete an item suggestion
+* Implement 'Add Creature Items' functionality
+* Make Hunt Info display the total value of the Loot Table
