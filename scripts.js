@@ -3,6 +3,7 @@ var mediviadb;
 
 var loottable;
 var loottable_lastitemid;
+var autocomplete_lastsize = 0;
 
 function init() {
     // Since fetch is async, we should only use the db after the init function returns
@@ -34,7 +35,12 @@ function loottable_clear() {
 
 function autocomplete_itemname(element_id) {
     let caller_element = document.getElementById(element_id);
-    if (caller_element.value == "") return;
+    if (autocomplete_lastsize >= caller_element.value.length) {
+        autocomplete_lastsize = caller_element.value.length;
+        return;
+    }
+
+    autocomplete_lastsize = caller_element.value.length;
     let callerlen = caller_element.value.length;
     for (let i = 0; i < mediviadb.items.length; i++) {
         if (callerlen > mediviadb.items[i].name.length)
