@@ -19,7 +19,7 @@ function init() {
 
 function loottable_add_row() {
     let row_id = "loottb_item" + loottable_lastitemid;
-    loottable.getElementsByTagName("tbody")[0].innerHTML += '<tr id="' + row_id + '"><td><input type="text" id="' + row_id + '_itemname" oninput="autocomplete_itemname(\'' + row_id + '_itemname\')"></td><td><input type="text" id="' + row_id + '_itemquantity"></td><td><input type="text" id="' + row_id + '_itemprice"></td></tr>';
+    loottable.getElementsByTagName("tbody")[0].innerHTML += '<tr id="' + row_id + '"><td><input type="text" id="' + row_id + '_itemname" oninput="autocomplete_itemname(\'' + row_id + '\')"></td><td><input type="text" id="' + row_id + '_itemquantity"></td><td><input type="text" id="' + row_id + '_itemprice"></td></tr>';
     loottable_lastitemid++;
 }
 
@@ -33,22 +33,32 @@ function loottable_clear() {
     gold_quant.focus();
 }
 
-function autocomplete_itemname(element_id) {
-    let caller_element = document.getElementById(element_id);
-    if (autocomplete_lastsize >= caller_element.value.length) {
-        autocomplete_lastsize = caller_element.value.length;
+function autocomplete_itemname(callerrow_id) {
+    let callerrow_itemname = document.getElementById(callerrow_id + "_itemname");
+    let callerrow_itemprice = document.getElementById(callerrow_id + "_itemprice");
+    if (autocomplete_lastsize >= callerrow_itemname.value.length) {
+        autocomplete_lastsize = callerrow_itemname.value.length;
+        callerrow_itemprice.value = "";
         return;
     }
 
-    autocomplete_lastsize = caller_element.value.length;
-    let callerlen = caller_element.value.length;
+    autocomplete_lastsize = callerrow_itemname.value.length;
+    let inputlen = callerrow_itemname.value.length;
+    let found_suggestion = false;
     for (let i = 0; i < mediviadb.items.length; i++) {
-        if (callerlen > mediviadb.items[i].name.length)
+        if (inputlen > mediviadb.items[i].name.length)
             continue;
-        if (caller_element.value.toLowerCase() == mediviadb.items[i].name.substr(0, callerlen).toLowerCase()) {
-            caller_element.value = mediviadb.items[i].name;
-            caller_element.setSelectionRange(callerlen, mediviadb.items[i].name.length);
+        if (callerrow_itemname.value.toLowerCase() == mediviadb.items[i].name.substr(0, inputlen).toLowerCase()) {
+            callerrow_itemname.value = mediviadb.items[i].name;
+            callerrow_itemname.setSelectionRange(inputlen, mediviadb.items[i].name.length);
+            callerrow_itemprice.value = mediviadb.items[i].price;
+            found_suggestion = true;
             break;
         }
     }
+    if (!found_suggestion) callerrow_itemprice.value = "";
+}
+
+function add_creature_items() {
+    
 }
