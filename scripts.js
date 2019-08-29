@@ -2,7 +2,7 @@
 var mediviadb;
 
 var loottable;
-var loottable_lastitemid;
+var loottable_lastitemid = 0;
 var autocomplete_lastsize = 0;
 
 function init() {
@@ -12,15 +12,56 @@ function init() {
     .then(function(data) {
         mediviadb = data;
     });
-    loottable_lastitemid = 0;
     loottable = document.getElementById("loottb");
     loottable_add_row();
 }
 
+// -------------------------------------
+// Functions pertaining to the loottable
+// -------------------------------------
+
 function loottable_add_row() {
     let row_id = "loottb_item" + loottable_lastitemid;
-    loottable.getElementsByTagName("tbody")[0].innerHTML += '<tr id="' + row_id + '"><td><input type="text" id="' + row_id + '_itemname" oninput="autocomplete_itemname(\'' + row_id + '\')"></td><td><input type="text" id="' + row_id + '_itemquantity"></td><td><input type="text" id="' + row_id + '_itemprice"></td></tr>';
+
+    let row = loottable.getElementsByTagName("tbody")[0].insertRow();
+    row.id = row_id;
+    row.setAttribute("onfocusin", "loottable_check_add_row('" + row_id + "')");
+
+    let itemname = document.createElement("input");
+    itemname.type = "text";
+    itemname.id = row_id + "_itemname";
+    itemname.setAttribute("oninput", "autocomplete_itemname('" + row_id + "')");
+    row.insertCell().appendChild(itemname);
+
+    let itemquantity = document.createElement("input");
+    itemquantity.type = "text";
+    itemquantity.id = row_id + "_itemquantity";
+    row.insertCell().appendChild(itemquantity);
+
+    let itemprice = document.createElement("input");
+    itemprice.type = "text";
+    itemprice.id = row_id + "_itemprice";
+    row.insertCell().appendChild(itemprice);
+
+    let closebutton = document.createElement("button");
+    closebutton.setAttribute("class", "table_closebutton");
+    closebutton.setAttribute("onclick", "loottable_delete_row('" + row_id + "')");
+    closebutton.innerText = "X";
+    closebutton.tabIndex = -1;
+    row.insertCell().appendChild(closebutton);
+
     loottable_lastitemid++;
+}
+
+// @Improvement: We can keep track of the selected row index so we can select the same index or the previous one if that doesn't exist.
+function loottable_delete_row(callerrow_id) {
+    loottable.deleteRow(loottable.rows.namedItem(callerrow_id).rowIndex);
+    if (loottable.rows.length == 2) loottable_add_row();
+}
+
+function loottable_check_add_row(callerrow_id) {
+    if (loottable.rows[loottable.rows.length - 1] == loottable.rows.namedItem(callerrow_id))
+        loottable_add_row();
 }
 
 function loottable_clear() {
@@ -28,17 +69,19 @@ function loottable_clear() {
     loottable_lastitemid = 0;
     loottable_add_row();
 
-    var gold_quant = document.getElementById("loottb_gold_itemquantity");
+    let gold_quant = document.getElementById("loottb_gold_itemquantity");
     gold_quant.value = "";
     gold_quant.focus();
 }
 
+// @Improvement: We can split this function in two so we can have a generic autocomplete that works on other tables.
+// @Speed: We can keep track of the last used db index for a specific autocomplete so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
 function autocomplete_itemname(callerrow_id) {
     let callerrow_itemname = document.getElementById(callerrow_id + "_itemname");
     let callerrow_itemprice = document.getElementById(callerrow_id + "_itemprice");
     if (autocomplete_lastsize >= callerrow_itemname.value.length) {
         autocomplete_lastsize = callerrow_itemname.value.length;
-        callerrow_itemprice.value = "";
+        NoSuggestion();
         return;
     }
 
@@ -56,9 +99,14 @@ function autocomplete_itemname(callerrow_id) {
             break;
         }
     }
-    if (!found_suggestion) callerrow_itemprice.value = "";
+    if (!found_suggestion) NoSuggestion();
+
+    // Maybe this function is not needed since I don't think it's a good idea to erase the price everytime we don't have a suggestion for the autocomplete.
+    function NoSuggestion() {
+        callerrow_itemprice.value = "";
+    }
 }
 
-function add_creature_items() {
+function loottable_add_creature_items() {
     
 }

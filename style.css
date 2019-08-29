@@ -1,6 +1,6 @@
 :root {
     --main-text-color: #dbdbdb;
-    --main-text-highlight-color: white;
+    --main-text-highlight-color: #ffffff;
     --secondary-text-color: #777777;
     --panel-background: #242424;
     --border-highlight: #313131;
@@ -99,6 +99,21 @@ h4 {
     margin: 0px 0px 15px;
     border-radius: 6px;
     padding: 5px 0px;
+}
+
+.table_closebutton {
+    background-color: #aa3030;
+    border: 1px solid #ce5353;
+    border-radius: 6px;
+    padding: 0px 4px 1px;
+    margin: 0px 0px;
+    transition-duration: 0.2s;
+}
+
+.table_closebutton:hover {
+    color: var(--main-text-highlight-color);
+    background-color: #c04343;
+    border-color: #d86c6c;
 }
 
 /* @Cleanup: Change the loottb styles to be generic so we can use tables with same style on other places */
