@@ -2,8 +2,11 @@
 var mediviadb;
 
 var loottable;
+var loottable_body;
 var loottable_lastitemid = 0;
-var autocomplete_lastsize = 0;
+var loottable_autocomplete_lastsize = 0;
+
+var huntinfo;
 
 function init() {
     // Since fetch is async, we should only use the db after the init function returns
@@ -13,7 +16,22 @@ function init() {
         mediviadb = data;
     });
     loottable = document.getElementById("loottb");
+    loottable_body = loottable.getElementsByTagName("tbody")[0];
     loottable_add_row();
+
+    huntinfo = document.getElementById("huntinfo");
+}
+
+function stoi(str) {
+    if (str == "") return 0;
+    else return parseInt(str);
+}
+
+function gtos(amount) {
+    if (amount < 1000) return amount;
+    else return (amount / 1000) + " K";
+    //else if (amount >= 1000 && amount < 1000000) return (amount / 1000) + " K";
+    //else return (amount / 1000000) + " KK";
 }
 
 // -------------------------------------
@@ -23,7 +41,7 @@ function init() {
 function loottable_add_row() {
     let row_id = "loottb_item" + loottable_lastitemid;
 
-    let row = loottable.getElementsByTagName("tbody")[0].insertRow();
+    let row = loottable_body.insertRow();
     row.id = row_id;
     row.setAttribute("onfocusin", "loottable_check_add_row('" + row_id + "')");
 
@@ -43,12 +61,12 @@ function loottable_add_row() {
     itemprice.id = row_id + "_itemprice";
     row.insertCell().appendChild(itemprice);
 
-    let closebutton = document.createElement("button");
-    closebutton.setAttribute("class", "table_closebutton");
-    closebutton.setAttribute("onclick", "loottable_delete_row('" + row_id + "')");
-    closebutton.innerText = "X";
-    closebutton.tabIndex = -1;
-    row.insertCell().appendChild(closebutton);
+    let deletebutton = document.createElement("button");
+    deletebutton.setAttribute("class", "delete_row_button");
+    deletebutton.setAttribute("onclick", "loottable_delete_row('" + row_id + "')");
+    deletebutton.innerText = "X";
+    deletebutton.tabIndex = -1;
+    row.insertCell().appendChild(deletebutton);
 
     loottable_lastitemid++;
 }
@@ -65,7 +83,7 @@ function loottable_check_add_row(callerrow_id) {
 }
 
 function loottable_clear() {
-    loottable.getElementsByTagName("tbody")[0].innerHTML = "";
+    loottable_body.innerHTML = "";
     loottable_lastitemid = 0;
     loottable_add_row();
 
@@ -74,18 +92,18 @@ function loottable_clear() {
     gold_quant.focus();
 }
 
-// @Improvement: We can split this function in two so we can have a generic autocomplete that works on other tables.
+// @Improvement: We can split this function in two so we can have a generic autocomplete.
 // @Speed: We can keep track of the last used db index for a specific autocomplete so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
 function autocomplete_itemname(callerrow_id) {
     let callerrow_itemname = document.getElementById(callerrow_id + "_itemname");
     let callerrow_itemprice = document.getElementById(callerrow_id + "_itemprice");
-    if (autocomplete_lastsize >= callerrow_itemname.value.length) {
-        autocomplete_lastsize = callerrow_itemname.value.length;
+    if (loottable_autocomplete_lastsize >= callerrow_itemname.value.length) {
+        loottable_autocomplete_lastsize = callerrow_itemname.value.length;
         NoSuggestion();
         return;
     }
 
-    autocomplete_lastsize = callerrow_itemname.value.length;
+    loottable_autocomplete_lastsize = callerrow_itemname.value.length;
     let inputlen = callerrow_itemname.value.length;
     let found_suggestion = false;
     for (let i = 0; i < mediviadb.items.length; i++) {
@@ -101,7 +119,6 @@ function autocomplete_itemname(callerrow_id) {
     }
     if (!found_suggestion) NoSuggestion();
 
-    // Maybe this function is not needed since I don't think it's a good idea to erase the price everytime we don't have a suggestion for the autocomplete.
     function NoSuggestion() {
         callerrow_itemprice.value = "";
     }
@@ -109,4 +126,20 @@ function autocomplete_itemname(callerrow_id) {
 
 function loottable_add_creature_items() {
     
+}
+
+
+function huntinfo_calculate_loot() {
+    let totalearnings = 0;
+
+    totalearnings += stoi(document.getElementById("loottb_gold_itemquantity").value);
+    let cur_rowid;
+    for (let i = 0; i < loottable_body.rows.length - 1; i++) {
+        cur_rowid = loottable_body.rows[i].id;
+        totalearnings += stoi(document.getElementById(cur_rowid + "_itemprice").value) * stoi(document.getElementById(cur_rowid + "_itemquantity").value);
+    }
+
+    document.getElementById("huntinfo_totalearnings").innerText = gtos(totalearnings);
+    document.getElementById("huntinfo_profit").innerText = gtos(totalearnings);
+    document.getElementById("huntinfo_splitprofit").innerText = gtos(totalearnings);
 }
