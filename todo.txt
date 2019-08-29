@@ -4,3 +4,4 @@
 * Hidden index on the item name input boxes related to what index of the db the item name is from, so we can quickly refer to the index instead of having to search the array again.
 * 'Add Creature Items' functionality
 * Make Hunt Info display the total value of the Loot Table
+* Sidebar menu with some options (like minimum value on loot, so that everything below that gets ignored by autocomplete and "add creature items")
