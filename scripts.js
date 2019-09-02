@@ -22,7 +22,7 @@ function init() {
     huntinfo = document.getElementById("huntinfo");
 }
 
-function stoi(str) {
+function stog(str) {
     if (str == "") return 0;
     else return parseInt(str);
 }
@@ -132,11 +132,11 @@ function loottable_add_creature_items() {
 function huntinfo_calculate_loot() {
     let totalearnings = 0;
 
-    totalearnings += stoi(document.getElementById("loottb_gold_itemquantity").value);
+    totalearnings += stog(document.getElementById("loottb_gold_itemquantity").value);
     let cur_rowid;
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
         cur_rowid = loottable_body.rows[i].id;
-        totalearnings += stoi(document.getElementById(cur_rowid + "_itemprice").value) * stoi(document.getElementById(cur_rowid + "_itemquantity").value);
+        totalearnings += stog(document.getElementById(cur_rowid + "_itemprice").value) * stog(document.getElementById(cur_rowid + "_itemquantity").value);
     }
 
     document.getElementById("huntinfo_totalearnings").innerText = gtos(totalearnings);
