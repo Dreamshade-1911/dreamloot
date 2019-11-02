@@ -1,13 +1,5 @@
 var mediviadb;
 
-// Constants
-var LOOTTB_COLUMN = {
-    NAME: 0,
-    QUANTITY: 1,
-    PRICE: 2,
-    DELETE: 3
-};
-
 // HTML Elements
 var loottable;
 var huntinfo;
@@ -15,6 +7,7 @@ var loottable_body;
 var loottb_addcreatureitems_panel;
 var loottb_addcreature_name;
 
+var loottable_lastitemid = 0;
 var loottable_autocomplete_lastsize = 0;
 
 function init() {
@@ -49,61 +42,53 @@ function gtos(amount) {
 // Functions pertaining to the loottable
 // --------------------------------------
 
-// @Robustness: It would be way better to make a function that recalculates the
-// last and first items that gets called whenever we delete or add an item. The
-// current implementation of trying to keep track of them when adding/removing
-// is convoluted, has code duplication and is error-prone.
 function loottable_add_row() {
-    let row_index = loottable_body.rows.length;
+    let row_id = "loottb_item" + loottable_lastitemid;
+
     let row = loottable_body.insertRow();
+    row.id = row_id;
+    row.setAttribute("onfocusin", "loottable_check_add_row('" + row_id + "')");
 
     let itemname = document.createElement("input");
     itemname.type = "text";
-    itemname.setAttribute("oninput", "autocomplete_itemname('" + row_index + "')");
+    itemname.id = row_id + "_itemname";
+    itemname.setAttribute("oninput", "autocomplete_itemname('" + row_id + "')");
     row.insertCell().appendChild(itemname);
-
-    itemname.setAttribute("onfocusout", "loottable_check_add_row('" + row_index  + "')");
-    if (row_index > 0)
-        loottable_body.rows[row_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.removeAttribute("onfocusin");
 
     let itemquantity = document.createElement("input");
     itemquantity.type = "text";
+    itemquantity.id = row_id + "_itemquantity";
     row.insertCell().appendChild(itemquantity);
 
     let itemprice = document.createElement("input");
     itemprice.type = "text";
+    itemprice.id = row_id + "_itemprice";
     row.insertCell().appendChild(itemprice);
 
-    if (row_index > 0) {
-        let deletebutton = document.createElement("button");
-        deletebutton.setAttribute("class", "delete_row_button");
-        deletebutton.setAttribute("onclick", "loottable_delete_row('" + row_index + "')");
-        deletebutton.innerText = "X";
-        deletebutton.tabIndex = -1;
-        row.insertCell().appendChild(deletebutton);
-    }
-}
+    let deletebutton = document.createElement("button");
+    deletebutton.setAttribute("class", "delete_row_button");
+    deletebutton.setAttribute("onclick", "loottable_delete_row('" + row_id + "')");
+    deletebutton.innerText = "X";
+    deletebutton.tabIndex = -1;
+    row.insertCell().appendChild(deletebutton);
 
-function loottable_check_add_row(callerrow_index) {
-    if (callerrow_index != loottable_body.rows.length - 1) return;
-    if (loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.NAME].firstChild.value != "")
-        loottable_add_row();
+    loottable_lastitemid++;
 }
 
 // @Improvement: We can keep track of the selected row index so we can select the same index or the previous one if that doesn't exist.
-function loottable_delete_row(callerrow_index) {
-    loottable_body.deleteRow(callerrow_index);
-    console.log("row index: " + callerrow_index + ", rows.length: " + loottable_body.rows.length);
-    if (callerrow_index == loottable_body.rows.length - 1) {
-        loottable_body.rows[callerrow_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.setAttribute("onfocusout", "loottable_check_add_row('" + (callerrow_index - 1)  + "')");
-    } else {
-        for (let i = callerrow_index; i < loottable_body.rows.length; i++)
-            loottable_body.rows[i].cells[LOOTTB_COLUMN.DELETE].firstChild.setAttribute("onclick", "loottable_delete_row('" + i + "')");
-    }
+function loottable_delete_row(callerrow_id) {
+    loottable.deleteRow(loottable.rows.namedItem(callerrow_id).rowIndex);
+    if (loottable.rows.length == 2) loottable_add_row();
+}
+
+function loottable_check_add_row(callerrow_id) {
+    if (loottable.rows[loottable.rows.length - 1] == loottable.rows.namedItem(callerrow_id))
+        loottable_add_row();
 }
 
 function loottable_clear() {
     loottable_body.innerHTML = "";
+    loottable_lastitemid = 0;
     loottable_add_row();
 
     let gold_quant = document.getElementById("loottb_gold_itemquantity");
@@ -113,10 +98,9 @@ function loottable_clear() {
 
 // @Improvement: We can split this function in two so we can have a generic autocomplete.
 // @Speed: We can keep track of the last used db index for a specific autocomplete so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
-function autocomplete_itemname(callerrow_index) {
-    // @Fix: @Priority: This won't work, we need a way to refer to individual cell elements in the loottable, the initial idea was to work with HTML id's, but that was too convoluted to maintain and I decided to switch to an approach that deals with table indexes instead.
-    let callerrow_itemname = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.NAME].firstChild;
-    let callerrow_itemprice = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.PRICE].firstChild;
+function autocomplete_itemname(callerrow_id) {
+    let callerrow_itemname = document.getElementById(callerrow_id + "_itemname");
+    let callerrow_itemprice = document.getElementById(callerrow_id + "_itemprice");
     if (loottable_autocomplete_lastsize >= callerrow_itemname.value.length) {
         loottable_autocomplete_lastsize = callerrow_itemname.value.length;
         callerrow_itemprice.value = "";
@@ -160,8 +144,8 @@ function huntinfo_calculate_loot() {
     totalearnings += stog(document.getElementById("loottb_gold_itemquantity").value);
     let cur_rowid;
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
-        cur_row = loottable_body.rows[i];
-        totalearnings += stog(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value * stog(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value));
+        cur_rowid = loottable_body.rows[i].id;
+        totalearnings += stog(document.getElementById(cur_rowid + "_itemprice").value) * stog(document.getElementById(cur_rowid + "_itemquantity").value);
     }
 
     document.getElementById("huntinfo_totalearnings").innerText = gtos(totalearnings);

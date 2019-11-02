@@ -60,6 +60,28 @@ kbd {
     border-radius: 4px;
 }
 
+input[type=text] {
+    width: 100%;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 10pt;
+    background-color: #2b2b2b;
+    color: var(--main-text-color);
+    border: 2px solid var(--accent-color-darker);
+    border-radius: 4px;
+    transition-duration: 0.2s;
+}
+
+input[type=text]:hover {
+    background-color: #2b2b2b;
+    border-color: var(--accent-color);
+}
+
+input[type=text]:focus {
+    background-color: var(--border-highlight);
+    border-color: var(--accent-color-lighter);
+}
+
 /* @Cleanup: unused, maybe we used it in the future?
     if not, delete it. */
 h4 {
@@ -87,7 +109,7 @@ table td {
     color: var(--secondary-text-color);
 }
 
-table input {
+table input[type=text] {
     width: 100%;
     text-align: center;
     font-family: sans-serif;
@@ -99,12 +121,12 @@ table input {
     transition-duration: 0.2s;
 }
 
-table input:hover {
+table input[type=text]:hover {
     background-color: #2b2b2b;
     border-color: var(--accent-color);
 }
 
-table input:focus {
+table input[type=text]:focus {
     background-color: var(--border-highlight);
     border-color: var(--accent-color-lighter);
 }
@@ -115,7 +137,7 @@ table input:focus {
     margin-top: 25px;
     display: grid;
     grid-gap: 10px;
-    grid-template: auto / minmax(400px, auto) minmax(400px, auto);
+    grid-template: auto / minmax(450px, auto) minmax(450px, auto);
 }
 
 /* - Classes for specific elements - */
@@ -161,4 +183,12 @@ table input:focus {
     color: var(--main-text-highlight-color);
     background-color: #c04343;
     border-color: #d86c6c;
+}
+
+.loottb_addcreatureitems {
+    display: none;
+    margin-top: 5px;
+    grid-gap: 10px;
+    grid-template: auto / 20% auto 52px 65px 0%;
+    align-items: center;
 }
