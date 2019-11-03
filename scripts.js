@@ -92,6 +92,7 @@ function loottable_check_add_row(callerrow_index) {
         loottable_add_row();
 }
 
+// @Improvement: Make it so that if we try to delete the last row, it clears it instead, that allows us to also show a delete button on the first row, and not need the current ghetto setup.
 // @Improvement: We can keep track of the selected row index so we can select the same index or the previous one if that doesn't exist.
 function loottable_delete_row(callerrow_index) {
     loottable_body.deleteRow(callerrow_index);
