@@ -60,7 +60,7 @@
         { "name": "Ankh", "price": 100, "weight": 4.2, "stackable": false, "sellto": ["Yaman"] },
         { "name": "Arming Sword", "price": 20000, "weight": 60, "stackable": false, "sellto": ["Ziyad"] },
         { "name": "Assassin Blade", "price": 6300, "weight": 42, "stackable": false, "sellto": ["Wulkan"] },
-        { "name": "Bascinet", "price": 1000, "weight": 75, "stackable": false, "sellto": ["Ziyad"] },
+        { "name": "Bascinet", "price": 24000, "weight": 75, "stackable": false, "sellto": ["Ziyad"] },
         { "name": "Battle Shield", "price": 95, "weight": 62, "stackable": false, "sellto": ["Shanar", "Risdarick", "Hardek", "Sam", "Turvy", "Yanni"] },
         { "name": "Black Pearl", "price": 280, "weight": 0.2, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
         { "name": "Black Shield", "price": 800, "weight": 41.5, "stackable": false, "sellto": ["Alesar"] },
