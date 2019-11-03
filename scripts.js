@@ -152,8 +152,7 @@ function autocomplete_generic(item_array, input_field) {
 }
 
 function autocomplete_creature_items() {
-    let creaturename_field = document.getElementById("loottb_creaturename");
-    creature_items_autocomplete_lastindex = autocomplete_generic(mediviadb.creatures, creaturename_field);
+    creature_items_autocomplete_lastindex = autocomplete_generic(mediviadb.creatures, loottb_addcreature_name);
 }
 
 function loottable_show_creature_items() {
@@ -169,11 +168,10 @@ function loottable_hide_creature_items() {
 function loottable_add_creature_items() {
     let i = 0;
     let index = creature_items_autocomplete_lastindex;
-    let creature_name_input = document.getElementById("loottb_creaturename");
 
     if (index == -1) {
         for (index = 0; index < mediviadb.creatures.length; index++) {
-            if (mediviadb.creatures[index].name == creature_name_input.value) {
+            if (mediviadb.creatures[index].name == loottb_addcreature_name.value) {
                 break;
             }
             else {
@@ -197,7 +195,8 @@ function loottable_add_creature_items() {
         autocomplete_itemname(row.sectionRowIndex);
     }
     loottable_add_row();
-    document.getElementById("loottb_creaturename").focus();
+    loottb_addcreature_name.focus();
+    loottb_addcreature_name.setSelectionRange(0, loottb_addcreature_name.value.length);
 }
 
 // ----------------------------------
@@ -206,8 +205,8 @@ function loottable_add_creature_items() {
 
 function huntinfo_calculate_loot() {
     let totalearnings = 0;
-
     totalearnings += stog(document.getElementById("loottb_gold_itemquantity").value);
+
     let cur_row;
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
         cur_row = loottable_body.rows[i];
