@@ -32,11 +32,11 @@
                     <tbody></tbody>
                 </table></center>
                 <center style="margin-top: 4px">
-                    <button onclick="loottable_add_creature_items()">Add creature items</button><button onclick="loottable_clear()">Clear</button>
+                    <button onclick="loottable_show_creature_items()">Add creature items</button><button onclick="loottable_clear()">Clear</button>
                     <div class="loottb_addcreatureitems" id="loottb_addcreatureitems">
                         <label>Creature name: </label>
-                        <input type="text" id="loottb_creaturename"/>
-                        <button>Add</button>
+                        <input type="text" oninput="autocomplete_creature_items()" id="loottb_creaturename"/>
+                        <button onclick="loottable_add_creature_items()">Add</button>
                         <button onclick="loottable_hide_creature_items()">Cancel</button>
                     </div>
                 </center>
@@ -52,10 +52,10 @@
                         <th>Split profit</th>
                     </tr>
                     <tr>
-                        <td><label id="huntinfo_totalwaste">0</label></td>
-                        <td><label id="huntinfo_totalearnings">0</label></td>
-                        <td><label id="huntinfo_profit">0</label></td>
-                        <td><label id="huntinfo_splitprofit">0</label></td>
+                        <td><label id="huntinfo_totalwaste">0 gp</label></td>
+                        <td><label id="huntinfo_totalearnings">0 gp</label></td>
+                        <td><label id="huntinfo_profit">0 gp</label></td>
+                        <td><label id="huntinfo_splitprofit">0 gp</label></td>
                     </tr>
                 </table></center>
                 <center style="margin-top: 4px">

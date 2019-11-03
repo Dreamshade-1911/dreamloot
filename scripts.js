@@ -16,6 +16,7 @@ var loottb_addcreatureitems_panel;
 var loottb_addcreature_name;
 
 var loottable_autocomplete_lastsize = 0;
+var creature_items_autocomplete_lastindex = -1;
 
 function init() {
     // Since fetch is async, we should only use the db after the init function returns
@@ -82,6 +83,7 @@ function loottable_add_row() {
         deletebutton.tabIndex = -1;
         row.insertCell().appendChild(deletebutton);
     }
+    return row;
 }
 
 function loottable_check_add_row(callerrow_index) {
@@ -149,7 +151,12 @@ function autocomplete_generic(item_array, input_field) {
     return suggestion_index;
 }
 
-function loottable_add_creature_items() {
+function autocomplete_creature_items() {
+    let creaturename_field = document.getElementById("loottb_creaturename");
+    creature_items_autocomplete_lastindex = autocomplete_generic(mediviadb.creatures, creaturename_field);
+}
+
+function loottable_show_creature_items() {
     loottb_addcreatureitems_panel.style.display = "grid";
     loottb_addcreature_name.focus();
 }
@@ -157,6 +164,41 @@ function loottable_add_creature_items() {
 function loottable_hide_creature_items() {
     loottb_addcreature_name.value = "";
     loottb_addcreatureitems_panel.style.display = "none";
+}
+
+function loottable_add_creature_items() {
+    let i = 0;
+    let index = creature_items_autocomplete_lastindex;
+    let creature_name_input = document.getElementById("loottb_creaturename");
+
+    if (index == -1) {
+        for (index = 0; index < mediviadb.creatures.length; index++) {
+            if (mediviadb.creatures[index].name == creature_name_input.value) {
+                break;
+            }
+            else {
+                // @Improvement: We should display an error message to the user
+                // saying that the creature name doesn't exist.
+                if (index == mediviadb.creatures.length - 1) return;
+            }
+        }
+    }
+    let creature = mediviadb.creatures[index];
+
+    let first_row = loottable_body.rows[loottable_body.rows.length - 1];
+    if (first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value == "") {
+        first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[0];
+        autocomplete_itemname(first_row.sectionRowIndex);
+        i = 1;
+    }
+    for (; i < creature.items.length; i++) {
+        loottable_autocomplete_lastsize = 0;
+        let row = loottable_add_row();
+        row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[i];
+        autocomplete_itemname(row.sectionRowIndex);
+    }
+    loottable_add_row();
+    document.getElementById("loottb_creaturename").focus();
 }
 
 // ----------------------------------
