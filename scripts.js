@@ -127,8 +127,7 @@ function autocomplete_itemname(callerrow_index) {
 }
 
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
-// Takes an array of objects with a 'name' field to be searched
-// and returns the index that was found, or -1 on failure.
+// Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
 function autocomplete_generic(item_array, input_field) {
     if (loottable_autocomplete_lastsize >= input_field.value.length) {
         loottable_autocomplete_lastsize = input_field.value.length;
@@ -177,8 +176,7 @@ function loottable_add_creature_items() {
                 break;
             }
             else {
-                // @Improvement: We should display an error message to the user
-                // saying that the creature name doesn't exist.
+                // @Improvement: We should display an error message to the user saying that the creature name doesn't exist.
                 if (index == mediviadb.creatures.length - 1) return;
             }
         }
