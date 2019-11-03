@@ -208,7 +208,7 @@ function huntinfo_calculate_loot() {
     let totalearnings = 0;
 
     totalearnings += stog(document.getElementById("loottb_gold_itemquantity").value);
-    let cur_rowid;
+    let cur_row;
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
         cur_row = loottable_body.rows[i];
         totalearnings += stog(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value * stog(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value));
