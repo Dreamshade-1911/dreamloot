@@ -93,10 +93,12 @@ function loottable_check_add_row(callerrow_index) {
 // @Improvement: We can keep track of the selected row index so we can select the same index or the previous one if that doesn't exist.
 function loottable_delete_row(callerrow_index) {
     loottable_body.deleteRow(callerrow_index);
-    console.log("row index: " + callerrow_index + ", rows.length: " + loottable_body.rows.length);
+    
     if (callerrow_index == loottable_body.rows.length - 1) {
         loottable_body.rows[callerrow_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.setAttribute("onfocusout", "loottable_check_add_row('" + (callerrow_index - 1)  + "')");
     } else {
+        // We have to forcefully update the indexes of items below the one we
+        // deleted, otherwise the functions won't work correctly.
         for (let i = callerrow_index; i < loottable_body.rows.length; i++)
             loottable_body.rows[i].cells[LOOTTB_COLUMN.DELETE].firstChild.setAttribute("onclick", "loottable_delete_row('" + i + "')");
     }
@@ -114,30 +116,38 @@ function loottable_clear() {
 // @Improvement: We can split this function in two so we can have a generic autocomplete.
 // @Speed: We can keep track of the last used db index for a specific autocomplete so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
 function autocomplete_itemname(callerrow_index) {
-    // @Fix: @Priority: This won't work, we need a way to refer to individual cell elements in the loottable, the initial idea was to work with HTML id's, but that was too convoluted to maintain and I decided to switch to an approach that deals with table indexes instead.
     let callerrow_itemname = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.NAME].firstChild;
     let callerrow_itemprice = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.PRICE].firstChild;
-    if (loottable_autocomplete_lastsize >= callerrow_itemname.value.length) {
-        loottable_autocomplete_lastsize = callerrow_itemname.value.length;
+
+    suggestion_index = autocomplete_generic(mediviadb.items, callerrow_itemname);
+    if (suggestion_index == -1)
         callerrow_itemprice.value = "";
-        return;
+    else
+        callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
+}
+
+// Takes an array of structs with a 'name' field to be searched
+// and returns the index that was found, or -1 on failure.
+function autocomplete_generic(item_array, input_field) {
+    if (loottable_autocomplete_lastsize >= input_field.value.length) {
+        loottable_autocomplete_lastsize = input_field.value.length;
+        return -1;
     }
 
-    loottable_autocomplete_lastsize = callerrow_itemname.value.length;
-    let inputlen = callerrow_itemname.value.length;
-    let found_suggestion = false;
-    for (let i = 0; i < mediviadb.items.length; i++) {
-        if (inputlen > mediviadb.items[i].name.length)
+    loottable_autocomplete_lastsize = input_field.value.length;
+    let inputlen = input_field.value.length;
+    let suggestion_index = -1;
+    for (let i = 0; i < item_array.length; i++) {
+        if (inputlen > item_array[i].name.length)
             continue;
-        if (callerrow_itemname.value.toLowerCase() == mediviadb.items[i].name.substr(0, inputlen).toLowerCase()) {
-            callerrow_itemname.value = mediviadb.items[i].name;
-            callerrow_itemname.setSelectionRange(inputlen, mediviadb.items[i].name.length);
-            callerrow_itemprice.value = mediviadb.items[i].price;
-            found_suggestion = true;
+        if (input_field.value.toLowerCase() == item_array[i].name.substr(0, inputlen).toLowerCase()) {
+            input_field.value = item_array[i].name;
+            input_field.setSelectionRange(inputlen, item_array[i].name.length);
+            suggestion_index = i;
             break;
         }
     }
-    if (!found_suggestion) callerrow_itemprice.value = "";
+    return suggestion_index;
 }
 
 function loottable_add_creature_items() {
