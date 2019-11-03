@@ -106,7 +106,7 @@
         { "name": "Guardian Halberd", "price": 8000, "weight": 110, "stackable": false, "sellto": ["Ziyad"] },
         { "name": "Halberd", "price": 400, "weight": 90, "stackable": false, "sellto": ["Risdarick", "Sam", "Turvy", "Romella"] },
         { "name": "Heavy Halberd", "price": 35000, "weight": 120, "stackable": false, "sellto": ["Zyiad", "Wulkan"] },
-        { "name": "Hellforged Armor", "price": 1000000, "weight": 270, "stackable": false, "sellto": ["Players"] },
+        { "name": "Hellforged Armor", "price": 10000000, "weight": 270, "stackable": false, "sellto": ["Players"] },
         { "name": "Hellforged Axe", "price": 50000, "weight": 80, "stackable": false, "sellto": ["Wulkan"] },
         { "name": "Hellforged Legs", "price": 300000, "weight": 180, "stackable": false, "sellto": ["Zyiad"] },
         { "name": "Hellforged Shield", "price": 36000, "weight": 120, "stackable": false, "sellto": ["Zyiad", "Wulkan"] },
