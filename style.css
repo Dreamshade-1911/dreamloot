@@ -190,6 +190,7 @@ table input[type=text]:focus {
     display: none;
     margin-top: 5px;
     grid-gap: 10px;
-    grid-template: auto / 20% auto 52px 65px 0%;
+    grid-template-columns: auto minmax(200px, 30%) auto auto;
+    justify-content: center;
     align-items: center;
 }
