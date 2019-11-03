@@ -113,7 +113,6 @@ function loottable_clear() {
     gold_quant.focus();
 }
 
-// @Improvement: We can split this function in two so we can have a generic autocomplete.
 // @Speed: We can keep track of the last used db index for a specific autocomplete so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
 function autocomplete_itemname(callerrow_index) {
     let callerrow_itemname = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.NAME].firstChild;
@@ -126,7 +125,7 @@ function autocomplete_itemname(callerrow_index) {
         callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
 }
 
-// Takes an array of structs with a 'name' field to be searched
+// Takes an array of objects with a 'name' field to be searched
 // and returns the index that was found, or -1 on failure.
 function autocomplete_generic(item_array, input_field) {
     if (loottable_autocomplete_lastsize >= input_field.value.length) {
