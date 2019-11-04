@@ -111,10 +111,8 @@ function autocomplete_itemname(callerrow) {
     let callerrow_itemprice = callerrow.cells[LOOTTB_COLUMN.PRICE].firstChild;
 
     suggestion_index = autocomplete_generic(mediviadb.items, callerrow_itemname);
-    if (suggestion_index == -1)
-        callerrow_itemprice.value = "";
-    else
-        callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
+    if (suggestion_index == -1) callerrow_itemprice.value = "";
+    else callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
 }
 
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
@@ -129,8 +127,7 @@ function autocomplete_generic(item_array, input_field) {
     let inputlen = input_field.value.length;
     let suggestion_index = -1;
     for (let i = 0; i < item_array.length; i++) {
-        if (inputlen > item_array[i].name.length)
-            continue;
+        if (inputlen > item_array[i].name.length) continue;
         if (input_field.value.toLowerCase() == item_array[i].name.substr(0, inputlen).toLowerCase()) {
             input_field.value = item_array[i].name;
             input_field.setSelectionRange(inputlen, item_array[i].name.length);
