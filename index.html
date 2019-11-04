@@ -33,11 +33,11 @@
                 </table></center>
                 <center style="margin-top: 4px">
                     <button onclick="loottable_show_creature_items()">Add creature items</button><button onclick="loottable_clear()">Clear</button>
-                    <div class="loottb_addcreatureitems" id="loottb_addcreatureitems">
+                    <form onsubmit="loottable_add_creature_items(); return false;" onkeyup="onkeyup_creature_items(event)" class="loottb_addcreatureitems" id="loottb_addcreatureitems">
                         <label>Creature name: </label>
                         <input type="text" oninput="autocomplete_creature_items()" id="loottb_creaturename"/>
-                        <button onclick="loottable_add_creature_items()">Add</button><button onclick="loottable_hide_creature_items()">Cancel</button>
-                    </div>
+                        <button type="submit">Add</button><button type="reset" onclick="loottable_hide_creature_items()">Cancel</button>
+                    </form>
                 </center>
             </div>
             <!-- HuntInfo Infopanel -->

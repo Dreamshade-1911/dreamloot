@@ -50,20 +50,16 @@ function gtos(amount) {
 // Functions pertaining to the loottable
 // --------------------------------------
 
-// @Robustness: It would be way better to make a function that recalculates the
-// last and first items that gets called whenever we delete or add an item. The
-// current implementation of trying to keep track of them when adding/removing
-// is convoluted, has code duplication and is error-prone.
 function loottable_add_row() {
     let row_index = loottable_body.rows.length;
     let row = loottable_body.insertRow();
 
     let itemname = document.createElement("input");
     itemname.type = "text";
-    itemname.setAttribute("oninput", "autocomplete_itemname('" + row_index + "')");
+    itemname.setAttribute("oninput", "autocomplete_itemname(parentElement.parentElement)");
     row.insertCell().appendChild(itemname);
 
-    itemname.setAttribute("onfocusout", "loottable_check_add_row('" + row_index  + "')");
+    itemname.setAttribute("onfocusin", "loottable_check_add_row(parentElement.parentElement)");
     if (row_index > 0)
         loottable_body.rows[row_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.removeAttribute("onfocusin");
 
@@ -78,7 +74,7 @@ function loottable_add_row() {
     if (row_index > 0) {
         let deletebutton = document.createElement("button");
         deletebutton.setAttribute("class", "delete_row_button");
-        deletebutton.setAttribute("onclick", "loottable_delete_row('" + row_index + "')");
+        deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
         deletebutton.innerText = "X";
         deletebutton.tabIndex = -1;
         row.insertCell().appendChild(deletebutton);
@@ -86,25 +82,19 @@ function loottable_add_row() {
     return row;
 }
 
-function loottable_check_add_row(callerrow_index) {
-    if (callerrow_index != loottable_body.rows.length - 1) return;
-    if (loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.NAME].firstChild.value != "")
+function loottable_check_add_row(callerrow) {
+    if (loottable.rows[callerrow.rowIndex - 1].cells[LOOTTB_COLUMN.NAME].firstChild.value != "")
         loottable_add_row();
 }
 
-// @Improvement: Make it so that if we try to delete the last row, it clears it instead, that allows us to also show a delete button on the first row, and not need the current ghetto setup.
 // @Improvement: We can keep track of the selected row index so we can select the same index or the previous one if that doesn't exist.
-function loottable_delete_row(callerrow_index) {
-    loottable_body.deleteRow(callerrow_index);
-    
-    if (callerrow_index == loottable_body.rows.length - 1) {
-        loottable_body.rows[callerrow_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.setAttribute("onfocusout", "loottable_check_add_row('" + (callerrow_index - 1)  + "')");
-    } else {
-        // We have to forcefully update the indexes of items below the one we
-        // deleted, otherwise the functions won't work correctly.
-        for (let i = callerrow_index; i < loottable_body.rows.length; i++)
-            loottable_body.rows[i].cells[LOOTTB_COLUMN.DELETE].firstChild.setAttribute("onclick", "loottable_delete_row('" + i + "')");
+function loottable_delete_row(callerrow) {
+    if (callerrow.rowIndex == loottable.rows.length - 1) {
+        if (loottable.rows[callerrow.rowIndex - 1].cells[LOOTTB_COLUMN.NAME].firstChild.value == "")
+            loottable.rows[callerrow.rowIndex - 1].cells[LOOTTB_COLUMN.NAME].firstChild.setAttribute("onfocusin", "loottable_check_add_row(parentElement.parentElement)");
+        else return;
     }
+    loottable_body.deleteRow(callerrow.sectionRowIndex);
 }
 
 function loottable_clear() {
@@ -116,9 +106,9 @@ function loottable_clear() {
     gold_quant.focus();
 }
 
-function autocomplete_itemname(callerrow_index) {
-    let callerrow_itemname = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.NAME].firstChild;
-    let callerrow_itemprice = loottable_body.rows[callerrow_index].cells[LOOTTB_COLUMN.PRICE].firstChild;
+function autocomplete_itemname(callerrow) {
+    let callerrow_itemname = callerrow.cells[LOOTTB_COLUMN.NAME].firstChild;
+    let callerrow_itemprice = callerrow.cells[LOOTTB_COLUMN.PRICE].firstChild;
 
     suggestion_index = autocomplete_generic(mediviadb.items, callerrow_itemname);
     if (suggestion_index == -1)
@@ -185,18 +175,20 @@ function loottable_add_creature_items() {
     let first_row = loottable_body.rows[loottable_body.rows.length - 1];
     if (first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value == "") {
         first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[0];
-        autocomplete_itemname(first_row.sectionRowIndex);
+        autocomplete_itemname(first_row);
         i = 1;
     }
     for (; i < creature.items.length; i++) {
         loottable_autocomplete_lastsize = 0;
         let row = loottable_add_row();
         row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[i];
-        autocomplete_itemname(row.sectionRowIndex);
+        autocomplete_itemname(row);
     }
+
     loottable_add_row();
-    loottb_addcreature_name.focus();
-    loottb_addcreature_name.setSelectionRange(0, loottb_addcreature_name.value.length);
+    loottb_addcreatureitems_panel.scrollIntoView();
+    loottb_addcreature_name.value = "";
+    autocomplete_creature_items();
 }
 
 // ----------------------------------
@@ -216,4 +208,13 @@ function huntinfo_calculate_loot() {
     document.getElementById("huntinfo_totalearnings").innerText = gtos(totalearnings);
     document.getElementById("huntinfo_profit").innerText = gtos(totalearnings);
     document.getElementById("huntinfo_splitprofit").innerText = gtos(totalearnings);
+}
+
+// ---------------
+// Input handling
+// ---------------
+
+function onkeyup_creature_items(event) {
+    if (event.code == "Escape")
+        loottable_hide_creature_items();
 }
