@@ -9,32 +9,37 @@ var LOOTTB_COLUMN = {
 };
 
 // HTML Elements
+var players_grid;
 var loottable;
-var huntinfo;
 var loottable_body;
-var loottb_addcreatureitems_panel;
-var loottb_addcreature_name;
+var huntinfo;
+var addcreature_panel;
+var addcreature_name;
 
 var autocomplete_lastsize = 0;
-var creature_items_autocomplete_lastindex = -1;
+var addcreature_autocomplete_lastindex = -1;
 
 function init() {
-    // Since fetch is async, we should only use the db after the init function returns
+    // Fetch is async
     fetch("./db.json")
     .then((resp) => resp.json())
     .then(function(data) {
         mediviadb = data;
     });
+
+    players_grid = document.getElementById("playersgrid");
+    players_add_player();
+
     loottable = document.getElementById("loottb");
     loottable_body = loottable.getElementsByTagName("tbody")[0];
     loottable_add_row();
 
-    loottb_addcreatureitems_panel = document.getElementById("loottb_addcreatureitems");
-    loottb_addcreature_name = document.getElementById("loottb_creaturename");
+    addcreature_panel = document.getElementById("loottb_addcreatureitems");
+    addcreature_name = document.getElementById("loottb_creaturename");
     huntinfo = document.getElementById("huntinfo");
 }
 
-function stog(str) {
+function stoi(str) {
     if (str == "") return 0;
     else return parseInt(str);
 }
@@ -43,6 +48,58 @@ function gtos(amount) {
     if (amount < 1000) return amount + " gp";
     else if (amount >= 1000 && amount < 1000000) return (amount / 1000).toFixed(1) + " K";
     else return (amount / 1000000).toFixed(3) + " KK";
+}
+
+// @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
+// Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
+function autocomplete_generic(item_array, input_field) {
+    if (autocomplete_lastsize >= input_field.value.length) {
+        autocomplete_lastsize = input_field.value.length;
+        return -1;
+    }
+
+    autocomplete_lastsize = input_field.value.length;
+    let inputlen = input_field.value.length;
+    let suggestion_index = -1;
+    for (let i = 0; i < item_array.length; i++) {
+        if (inputlen > item_array[i].name.length) continue;
+        if (input_field.value.toLowerCase() == item_array[i].name.substr(0, inputlen).toLowerCase()) {
+            input_field.value = item_array[i].name;
+            input_field.setSelectionRange(inputlen, item_array[i].name.length);
+            suggestion_index = i;
+            break;
+        }
+    }
+    return suggestion_index;
+}
+
+// ------------------------------------------
+// Functions pertaining to the players panel
+// ------------------------------------------
+
+function players() { return players_grid.children; }
+
+function players_add_player() {
+    let playerpanel = document.createElement("div");
+    playerpanel.className = "playerpanel";
+    players_grid.appendChild(playerpanel);
+
+    let playername = document.createElement("input");
+    playername.className = "playername";
+    playername.type = "text";
+    playername.value = "New Player";
+    playerpanel.appendChild(playername);
+
+    let playerdelete = document.createElement("button");
+    playerdelete.className = "playerdelete_button";
+    playerdelete.innerText = "X";
+    playerpanel.appendChild(playerdelete);
+}
+
+function players_clear() {
+    while(players().length > 1)
+        players_grid.lastChild.remove();
+    players_add_player();
 }
 
 // --------------------------------------
@@ -72,7 +129,7 @@ function loottable_add_row() {
 
     if (row_index > 0) {
         let deletebutton = document.createElement("button");
-        deletebutton.setAttribute("class", "delete_row_button");
+        deletebutton.className = "delete_row_button";
         deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
         deletebutton.innerText = "X";
         deletebutton.tabIndex = -1;
@@ -97,7 +154,8 @@ function loottable_delete_row(callerrow) {
 }
 
 function loottable_clear() {
-    loottable_body.innerHTML = "";
+    while (loottable_body.firstChild)
+        loottable_body.firstChild.remove();
     loottable_add_row();
 
     let gold_quant = document.getElementById("loottb_gold_itemquantity");
@@ -114,48 +172,25 @@ function autocomplete_itemname(callerrow) {
     else callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
 }
 
-// @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
-// Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
-function autocomplete_generic(item_array, input_field) {
-    if (autocomplete_lastsize >= input_field.value.length) {
-        autocomplete_lastsize = input_field.value.length;
-        return -1;
-    }
-
-    autocomplete_lastsize = input_field.value.length;
-    let inputlen = input_field.value.length;
-    let suggestion_index = -1;
-    for (let i = 0; i < item_array.length; i++) {
-        if (inputlen > item_array[i].name.length) continue;
-        if (input_field.value.toLowerCase() == item_array[i].name.substr(0, inputlen).toLowerCase()) {
-            input_field.value = item_array[i].name;
-            input_field.setSelectionRange(inputlen, item_array[i].name.length);
-            suggestion_index = i;
-            break;
-        }
-    }
-    return suggestion_index;
-}
-
 function autocomplete_creature_items() {
-    creature_items_autocomplete_lastindex = autocomplete_generic(mediviadb.creatures, loottb_addcreature_name);
+    addcreature_autocomplete_lastindex = autocomplete_generic(mediviadb.creatures, addcreature_name);
 }
 
 function loottable_show_creature_items() {
-    loottb_addcreatureitems_panel.style.display = "grid";
-    loottb_addcreature_name.focus();
+    addcreature_panel.style.display = "grid";
+    addcreature_name.focus();
 }
 
 function loottable_hide_creature_items() {
-    loottb_addcreature_name.value = "";
-    loottb_addcreatureitems_panel.style.display = "none";
+    addcreature_name.value = "";
+    addcreature_panel.style.display = "none";
 }
 
 function loottable_add_creature_items() {
     // @Improvement: We should display an error message to the user saying that the creature name doesn't exist.
-    if (creature_items_autocomplete_lastindex == -1) return;
+    if (addcreature_autocomplete_lastindex == -1) return;
     let i = 0;
-    let creature = mediviadb.creatures[creature_items_autocomplete_lastindex];
+    let creature = mediviadb.creatures[addcreature_autocomplete_lastindex];
 
     // @Improvement: Instead of only checking the last row, keep adding items on empty rows until we reach the last one
     let first_row = loottable_body.rows[loottable_body.rows.length - 1];
@@ -172,8 +207,8 @@ function loottable_add_creature_items() {
     }
 
     loottable_add_row();
-    loottb_addcreatureitems_panel.scrollIntoView();
-    loottb_addcreature_name.value = "";
+    addcreature_panel.scrollIntoView();
+    addcreature_name.value = "";
     autocomplete_creature_items();
 }
 
@@ -183,12 +218,12 @@ function loottable_add_creature_items() {
 
 function huntinfo_calculate_loot() {
     let totalearnings = 0;
-    totalearnings += stog(document.getElementById("loottb_gold_itemquantity").value);
+    totalearnings += stoi(document.getElementById("loottb_gold_itemquantity").value);
 
     let cur_row;
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
         cur_row = loottable_body.rows[i];
-        totalearnings += stog(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value * stog(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value));
+        totalearnings += stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value * stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value));
     }
 
     document.getElementById("huntinfo_totalearnings").innerText = gtos(totalearnings);

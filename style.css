@@ -7,6 +7,7 @@
     --accent-color: #233a44;
     --accent-color-lighter: #335463;
     --accent-color-darker: #202b30;
+    --detail-color: #cac0a4;
 }
 
 /* - Default styles - */
@@ -17,7 +18,6 @@ html {
 }
 
 body {
-    background-image: url('background.png');
     background-color: #171717;
 }
 
@@ -29,10 +29,11 @@ label {
 button {
     color: var(--main-text-color);
     background-color: var(--accent-color);
-    border: 1px solid #34515c;
+    border: 2px solid #34515c;
     border-radius: 6px;
     padding: 3px 6px 4px;
     margin: 4px 2px;
+    min-width: 50px;
     transition-duration: 0.15s;
 }
 
@@ -40,12 +41,14 @@ button:hover {
     color: var(--main-text-highlight-color);
     background-color: #3c6469;
     border-color: #51939e;
+    transition-duration: 0.15s;
 }
 
 button:active {
     color: #a3a3a3;
     background-color: #172b33;
     border-color: #233b44;
+    transition-duration: 0.15s;
 }
 
 small {
@@ -76,21 +79,13 @@ input[type=text] {
 input[type=text]:hover {
     background-color: #2b2b2b;
     border-color: var(--accent-color);
+    transition-duration: 0.2s;
 }
 
 input[type=text]:focus {
     background-color: var(--border-highlight);
     border-color: var(--accent-color-lighter);
-}
-
-/* @Cleanup: unused, maybe we used it in the future?
-    if not, delete it. */
-h4 {
-    background-color: #2b2b2b;
-    padding: 4px;
-    margin: 0px;
-    border: 2px solid #2b2b2b;
-    border-radius: 6px;
+    transition-duration: 0.2s;
 }
 
 /* Tables */
@@ -99,7 +94,8 @@ table {
     width: 98%;
 }
 
-table th, td {
+table th,
+table td {
     text-align: center;
     padding: 4px 5px 6px;
     border-bottom: 2px solid var(--border-highlight);
@@ -125,24 +121,55 @@ table input[type=text] {
 table input[type=text]:hover {
     background-color: #2b2b2b;
     border-color: var(--accent-color);
+    transition-duration: 0.2s;
 }
 
 table input[type=text]:focus {
     background-color: var(--border-highlight);
     border-color: var(--accent-color-lighter);
+    transition-duration: 0.2s;
 }
 
 /* - Grid related - */
 
-.main-grid {
+.maingrid {
     margin-top: 25px;
     display: grid;
     grid-gap: 10px;
-    grid-template: auto / minmax(450px, auto) minmax(450px, auto);
+    grid-template-columns: repeat(2, minmax(450px, auto));
     align-items: flex-start;
 }
 
-/* - Classes for specific elements - */
+#playersgrid {
+    grid-area: auto / span 2;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.playerpanel {
+    display: grid;
+    grid-template-columns: auto max-content;
+    grid-gap: 5px;
+    flex-grow: 1;
+    flex-basis: 280px;
+    min-width: 280px;
+    max-width: 25%;
+    border-top: 2px solid var(--border-highlight);
+    border-right: 1px solid var(--panel-background);
+    border-left: 1px solid var(--panel-background);
+    box-shadow: inset 0px 0px var(--panel-background);
+    transition-duration: 0.4s;
+}
+
+.playerpanel:hover,
+.playerpanel:focus-within {
+    box-shadow: inset 0px 20px var(--panel-background);
+    transition-duration: 0.2s;
+}
+
+/* - Classes - */
 
 .title {
     text-align: center;
@@ -150,16 +177,39 @@ table input[type=text]:focus {
     margin: 20px;
 }
 
+.playername[type=text],
+.playername[type=text]:hover,
+.playername[type=text]:focus {
+    background: none;
+    border: none;
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 8px 0px;
+    text-align: center;
+}
+
+.playerdelete_button {
+    border: 1px solid var(--accent-color);
+    border-radius: 0px;
+    margin: 4px;
+    justify-self: right;
+    min-width: 30px;
+    background: var(--accent-color-darker);
+    transition-duration: 0.4s;
+}
+
 .infopanel {
     background-color: var(--panel-background);
     border: 2px solid #202020;
     border-radius: 10px;
     padding: 2px 2px 8px;
-    transition-duration: 0.2s;
+    transition-duration: 0.4s;
 }
 
+.infopanel:hover,
 .infopanel:focus-within {
     border-color: #313131;
+    transition-duration: 0.4s;
 }
 
 .infopanel h1 {
@@ -178,6 +228,7 @@ table input[type=text]:focus {
     border-radius: 6px;
     padding: 0px 4px 1px;
     margin: 0px 0px;
+    min-width: 20px;
     transition-duration: 0.2s;
 }
 
@@ -185,9 +236,12 @@ table input[type=text]:focus {
     color: var(--main-text-highlight-color);
     background-color: #c04343;
     border-color: #d86c6c;
+    transition-duration: 0.2s;
 }
 
-.loottb_addcreatureitems {
+/* Specific elements by id */
+
+#loottb_addcreatureitems {
     display: none;
     margin-top: 5px;
     grid-gap: 10px;

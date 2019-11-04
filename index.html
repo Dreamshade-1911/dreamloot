@@ -11,7 +11,10 @@
     <div style="margin-top: 15px; padding: 0px 2%">
         <h1 class="title">DreamLoot</h1>
         <p style="color: #c22222; text-align: center">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
-        <div class="main-grid">
+        <div class="maingrid">
+            <!-- Player waste -->
+            <div id="playersgrid">
+            </div>
             <!-- LootTable Infopanel -->
             <div class="infopanel">
                 <h1>Loot Table</h1>
@@ -33,10 +36,10 @@
                 </table></center>
                 <center style="margin-top: 4px">
                     <button onclick="loottable_show_creature_items()">Add creature items</button><button onclick="loottable_clear()">Clear</button>
-                    <form onsubmit="loottable_add_creature_items(); return false;" onkeyup="onkeyup_creature_items(event)" class="loottb_addcreatureitems" id="loottb_addcreatureitems">
+                    <form onsubmit="loottable_add_creature_items(); return false;" onkeyup="onkeyup_creature_items(event)" id="loottb_addcreatureitems">
                         <label>Creature name: </label>
-                        <input type="text" oninput="autocomplete_creature_items()" id="loottb_creaturename"/>
-                        <button type="submit">Add</button><button type="reset" onclick="loottable_hide_creature_items()">Cancel</button>
+                        <input type="text" autocomplete="off" oninput="autocomplete_creature_items()" id="loottb_creaturename"/>
+                        <div><button type="submit">Add</button><button type="reset" onclick="loottable_hide_creature_items()">Cancel</button></div>
                     </form>
                 </center>
             </div>
