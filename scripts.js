@@ -37,6 +37,8 @@ function init() {
     addcreature_panel = document.getElementById("loottb_addcreatureitems");
     addcreature_name = document.getElementById("loottb_creaturename");
     huntinfo = document.getElementById("huntinfo");
+
+    prevent_default_keys();
 }
 
 function stoi(str) {
@@ -127,6 +129,7 @@ function loottable_add_row() {
     itemprice.type = "text";
     row.insertCell().appendChild(itemprice);
 
+    // Add a delete button if it's not the first row
     if (row_index > 0) {
         let deletebutton = document.createElement("button");
         deletebutton.className = "delete_row_button";
@@ -184,6 +187,15 @@ function loottable_show_creature_items() {
 function loottable_hide_creature_items() {
     addcreature_name.value = "";
     addcreature_panel.style.display = "none";
+
+    // Select first row which has an empty quantity value
+    for (let i = 0; i < loottable_body.rows.length; i++) {
+        cur_quant = loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild;
+        if (cur_quant.value == "") {
+            cur_quant.focus();
+            break;
+        }
+    }
 }
 
 function loottable_add_creature_items() {
@@ -235,7 +247,39 @@ function huntinfo_calculate_loot() {
 // Input handling
 // ---------------
 
+function prevent_default_keys() {
+    document.body.addEventListener("keydown", event => {
+        // Block keys used with the control modifier
+        if (!event.ctrlKey) return;
+
+        switch (event.code) {
+            case "KeyM":
+                event.preventDefault();
+                break;
+        }
+    })
+}
+
+function onkeyup_loottable(event) {
+    switch (event.code) {
+        case "Enter":
+            huntinfo_calculate_loot();
+            break;
+
+        case "Escape":
+            loottable_clear();
+            break;
+
+        case "KeyM":
+            if (event.ctrlKey) {
+                loottable_show_creature_items();
+            }
+            break;
+    }
+}
+
 function onkeyup_creature_items(event) {
     if (event.code == "Escape")
         loottable_hide_creature_items();
+    event.cancelBubble = true;
 }

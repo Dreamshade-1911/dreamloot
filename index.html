@@ -16,7 +16,7 @@
             <div id="playersgrid">
             </div>
             <!-- LootTable Infopanel -->
-            <div class="infopanel">
+            <div class="infopanel" onkeyup="onkeyup_loottable(event)">
                 <h1>Loot Table</h1>
                 <center><table id="loottb">
                     <thead>
@@ -67,8 +67,11 @@
         </div>
 
         <p style="margin: 15px"><small>You can use hotkeys to make your job easier, check it out:<br>
-            <kbd>Tab</kbd> : Select next input box<br>
-            <kbd>Shift</kbd> + <kbd>Tab</kbd> : Select previous input box<br>
+            <kbd>Tab</kbd> : Select next input box.<br>
+            <kbd>Shift</kbd> + <kbd>Tab</kbd> : Select previous input box.<br>
+            <kbd>Enter</kbd> : Accept any action on focused element.<br>
+            <kbd>Esc</kbd> : Cancel any action or clear focused element.<br>
+            <kbd>Ctrl</kbd> + <kbd>M</kbd> : Add creature items
         </p>
 
         <footer style="text-align: center"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
