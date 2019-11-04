@@ -150,7 +150,7 @@
         { "name": "Small Emerald", "price": 250, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
         { "name": "Small Sapphire", "price": 250, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
         { "name": "Spike Sword", "price": 1000, "weight": 50, "stackable": false, "sellto": ["Nah'Bob"] },
-        { "name": "Sphinx Claw", "price": 3000, "weight": 0, "stackable": false, "sellto": ["Arses"] },
+        { "name": "Sphinx Claw", "price": 3000, "weight": 9, "stackable": true, "sellto": ["Arses"] },
         { "name": "Steel Boots", "price": 30000, "weight": 29, "stackable": false, "sellto": ["Ziyad"] },
         { "name": "Steel Helmet", "price": 293, "weight": 46, "stackable": false, "sellto": ["Cornelia", "Kroox", "Hasain", "Noranim"] },
         { "name": "Steel Shield", "price": 80, "weight": 69, "stackable": false, "sellto": ["Shanar", "Risdarick", "Sam", "Turvy", "Yanni"] },
