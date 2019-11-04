@@ -15,7 +15,7 @@ var loottable_body;
 var loottb_addcreatureitems_panel;
 var loottb_addcreature_name;
 
-var loottable_autocomplete_lastsize = 0;
+var autocomplete_lastsize = 0;
 var creature_items_autocomplete_lastindex = -1;
 
 function init() {
@@ -121,12 +121,12 @@ function autocomplete_itemname(callerrow) {
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
 // Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
 function autocomplete_generic(item_array, input_field) {
-    if (loottable_autocomplete_lastsize >= input_field.value.length) {
-        loottable_autocomplete_lastsize = input_field.value.length;
+    if (autocomplete_lastsize >= input_field.value.length) {
+        autocomplete_lastsize = input_field.value.length;
         return -1;
     }
 
-    loottable_autocomplete_lastsize = input_field.value.length;
+    autocomplete_lastsize = input_field.value.length;
     let inputlen = input_field.value.length;
     let suggestion_index = -1;
     for (let i = 0; i < item_array.length; i++) {
@@ -157,22 +157,12 @@ function loottable_hide_creature_items() {
 }
 
 function loottable_add_creature_items() {
+    // @Improvement: We should display an error message to the user saying that the creature name doesn't exist.
+    if (creature_items_autocomplete_lastindex == -1) return;
     let i = 0;
-    let index = creature_items_autocomplete_lastindex;
+    let creature = mediviadb.creatures[creature_items_autocomplete_lastindex];
 
-    if (index == -1) {
-        for (index = 0; index < mediviadb.creatures.length; index++) {
-            if (mediviadb.creatures[index].name == loottb_addcreature_name.value) {
-                break;
-            }
-            else {
-                // @Improvement: We should display an error message to the user saying that the creature name doesn't exist.
-                if (index == mediviadb.creatures.length - 1) return;
-            }
-        }
-    }
-    let creature = mediviadb.creatures[index];
-
+    // @Improvement: Instead of only checking the last row, keep adding items on empty rows until we reach the last one
     let first_row = loottable_body.rows[loottable_body.rows.length - 1];
     if (first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value == "") {
         first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[0];
@@ -180,7 +170,7 @@ function loottable_add_creature_items() {
         i = 1;
     }
     for (; i < creature.items.length; i++) {
-        loottable_autocomplete_lastsize = 0;
+        autocomplete_lastsize = 0;
         let row = loottable_add_row();
         row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[i];
         autocomplete_itemname(row);
