@@ -41,9 +41,8 @@ function stog(str) {
 
 function gtos(amount) {
     if (amount < 1000) return amount + " gp";
-    else return (amount / 1000) + " K";
-    //else if (amount >= 1000 && amount < 1000000) return (amount / 1000) + " K";
-    //else return (amount / 1000000) + " KK";
+    else if (amount >= 1000 && amount < 1000000) return (amount / 1000).toFixed(1) + " K";
+    else return (amount / 1000000).toFixed(3) + " KK";
 }
 
 // --------------------------------------
