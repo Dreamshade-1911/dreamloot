@@ -117,6 +117,7 @@ function autocomplete_itemname(callerrow) {
         callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
 }
 
+// @Bug: We are only starting the autocomplete after atleast 2 characters have been typed.
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
 // Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
 function autocomplete_generic(item_array, input_field) {

@@ -1,4 +1,5 @@
 *** Fix ***
+* We are only starting the autocomplete after atleast 2 characters have been typed.
 
 *** Implement ***
 * Show where the loot is sold (sorted by NPC)
