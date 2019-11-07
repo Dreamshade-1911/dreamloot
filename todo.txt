@@ -2,7 +2,6 @@
 
 *** Implement ***
 * Show where the loot is sold (sorted by NPC)
-* Calculate waste based on supplies used (by player)
 * Fill out database.
 * Ability to navigate through autocomplete suggestions with the arrow keys
 * Hotkeys
