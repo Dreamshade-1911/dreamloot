@@ -62,6 +62,13 @@
                         <td><label id="huntinfo_profit">0 gp</label></td>
                         <td><label id="huntinfo_splitprofit">0 gp</label></td>
                     </tr>
+                </table>
+                <table id="huntinfo_playerstb" style="margin-top: 15px; display: none">
+                    <tr>
+                        <th>Player</th>
+                        <th>Supplies used</th>
+                        <th>Share</th>
+                    </tr>
                 </table></center>
                 <center style="margin-top: 4px">
                     <button onclick="huntinfo_calculate_loot()">Calculate loot</button>
@@ -74,14 +81,16 @@
             <kbd>Shift</kbd> + <kbd>Tab</kbd> : Select previous input box.<br>
             <kbd>Enter</kbd> : Accept any action on focused element.<br>
             <kbd>Esc</kbd> : Cancel any action or clear focused element.<br>
-            <kbd>Ctrl</kbd> + <kbd>M</kbd> : Add creature items
+            <kbd>Ctrl</kbd> + <kbd>M</kbd> : Add creature items.<br>
+            <kbd>Ctrl</kbd> + <kbd>1-9</kbd> : Select player 1-9.<br>
+            <kbd>Ctrl</kbd> + <kbd>~</kbd> : Add player.<br>
         </p>
 
         <footer style="text-align: center"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
     </div>
 
     <template id="playerpanel-template">
-        <div class="playerpanel">
+        <div class="playerpanel" data-waste="0">
             <h1>
                 <input type="text" class="playername" value="New Player">
                 <button class="squarebutton" onclick="player_delete(parentElement.parentElement)" tabindex="-1">X</button>

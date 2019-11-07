@@ -200,8 +200,6 @@ table input[type=text]:focus {
     transition-timing-function: ease;
 }
 
-/* @Prototyping: Remove hover when done testing */
-.playerpanel:hover .playercontent,
 .playerpanel:focus-within .playercontent {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     transition-duration: 0.3s;
@@ -320,4 +318,9 @@ table input[type=text]:focus {
     grid-template-columns: auto minmax(200px, 30%) auto auto;
     justify-content: center;
     align-items: center;
+}
+
+#huntinfo label,
+#huntinfo_playerstb label {
+    font-weight: bold;
 }

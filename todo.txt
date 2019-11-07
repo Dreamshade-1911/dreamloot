@@ -8,3 +8,4 @@
 * Hotkeys
 * Sidebar menu with some options (like minimum value on loot, so that everything below that gets ignored by autocomplete and "add creature items")
 * Calculate how many items are in a backpack of a specific item by the weight of the backpack
+* Link to state of the tables so people can share loot calculations

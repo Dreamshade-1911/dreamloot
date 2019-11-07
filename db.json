@@ -15,7 +15,7 @@
 
 "runes": [
     { "name": "UH", "price": 2500 },
-    { "name": "SD", "price": 5500 },
+    { "name": "SD", "price": 6000 },
     { "name": "GFB", "price": 3500 },
     { "name": "HMM", "price": 1500 },
     { "name": "XPL", "price": 4500 },
@@ -27,7 +27,7 @@
     { "name": "H-Arrow", "price": 4, "weight": 0.7 },
     { "name": "Bolt", "price": 3, "weight": 0.8 },
     { "name": "H-Bolt", "price": 5, "weight": 0.8 },
-    { "name": "Burst Arrow", "price": 48, "weight": 0.8 }
+    { "name": "Burst Arrow", "price": 45, "weight": 0.8 }
 ],
 
 "npcs": [

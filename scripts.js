@@ -1,14 +1,20 @@
 // Constants
+var PLAYERS_PANEL = {
+    HEADER: 0,
+    RUNESTABLE: 2
+};
+
+var PLAYERSTB_COLUMN = {
+    NAME: 0,
+    QUANTITY: 1,
+    PRICE: 2
+}
+
 var LOOTTB_COLUMN = {
     NAME: 0,
     QUANTITY: 1,
     PRICE: 2,
     DELETE: 3
-};
-
-var PLAYERS_PANEL = {
-    HEADER: 0,
-    RUNESTABLE: 2
 };
 
 var mediviadb;
@@ -20,9 +26,14 @@ var playerpanel_template;
 var players_grid;
 var loottable;
 var loottable_body;
-var huntinfo;
 var addcreature_panel;
 var addcreature_name;
+var huntinfo;
+var huntinfo_totalwaste;
+var huntinfo_totalearnings;
+var huntinfo_profit;
+var huntinfo_splitprofit;
+var huntinfo_playerstable;
 
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
@@ -48,7 +59,13 @@ function init() {
 
     addcreature_panel = document.getElementById("loottb_addcreatureitems");
     addcreature_name = document.getElementById("loottb_creaturename");
+    
     huntinfo = document.getElementById("huntinfo");
+    huntinfo_totalwaste = document.getElementById("huntinfo_totalwaste");
+    huntinfo_totalearnings = document.getElementById("huntinfo_totalearnings");
+    huntinfo_profit = document.getElementById("huntinfo_profit");
+    huntinfo_splitprofit = document.getElementById("huntinfo_splitprofit");
+    huntinfo_playerstable = document.getElementById("huntinfo_playerstb");
 
     document.body.addEventListener("keydown", onkeydown_global);
 }
@@ -59,9 +76,9 @@ function stoi(str) {
 }
 
 function gtos(amount) {
-    if (amount < 1000) return amount + " gp";
-    else if (amount >= 1000 && amount < 1000000) return (amount / 1000).toFixed(1) + " K";
-    else return (amount / 1000000).toFixed(3) + " KK";
+    if (Math.abs(amount) < 1000) return amount + " gp";
+    else if (Math.abs(amount) >= 1000 && Math.abs(amount) < 1000000) return (amount / 1000).toFixed(1) + " K";
+    else return (Math.abs(amount) / 1000000).toFixed(3) + " KK";
 }
 
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
@@ -132,7 +149,7 @@ function players_add_player() {
         ammorow.insertCell().appendChild(ammoprice);
     }
     
-    players_grid.appendChild(newpanel);
+    return players_grid.appendChild(newpanel);
 }
 
 function player_delete(callerpanel) {
@@ -270,12 +287,31 @@ function loottable_add_creature_items() {
 // Functions pertaining to hunt info
 // ----------------------------------
 
+function huntinfo_clearplayers() {
+    while (huntinfo_playerstable.rows[1])
+        huntinfo_playerstable.rows[1].remove();
+}
+
 function huntinfo_calculate_loot() {
     // Calculate waste
     let totalwaste = 0;
+    let playerwaste, runestable, ammotable;
     for (let i = 1; i < players().length; i++) {
-        
+        playerwaste = 0;
+        runestable = player(i).querySelector(".runestable");
+        for (let j = 1; j < runestable.rows.length; j++) {
+            playerwaste += stoi(runestable.rows[j].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value) *
+                           stoi(runestable.rows[j].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
+        }
+        ammotable = player(i).querySelector(".ammotable");
+        for (let j = 1; j < ammotable.rows.length; j++) {
+            playerwaste += stoi(ammotable.rows[j].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value) *
+                           stoi(ammotable.rows[j].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
+        }
+        player(i).setAttribute("data-waste", playerwaste);
+        totalwaste += playerwaste;
     }
+    huntinfo_totalwaste.innerText = gtos(totalwaste);
 
     // Calculate profit
     let totalearnings = 0;
@@ -286,10 +322,40 @@ function huntinfo_calculate_loot() {
         cur_row = loottable_body.rows[i];
         totalearnings += stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value * stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value));
     }
+    let splitprofit = (totalearnings - totalwaste) / (players().length - 1);
 
-    document.getElementById("huntinfo_totalearnings").innerText = gtos(totalearnings);
-    document.getElementById("huntinfo_profit").innerText = gtos(totalearnings);
-    document.getElementById("huntinfo_splitprofit").innerText = gtos(totalearnings);
+    huntinfo_totalearnings.innerText = gtos(totalearnings);
+    huntinfo_profit.innerText = gtos(totalearnings - totalwaste);
+    huntinfo_splitprofit.innerText = gtos(splitprofit);
+    if (totalearnings - totalwaste >= 0) {
+        huntinfo_profit.style.color = "green";
+        huntinfo_splitprofit.style.color = "green";
+    } else {
+        huntinfo_profit.style.color = "red";
+        huntinfo_splitprofit.style.color = "red";
+    }
+
+    // Calculate player shares
+    if (players().length > 2) {
+        huntinfo_clearplayers();
+        huntinfo_playerstable.style.display = "table";
+        let row, plname, plsupplies, plshare;
+        for (let i = 1; i < players().length; i++) {
+            row = huntinfo_playerstable.insertRow();
+
+            plname = document.createElement("label");
+            plname.innerText = player(i).querySelector(".playername").value;
+            row.insertCell().appendChild(plname);
+
+            plsupplies = document.createElement("label");
+            plsupplies.innerText = gtos(player(i).getAttribute("data-waste"));
+            row.insertCell().appendChild(plsupplies);
+
+            plshare = document.createElement("label");
+            plshare.innerText = gtos(parseInt(player(i).getAttribute("data-waste")) + splitprofit);
+            row.insertCell().appendChild(plshare);
+        }
+    } else huntinfo_playerstable.style.display = "none";
 }
 
 // ---------------
@@ -322,6 +388,8 @@ function onkeydown_global(event) {
             switch (event.keyCode) {
                 case 192: // Tilde
                     players_add_player();
+                    player(players().length - 1).querySelector(".playername").focus();
+                    player(players().length - 1).querySelector(".playername").setSelectionRange(0, 100);
                     break;
 
                 default:  handled = false;
