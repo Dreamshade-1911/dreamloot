@@ -4,6 +4,8 @@
     <title>DreamLoot</title>
     <meta charset="utf-8">
     <script src="scripts.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"> 
+    <link href='https://fonts.googleapis.com/css?family=Arimo&display=swap' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 
@@ -14,6 +16,7 @@
         <div class="maingrid">
             <!-- Player waste -->
             <div id="playersgrid">
+                <button class="squarebutton" id="addplayerbtn" style="width: 2%; font-size: 14pt" onclick="players_add_player()">+</button>
             </div>
             <!-- LootTable Infopanel -->
             <div class="infopanel" onkeyup="onkeyup_loottable(event)">
@@ -28,7 +31,7 @@
                         </tr>
                         <tr>
                             <td><label>Gold Coin</label></td>
-                            <td><input type="text" id="loottb_gold_itemquantity" autofocus/></td>
+                            <td><input type="text" id="loottb_gold_itemquantity"/></td>
                             <td><label>1</label></td>
                         </tr>
                     </thead>
@@ -76,5 +79,32 @@
 
         <footer style="text-align: center"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
     </div>
+
+    <template id="playerpanel-template">
+        <div class="playerpanel">
+            <h1>
+                <input type="text" class="playername" value="New Player">
+                <button class="squarebutton" onclick="player_delete(parentElement.parentElement)" tabindex="-1">X</button>
+            </h1>
+            <div class="playercontent">
+                <h2>Backpacks of runes used</h2>
+                <table class="runestable">
+                    <tr>
+                        <th>Rune</th>
+                        <th style="width: 15%">Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </table>
+                <h2>Ammunition used</h2>
+                <table class="ammotable">
+                    <tr>
+                        <th>Ammo</th>
+                        <th style="width: 18%">Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
 </body>
 </html>

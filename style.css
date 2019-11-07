@@ -1,8 +1,9 @@
 :root {
+    --background-color: #171717;
     --main-text-color: #dbdbdb;
     --main-text-highlight-color: #ffffff;
     --secondary-text-color: #808080;
-    --panel-background: #242424;
+    --panel-background: #202020;
     --border-highlight: #313131;
     --accent-color: #233a44;
     --accent-color-lighter: #335463;
@@ -13,12 +14,13 @@
 /* - Default styles - */
 
 html {
-    font-family: sans-serif;
+    font-family: "Arimo", sans-serif;
     color: var(--main-text-color);
 }
 
 body {
-    background-color: #171717;
+    background-color: var(--background-color);
+    font-family: "Arimo", sans-serif;
 }
 
 label {
@@ -29,12 +31,14 @@ label {
 button {
     color: var(--main-text-color);
     background-color: var(--accent-color);
+    font-family: "Arimo", sans-serif;
     border: 2px solid #34515c;
     border-radius: 6px;
     padding: 3px 6px 4px;
     margin: 4px 2px;
     min-width: 50px;
     transition-duration: 0.15s;
+    transition-timing-function: ease;
 }
 
 button:hover {
@@ -42,6 +46,7 @@ button:hover {
     background-color: #3c6469;
     border-color: #51939e;
     transition-duration: 0.15s;
+    transition-timing-function: ease;
 }
 
 button:active {
@@ -66,26 +71,29 @@ kbd {
 
 input[type=text] {
     width: 100%;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 10pt;
     background-color: #2b2b2b;
+    text-align: center;
+    font-family: "Arimo", sans-serif;
+    font-size: 10pt;
     color: var(--main-text-color);
-    border: 2px solid var(--accent-color-darker);
+    border: 2px solid var(--panel-background);
     border-radius: 4px;
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 input[type=text]:hover {
     background-color: #2b2b2b;
     border-color: var(--accent-color);
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 input[type=text]:focus {
     background-color: var(--border-highlight);
     border-color: var(--accent-color-lighter);
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 /* Tables */
@@ -107,27 +115,22 @@ table td {
 }
 
 table input[type=text] {
-    width: 100%;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 10pt;
     background-color: var(--panel-background);
-    color: var(--main-text-color);
-    border: 2px solid var(--panel-background);
-    border-radius: 4px;
-    transition-duration: 0.2s;
+
 }
 
 table input[type=text]:hover {
     background-color: #2b2b2b;
     border-color: var(--accent-color);
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 table input[type=text]:focus {
     background-color: var(--border-highlight);
     border-color: var(--accent-color-lighter);
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 /* - Grid related - */
@@ -146,56 +149,121 @@ table input[type=text]:focus {
     flex-wrap: wrap;
     flex-grow: 1;
     justify-content: center;
+    position: relative;
 }
 
 .playerpanel {
-    display: grid;
-    grid-template-columns: auto max-content;
-    grid-gap: 5px;
+    background-color: var(--background-color);
+    position: relative;
     flex-grow: 1;
-    flex-basis: 280px;
-    min-width: 280px;
-    max-width: 25%;
-    border-top: 2px solid var(--border-highlight);
+    flex-basis: 250px;
+    min-width: 250px;
+    max-width: 30%;
+    border-top: 3px solid var(--border-highlight);
     border-right: 1px solid var(--panel-background);
-    border-left: 1px solid var(--panel-background);
+    border-left: 1px solid var(--border-highlight);
     box-shadow: inset 0px 0px var(--panel-background);
-    transition-duration: 0.4s;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 .playerpanel:hover,
 .playerpanel:focus-within {
-    box-shadow: inset 0px 20px var(--panel-background);
-    transition-duration: 0.2s;
+    box-shadow: inset 0px 40px var(--panel-background);
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
 }
 
 /* - Classes - */
 
 .title {
+    font-family: "Righteous", sans-serif;
     text-align: center;
     font-weight: 600;
     margin: 20px;
 }
 
-.playername[type=text],
-.playername[type=text]:hover,
-.playername[type=text]:focus {
+.playercontent {
+    position: absolute;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-highlight);
+    box-sizing: border-box;
+    z-index: 1;
+    width: 100%;
+    border-top-width: 0px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding: 6px;
+    padding-bottom: 15px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+/* @Prototyping: Remove hover when done testing */
+.playerpanel:hover .playercontent,
+.playerpanel:focus-within .playercontent {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+.playercontent label {
+    font-weight: bold;
+}
+
+.playerpanel h1 {
+    margin: 2px 10px;
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: auto max-content;
+}
+
+#playerfirstpanel.playerpanel h1 {
+    grid-template-columns: max-content auto max-content;
+}
+
+.squarebutton {
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid var(--accent-color);
+    border-radius: 0px;
+    margin: 4px;
+    min-width: 30px;
+    background: var(--accent-color-darker);
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+}
+
+.squarebutton:hover {
+    border-color: var(--accent-color-lighter);
+    background: var(--accent-color);
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+.playerpanel h1 input[type=text],
+.playerpanel h1 input[type=text]:hover,
+.playerpanel h1 input[type=text]:focus {
     background: none;
     border: none;
     font-size: 12pt;
     font-weight: bold;
-    margin: 8px 0px;
     text-align: center;
 }
 
-.playerdelete_button {
-    border: 1px solid var(--accent-color);
-    border-radius: 0px;
-    margin: 4px;
-    justify-self: right;
-    min-width: 30px;
-    background: var(--accent-color-darker);
-    transition-duration: 0.4s;
+.playerpanel h2 {
+    background-color: var(--accent-color-darker);
+    text-align: center;
+    line-height: 25px;
+    border-radius: 8px;
+    height: 25px;
+    margin: 6px;
+    font-size: 11pt;
+}
+
+.playerpanel th {
+    font-size: 10pt;
 }
 
 .infopanel {
@@ -204,12 +272,14 @@ table input[type=text]:focus {
     border-radius: 10px;
     padding: 2px 2px 8px;
     transition-duration: 0.4s;
+    transition-timing-function: ease;
 }
 
 .infopanel:hover,
 .infopanel:focus-within {
     border-color: #313131;
     transition-duration: 0.4s;
+    transition-timing-function: ease;
 }
 
 .infopanel h1 {
@@ -230,6 +300,7 @@ table input[type=text]:focus {
     margin: 0px 0px;
     min-width: 20px;
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 .delete_row_button:hover {
@@ -237,6 +308,7 @@ table input[type=text]:focus {
     background-color: #c04343;
     border-color: #d86c6c;
     transition-duration: 0.2s;
+    transition-timing-function: ease;
 }
 
 /* Specific elements by id */

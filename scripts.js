@@ -1,5 +1,3 @@
-var mediviadb;
-
 // Constants
 var LOOTTB_COLUMN = {
     NAME: 0,
@@ -7,6 +5,16 @@ var LOOTTB_COLUMN = {
     PRICE: 2,
     DELETE: 3
 };
+
+var PLAYERS_PANEL = {
+    HEADER: 0,
+    RUNESTABLE: 2
+};
+
+var mediviadb;
+
+// Templates
+var playerpanel_template;
 
 // HTML Elements
 var players_grid;
@@ -25,20 +33,24 @@ function init() {
     .then((resp) => resp.json())
     .then(function(data) {
         mediviadb = data;
+        players_add_player();
+        loottable_add_row();
+        player(1).querySelector(".playername").focus();
+        player(1).querySelector(".playername").setSelectionRange(0, 100);
     });
 
+    playerpanel_template = document.getElementById("playerpanel-template");
+
     players_grid = document.getElementById("playersgrid");
-    players_add_player();
 
     loottable = document.getElementById("loottb");
     loottable_body = loottable.getElementsByTagName("tbody")[0];
-    loottable_add_row();
 
     addcreature_panel = document.getElementById("loottb_addcreatureitems");
     addcreature_name = document.getElementById("loottb_creaturename");
     huntinfo = document.getElementById("huntinfo");
 
-    prevent_default_keys();
+    document.body.addEventListener("keydown", onkeydown_global);
 }
 
 function stoi(str) {
@@ -80,28 +92,57 @@ function autocomplete_generic(item_array, input_field) {
 // ------------------------------------------
 
 function players() { return players_grid.children; }
+function player(index) { return players_grid.children[index]; }
 
 function players_add_player() {
-    let playerpanel = document.createElement("div");
-    playerpanel.className = "playerpanel";
-    players_grid.appendChild(playerpanel);
+    let newpanel = document.importNode(playerpanel_template.content, true);
+    let runestable = newpanel.querySelector(".runestable");
+    let ammotable = newpanel.querySelector(".ammotable");
 
-    let playername = document.createElement("input");
-    playername.className = "playername";
-    playername.type = "text";
-    playername.value = "New Player";
-    playerpanel.appendChild(playername);
+    let runerow, runelbl, runequant, runeprice;
+    for (let i = 0; i < mediviadb.runes.length; i++) {
+        runerow = runestable.insertRow();
+        runelbl = document.createElement("label");
+        runelbl.innerText = mediviadb.runes[i].name + "'s";
+        runerow.insertCell().appendChild(runelbl);
 
-    let playerdelete = document.createElement("button");
-    playerdelete.className = "playerdelete_button";
-    playerdelete.innerText = "X";
-    playerpanel.appendChild(playerdelete);
+        runequant = document.createElement("input");
+        runequant.setAttribute("type", "text");
+        runerow.insertCell().appendChild(runequant);
+
+        runeprice = document.createElement("input");
+        runeprice.setAttribute("type", "text");
+        runeprice.value = mediviadb.runes[i].price;
+        runerow.insertCell().appendChild(runeprice);
+    }
+    let ammorow, ammolbl, ammoquant, ammoprice;
+    for (let i = 0; i < mediviadb.ammo.length; i++) {
+        ammorow = ammotable.insertRow();
+        ammolbl = document.createElement("label");
+        ammolbl.innerText = mediviadb.ammo[i].name + "s";
+        ammorow.insertCell().appendChild(ammolbl);
+
+        ammoquant = document.createElement("input");
+        ammoquant.setAttribute("type", "text");
+        ammorow.insertCell().appendChild(ammoquant);
+
+        ammoprice = document.createElement("input");
+        ammoprice.setAttribute("type", "text");
+        ammoprice.value = mediviadb.ammo[i].price;
+        ammorow.insertCell().appendChild(ammoprice);
+    }
+    
+    players_grid.appendChild(newpanel);
+}
+
+function player_delete(callerpanel) {
+    callerpanel.remove();
+    if (players().length <= 1) players_add_player();
 }
 
 function players_clear() {
     while(players().length > 1)
         players_grid.lastChild.remove();
-    players_add_player();
 }
 
 // --------------------------------------
@@ -192,6 +233,7 @@ function loottable_hide_creature_items() {
     for (let i = 0; i < loottable_body.rows.length; i++) {
         cur_quant = loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild;
         if (cur_quant.value == "") {
+            cur_quant.scrollIntoView(false);
             cur_quant.focus();
             break;
         }
@@ -229,6 +271,13 @@ function loottable_add_creature_items() {
 // ----------------------------------
 
 function huntinfo_calculate_loot() {
+    // Calculate waste
+    let totalwaste = 0;
+    for (let i = 1; i < players().length; i++) {
+        
+    }
+
+    // Calculate profit
     let totalearnings = 0;
     totalearnings += stoi(document.getElementById("loottb_gold_itemquantity").value);
 
@@ -247,19 +296,49 @@ function huntinfo_calculate_loot() {
 // Input handling
 // ---------------
 
-function prevent_default_keys() {
-    document.body.addEventListener("keydown", event => {
-        // Block keys used with the control modifier
-        if (!event.ctrlKey) return;
+function onkeydown_global(event) {
+    // Block keys used with the control modifier
+    if (!event.ctrlKey) return;
+    let dig = -1;
+    let handled = true;
 
-        switch (event.code) {
-            case "KeyM":
-                event.preventDefault();
-                break;
+    switch (event.code) {
+        case "Digit1":  dig = 1;    break;
+        case "Digit2":  dig = 2;    break;
+        case "Digit3":  dig = 3;    break;
+        case "Digit4":  dig = 4;    break;
+        case "Digit5":  dig = 5;    break;
+        case "Digit6":  dig = 6;    break;
+        case "Digit7":  dig = 7;    break;
+        case "Digit8":  dig = 8;    break;
+        case "Digit9":  dig = 9;    break;
+
+        case "KeyM":
+            loottable_show_creature_items();
+            break;
+
+        default:
+            // keyCode handling for keys without a string id
+            switch (event.keyCode) {
+                case 192: // Tilde
+                    players_add_player();
+                    break;
+
+                default:  handled = false;
+            }
+    }
+
+    if (dig != -1) {
+        players_grid.scrollIntoView(false);
+        if (players().length >= dig + 1) {
+            player(dig).querySelector(".playername").focus();
+            player(dig).querySelector(".playername").setSelectionRange(0, 100);
         }
-    })
+    }
+    if (handled) event.preventDefault();
 }
 
+// Make pageup and pagedown change rows
 function onkeyup_loottable(event) {
     switch (event.code) {
         case "Enter":
@@ -268,12 +347,6 @@ function onkeyup_loottable(event) {
 
         case "Escape":
             loottable_clear();
-            break;
-
-        case "KeyM":
-            if (event.ctrlKey) {
-                loottable_show_creature_items();
-            }
             break;
     }
 }
