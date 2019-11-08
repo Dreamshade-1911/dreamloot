@@ -114,7 +114,7 @@ function player(index) { return players_grid.children[index]; }
 function players_add_player() {
     let newpanel = document.importNode(playerpanel_template.content, true);
     let runestable = newpanel.querySelector(".runestable");
-    let ammotable = newpanel.querySelector(".ammotable");
+    let otherstable = newpanel.querySelector(".otherstable");
 
     let runerow, runelbl, runequant, runeprice;
     for (let i = 0; i < mediviadb.runes.length; i++) {
@@ -132,21 +132,21 @@ function players_add_player() {
         runeprice.value = mediviadb.runes[i].price;
         runerow.insertCell().appendChild(runeprice);
     }
-    let ammorow, ammolbl, ammoquant, ammoprice;
-    for (let i = 0; i < mediviadb.ammo.length; i++) {
-        ammorow = ammotable.insertRow();
-        ammolbl = document.createElement("label");
-        ammolbl.innerText = mediviadb.ammo[i].name + "s";
-        ammorow.insertCell().appendChild(ammolbl);
+    let othersrow, otherslbl, othersquant, othersprice;
+    for (let i = 0; i < mediviadb.players_otheritems.length; i++) {
+        othersrow = otherstable.insertRow();
+        otherslbl = document.createElement("label");
+        otherslbl.innerText = mediviadb.players_otheritems[i].name;
+        othersrow.insertCell().appendChild(otherslbl);
 
-        ammoquant = document.createElement("input");
-        ammoquant.setAttribute("type", "text");
-        ammorow.insertCell().appendChild(ammoquant);
+        othersquant = document.createElement("input");
+        othersquant.setAttribute("type", "text");
+        othersrow.insertCell().appendChild(othersquant);
 
-        ammoprice = document.createElement("input");
-        ammoprice.setAttribute("type", "text");
-        ammoprice.value = mediviadb.ammo[i].price;
-        ammorow.insertCell().appendChild(ammoprice);
+        othersprice = document.createElement("input");
+        othersprice.setAttribute("type", "text");
+        othersprice.value = mediviadb.players_otheritems[i].price;
+        othersrow.insertCell().appendChild(othersprice);
     }
     
     return players_grid.appendChild(newpanel);
