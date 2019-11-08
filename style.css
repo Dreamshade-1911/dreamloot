@@ -37,7 +37,7 @@ button {
     padding: 3px 6px 4px;
     margin: 4px 2px;
     min-width: 50px;
-    transition-duration: 0.15s;
+    transition-duration: 0.2s;
     transition-timing-function: ease;
 }
 
@@ -54,6 +54,7 @@ button:active {
     background-color: #172b33;
     border-color: #233b44;
     transition-duration: 0.15s;
+    transition-timing-function: ease;
 }
 
 small {
@@ -193,6 +194,7 @@ table input[type=text]:focus {
     border-top-width: 0px;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
+    box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.6);
     padding: 6px;
     padding-bottom: 15px;
     clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
@@ -201,7 +203,7 @@ table input[type=text]:focus {
 }
 
 .playerpanel:focus-within .playercontent {
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
     transition-duration: 0.3s;
     transition-timing-function: ease;
 }
@@ -221,7 +223,7 @@ table input[type=text]:focus {
     grid-template-columns: max-content auto max-content;
 }
 
-.squarebutton {
+.square-button {
     font-size: 10pt;
     font-weight: bold;
     border: 1px solid var(--accent-color);
@@ -233,7 +235,7 @@ table input[type=text]:focus {
     transition-timing-function: ease;
 }
 
-.squarebutton:hover {
+.square-button:hover {
     border-color: var(--accent-color-lighter);
     background: var(--accent-color);
     transition-duration: 0.2s;
@@ -265,10 +267,12 @@ table input[type=text]:focus {
 }
 
 .infopanel {
+    position: relative;
     background-color: var(--panel-background);
     border: 2px solid #202020;
     border-radius: 10px;
-    padding: 2px 2px 8px;
+    box-shadow: 0px 6px 0px 2px rgba(0, 0, 0, 0.2);
+    padding: 2px 2px 15px;
     transition-duration: 0.4s;
     transition-timing-function: ease;
 }
@@ -281,39 +285,50 @@ table input[type=text]:focus {
 }
 
 .infopanel h1 {
+    text-align: center;
     background-color: var(--accent-color);
     font-size: 22px;
     font-weight: 600;
-    text-align: center;
-    margin: 0px 0px 15px;
     border-radius: 6px;
+    box-shadow: 0px 4px 0px 0px var(--accent-color-darker);
+    margin: 0px 0px 15px;
     padding: 5px 0px;
 }
 
-.delete_row_button {
-    background-color: #aa3030;
-    border: 1px solid #ce5353;
-    border-radius: 6px;
-    padding: 0px 4px 1px;
-    margin: 0px 0px;
-    min-width: 20px;
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
+.headerbutton-left {
+    position: absolute;
+    left: 4px;
 }
 
-.delete_row_button:hover {
+.headerbutton-right {
+    position: absolute;
+    right: 4px;
+}
+
+.red-button {
+    background-color: #aa3030;
+    border: 2px solid #ce5353;
+    border-radius: 6px;
+}
+
+.red-button:hover {
     color: var(--main-text-highlight-color);
     background-color: #c04343;
     border-color: #d86c6c;
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
+}
+
+.loottable-button {
+    border-width: 1px;
+    padding: 0px 4px 1px;
+    margin: 0px 0px;
+    min-width: 20px;
 }
 
 /* Specific elements by id */
 
 #loottb_addcreatureitems {
     display: none;
-    margin-top: 5px;
+    margin-bottom: 10px;
     grid-gap: 10px;
     grid-template-columns: auto minmax(200px, 30%) auto auto;
     justify-content: center;
@@ -322,5 +337,18 @@ table input[type=text]:focus {
 
 #huntinfo label,
 #huntinfo_playerstb label {
+    color: var(--detail-color);
     font-weight: bold;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 960px), screen and (max-device-width: 960px) {
+    .maingrid {
+        grid-template-columns: minmax(450px, auto);
+    }
+
+    #playersgrid {
+        grid-area: auto;
+    }
 }

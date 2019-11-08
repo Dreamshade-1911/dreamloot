@@ -76,7 +76,7 @@ function stoi(str) {
 }
 
 function gtos(amount) {
-    if (Math.abs(amount) < 1000) return amount + " gp";
+    if (Math.abs(amount) < 1000) return parseInt(amount) + " gp";
     else if (Math.abs(amount) >= 1000 && Math.abs(amount) < 1000000) return (amount / 1000).toFixed(1) + " K";
     else return (Math.abs(amount) / 1000000).toFixed(3) + " KK";
 }
@@ -190,7 +190,7 @@ function loottable_add_row() {
     // Add a delete button if it's not the first row
     if (row_index > 0) {
         let deletebutton = document.createElement("button");
-        deletebutton.className = "delete_row_button";
+        deletebutton.className = "red-button loottable-button";
         deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
         deletebutton.innerText = "X";
         deletebutton.tabIndex = -1;
@@ -327,12 +327,15 @@ function huntinfo_calculate_loot() {
     huntinfo_totalearnings.innerText = gtos(totalearnings);
     huntinfo_profit.innerText = gtos(totalearnings - totalwaste);
     huntinfo_splitprofit.innerText = gtos(splitprofit);
-    if (totalearnings - totalwaste >= 0) {
+    if (splitprofit > 0) {
         huntinfo_profit.style.color = "green";
         huntinfo_splitprofit.style.color = "green";
-    } else {
+    } else if (splitprofit < 0) {
         huntinfo_profit.style.color = "red";
         huntinfo_splitprofit.style.color = "red";
+    } else {
+        huntinfo_profit.style.color = "var(--detail-color)";
+        huntinfo_splitprofit.style.color = "var(--detail-color)";
     }
 
     // Calculate player shares
