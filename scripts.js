@@ -295,7 +295,7 @@ function huntinfo_clearplayers() {
 function huntinfo_calculate_loot() {
     // Calculate waste
     let totalwaste = 0;
-    let playerwaste, runestable, ammotable;
+    let playerwaste, runestable, otherstable;
     for (let i = 1; i < players().length; i++) {
         playerwaste = 0;
         runestable = player(i).querySelector(".runestable");
@@ -303,10 +303,10 @@ function huntinfo_calculate_loot() {
             playerwaste += stoi(runestable.rows[j].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value) *
                            stoi(runestable.rows[j].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
         }
-        ammotable = player(i).querySelector(".ammotable");
-        for (let j = 1; j < ammotable.rows.length; j++) {
-            playerwaste += stoi(ammotable.rows[j].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value) *
-                           stoi(ammotable.rows[j].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
+        otherstable = player(i).querySelector(".otherstable");
+        for (let j = 1; j < otherstable.rows.length; j++) {
+            playerwaste += stoi(otherstable.rows[j].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value) *
+                           stoi(otherstable.rows[j].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
         }
         player(i).setAttribute("data-waste", playerwaste);
         totalwaste += playerwaste;
