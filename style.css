@@ -134,7 +134,8 @@ table td {
 }
 
 table input[type=text],
-table input[type=number] {
+table input[type=number], 
+table input[type=number]:invalid {
     background-color: var(--panel-background);
 }
 

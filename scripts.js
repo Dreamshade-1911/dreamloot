@@ -130,12 +130,14 @@ function players_add_player() {
             rowquant = document.createElement("input");
             rowquant.type = "number";
             rowquant.setAttribute("min", "0");
+            rowquant.setAttribute("placeholder", "0");
             newrow.insertCell().appendChild(rowquant);
     
             rowprice = document.createElement("input");
             rowprice.type = "number";
             rowprice.setAttribute("min", "0");
             rowprice.setAttribute("step", "100");
+            rowprice.setAttribute("placeholder", "0");
             rowprice.value = dbarray[i].price;
             newrow.insertCell().appendChild(rowprice);
         }
@@ -174,12 +176,14 @@ function loottable_add_row() {
     let itemquantity = document.createElement("input");
     itemquantity.type = "number";
     itemquantity.setAttribute("min", "0");
+    itemquantity.setAttribute("placeholder", "0");
     row.insertCell().appendChild(itemquantity);
 
     let itemprice = document.createElement("input");
     itemprice.type = "number";
     itemprice.setAttribute("min", "0");
     itemprice.setAttribute("step", "100");
+    itemprice.setAttribute("placeholder", "0");
     row.insertCell().appendChild(itemprice);
 
     // Add a delete button if it's not the first row
