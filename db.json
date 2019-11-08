@@ -23,12 +23,12 @@
 ],
 
 "players_otheritems": [
-    { "name": "ROH's", "price": 2000, "weight": 0.8 },
-    { "name": "Arrows", "price": 2, "weight": 0.7 },
-    { "name": "H-Arrows", "price": 4, "weight": 0.7 },
-    { "name": "Bolts", "price": 3, "weight": 0.8 },
-    { "name": "H-Bolts", "price": 5, "weight": 0.8 },
-    { "name": "Burst Arrows", "price": 45, "weight": 0.8 }
+    { "name": "RoH", "price": 2000, "weight": 0.8 },
+    { "name": "Arrow", "price": 2, "weight": 0.7 },
+    { "name": "H-Arrow", "price": 4, "weight": 0.7 },
+    { "name": "Bolt", "price": 3, "weight": 0.8 },
+    { "name": "H-Bolt", "price": 5, "weight": 0.8 },
+    { "name": "Burst Arrow", "price": 45, "weight": 0.8 }
 ],
 
 "npcs": [

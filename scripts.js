@@ -116,37 +116,29 @@ function players_add_player() {
     let runestable = newpanel.querySelector(".runestable");
     let otherstable = newpanel.querySelector(".otherstable");
 
-    let runerow, runelbl, runequant, runeprice;
-    for (let i = 0; i < mediviadb.runes.length; i++) {
-        runerow = runestable.insertRow();
-        runelbl = document.createElement("label");
-        runelbl.innerText = mediviadb.runes[i].name + "'s";
-        runerow.insertCell().appendChild(runelbl);
+    populate_table(runestable, mediviadb.runes);
+    populate_table(otherstable, mediviadb.players_otheritems);
 
-        runequant = document.createElement("input");
-        runequant.setAttribute("type", "text");
-        runerow.insertCell().appendChild(runequant);
-
-        runeprice = document.createElement("input");
-        runeprice.setAttribute("type", "text");
-        runeprice.value = mediviadb.runes[i].price;
-        runerow.insertCell().appendChild(runeprice);
-    }
-    let othersrow, otherslbl, othersquant, othersprice;
-    for (let i = 0; i < mediviadb.players_otheritems.length; i++) {
-        othersrow = otherstable.insertRow();
-        otherslbl = document.createElement("label");
-        otherslbl.innerText = mediviadb.players_otheritems[i].name;
-        othersrow.insertCell().appendChild(otherslbl);
-
-        othersquant = document.createElement("input");
-        othersquant.setAttribute("type", "text");
-        othersrow.insertCell().appendChild(othersquant);
-
-        othersprice = document.createElement("input");
-        othersprice.setAttribute("type", "text");
-        othersprice.value = mediviadb.players_otheritems[i].price;
-        othersrow.insertCell().appendChild(othersprice);
+    function populate_table(tb, dbarray) {
+        let newrow, rowlbl, rowquant, rowprice;
+        for (let i = 0; i < dbarray.length; i++) {
+            newrow = tb.insertRow();
+            rowlbl = document.createElement("label");
+            rowlbl.innerText = dbarray[i].name;
+            newrow.insertCell().appendChild(rowlbl);
+    
+            rowquant = document.createElement("input");
+            rowquant.type = "number";
+            rowquant.setAttribute("min", "0");
+            newrow.insertCell().appendChild(rowquant);
+    
+            rowprice = document.createElement("input");
+            rowprice.type = "number";
+            rowprice.setAttribute("min", "0");
+            rowprice.setAttribute("step", "100");
+            rowprice.value = dbarray[i].price;
+            newrow.insertCell().appendChild(rowprice);
+        }
     }
     
     return players_grid.appendChild(newpanel);
@@ -180,11 +172,14 @@ function loottable_add_row() {
     row.insertCell().appendChild(itemname);
 
     let itemquantity = document.createElement("input");
-    itemquantity.type = "text";
+    itemquantity.type = "number";
+    itemquantity.setAttribute("min", "0");
     row.insertCell().appendChild(itemquantity);
 
     let itemprice = document.createElement("input");
-    itemprice.type = "text";
+    itemprice.type = "number";
+    itemprice.setAttribute("min", "0");
+    itemprice.setAttribute("step", "100");
     row.insertCell().appendChild(itemprice);
 
     // Add a delete button if it's not the first row
