@@ -30,6 +30,7 @@ button {
     font-family: "Arimo", sans-serif;
     border: 2px solid #34515c;
     border-radius: 6px;
+    box-shadow: 0px 3px 0px 0px var(--accent-color-darker);
     padding: 3px 6px 4px;
     margin: 4px 2px;
     min-width: 50px;
@@ -41,6 +42,7 @@ button:hover {
     color: var(--main-text-highlight-color);
     background-color: #3c6469;
     border-color: #51939e;
+    box-shadow: 0px 3px 0px 0px var(--accent-color);
     transition-duration: 0.15s;
     transition-timing-function: ease;
 }
@@ -49,6 +51,8 @@ button:active {
     color: #a3a3a3;
     background-color: #172b33;
     border-color: #233b44;
+    transform: translateY(2px);
+    box-shadow: 0px 0px 0px 0px var(--accent-color-darker);
     transition-duration: 0.15s;
     transition-timing-function: ease;
 }
@@ -236,15 +240,11 @@ table input[type=number]:invalid {
     margin: 4px;
     min-width: 30px;
     background: var(--accent-color-darker);
-    transition-duration: 0.4s;
-    transition-timing-function: ease;
 }
 
 .square-button:hover {
     border-color: var(--accent-color-lighter);
     background: var(--accent-color);
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
 }
 
 .playerpanel h1 input[type=text],
@@ -314,17 +314,25 @@ table input[type=number]:invalid {
     background-color: #aa3030;
     border: 2px solid #ce5353;
     border-radius: 6px;
+    box-shadow: 0px 3px 0px 0px #792828;
 }
 
 .red-button:hover {
     color: var(--main-text-highlight-color);
     background-color: #c04343;
     border-color: #d86c6c;
+    box-shadow: 0px 3px 0px 0px #aa3030;
+}
+
+.red-button:active {
+    background-color: #aa3030;
+    border-color: #ce5353;
+    box-shadow: 0px 0px 0px 0px #792828;
 }
 
 .loottable-button {
     border-width: 1px;
-    padding: 0px 4px 1px;
+    padding: 1px 8px;
     margin: 0px;
     min-width: 20px;
 }
