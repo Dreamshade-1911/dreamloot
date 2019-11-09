@@ -17,17 +17,17 @@
         <div class="maingrid">
             <!-- Player waste -->
             <div id="playersgrid">
-                <button class="square-button" id="addplayerbtn" style="width: 2%; font-size: 14pt" onclick="players_add_player()">+</button>
+                <button id="addplayerbtn" class="square-button" style="width: 2%; font-size: 14pt" onclick="players_add_player()">+</button>
             </div>
             <!-- LootTable Infopanel -->
             <div class="infopanel" onkeyup="onkeyup_loottable(event)">
-                <button onclick="loottable_clear()" class="headerbutton-left">Clear</button>
-                <button onclick="loottable_show_creature_items()" class="headerbutton-right">Add creature items</button>
+                <button class="headerbutton-left" onclick="loottable_clear()">Clear</button>
+                <button class="headerbutton-right" onclick="loottable_show_creature_items()">Add creature items</button>
                 <h1>Loot Table</h1>
                 <center>
                     <form onsubmit="loottable_add_creature_items(); return false;" onkeyup="onkeyup_creature_items(event)" id="loottb_addcreatureitems">
                         <label>Creature name: </label>
-                        <input type="text" autocomplete="off" oninput="autocomplete_creature_items()" id="loottb_creaturename"/>
+                        <input type="text" id="loottb_creaturename" autocomplete="off" oninput="autocomplete_creature_items()"/>
                         <div><button type="submit">Add</button><button type="reset" onclick="loottable_hide_creature_items()">Cancel</button></div>
                     </form>
                     <table id="loottb">
@@ -40,7 +40,7 @@
                             </tr>
                             <tr>
                                 <td><label>Gold Coin</label></td>
-                                <td><input type="number" placeholder="0" id="loottb_gold_itemquantity"/></td>
+                                <td><input type="number" id="loottb_gold_itemquantity" placeholder="0"/></td>
                                 <td><label>1</label></td>
                             </tr>
                         </thead>
@@ -50,7 +50,7 @@
             </div>
             <!-- HuntInfo Infopanel -->
             <div class="infopanel">
-                <button onclick="huntinfo_calculate_loot()" class="headerbutton-left">Calculate loot</button>
+                <button class="headerbutton-left" onclick="huntinfo_calculate_loot()">Calculate loot</button>
                 <h1>Hunt Info</h1>
                 <center><table id="huntinfo">
                     <tr>
@@ -92,7 +92,7 @@
     <template id="playerpanel-template">
         <div class="playerpanel" data-waste="0">
             <h1>
-                <input type="text" class="playername" value="New Player">
+                <input class="playername" type="text" value="New Player">
                 <button class="square-button" onclick="player_delete(parentElement.parentElement)" tabindex="-1">X</button>
             </h1>
             <div class="playercontent">

@@ -42,7 +42,6 @@ button:hover {
     color: var(--main-text-highlight-color);
     background-color: #3c6469;
     border-color: #51939e;
-    box-shadow: 0px 3px 0px 0px var(--accent-color);
     transition-duration: 0.15s;
     transition-timing-function: ease;
 }
