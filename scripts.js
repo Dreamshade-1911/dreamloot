@@ -296,7 +296,20 @@ function loottable_add_creature_items() {
         autocomplete_itemname(first_row);
         i = 1;
     }
+
+    let loottb_length = loottable_body.rows.length;
+    let skip_item;
     for (; i < creature.items.length; i++) {
+        // If the item already exists in the table, skip it
+        skip_item = false;
+        for (let j = 0; j < loottb_length; j++) {
+            if (creature.items[i] == loottable_body.rows[j].cells[LOOTTB_COLUMN.NAME].firstChild.value) {
+                skip_item = true;
+                break;
+            }
+        }
+        if (skip_item) continue;
+
         autocomplete_lastsize = 0;
         let row = loottable_add_row();
         row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[i];
