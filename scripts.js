@@ -17,6 +17,14 @@ var LOOTTB_COLUMN = {
     DELETE: 3
 };
 
+var LOCATIONTB_COLUMN = {
+    NAME: 0,
+    PRICE: 1
+};
+
+// @Speed: For every access into an array item we can cache the index of the lookup.
+// For example: Amulet of Loss having a second sellto that corresponds to the npc indexes,
+// and the npcs having another location which refers to the location index.
 var mediviadb;
 
 // Templates
@@ -34,6 +42,7 @@ var huntinfo_totalearnings;
 var huntinfo_profit;
 var huntinfo_splitprofit;
 var huntinfo_playerstable;
+var huntinfo_selllocation;
 
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
@@ -46,6 +55,7 @@ function init() {
         mediviadb = data;
         players_add_player();
         loottable_add_row();
+        huntinfo_create_location_rows();
         player(1).querySelector(".playername").focus();
         player(1).querySelector(".playername").setSelectionRange(0, 100);
     });
@@ -66,6 +76,7 @@ function init() {
     huntinfo_profit = document.getElementById("huntinfo_profit");
     huntinfo_splitprofit = document.getElementById("huntinfo_splitprofit");
     huntinfo_playerstable = document.getElementById("huntinfo_playerstb");
+    huntinfo_selllocation = document.getElementById("huntinfo_selllocation");
 
     document.body.addEventListener("keydown", onkeydown_global);
 }
@@ -75,8 +86,22 @@ function stoi(str) {
     else return parseInt(str);
 }
 
+function stog(gold_text) {
+    if (gold_text == "") return 0;
+    let splittext = gold_text.split(" ");
+    let num = Number(splittext[0]);
+    if (num[0] == 0) return 0;
+
+    splittext[1].toUpperCase();
+    if (splittext[1] == "K")
+        num *= 1000;
+    else if (splittext[1] == "KK")
+        num *= 1000000;
+    return parseInt(num);
+}
+
 function gtos(amount) {
-    if (Math.abs(amount) < 1000) return parseInt(amount) + " gp";
+    if (Math.abs(amount) < 1000) return parseInt(amount) + " GP";
     else if (Math.abs(amount) >= 1000 && Math.abs(amount) < 1000000) return (amount / 1000).toFixed(1) + " K";
     else return (Math.abs(amount) / 1000000).toFixed(3) + " KK";
 }
@@ -152,7 +177,7 @@ function player_delete(callerpanel) {
 }
 
 function players_clear() {
-    while(players().length > 1)
+    while (players().length > 1)
         players_grid.lastChild.remove();
 }
 
@@ -195,6 +220,7 @@ function loottable_add_row() {
         deletebutton.tabIndex = -1;
         row.insertCell().appendChild(deletebutton);
     }
+    row.setAttribute("data-itemindex", -1);
     return row;
 }
 
@@ -214,8 +240,8 @@ function loottable_delete_row(callerrow) {
 }
 
 function loottable_clear() {
-    while (loottable_body.firstChild)
-        loottable_body.firstChild.remove();
+    while (loottable_body.lastChild)
+        loottable_body.lastChild.remove();
     loottable_add_row();
 
     let gold_quant = document.getElementById("loottb_gold_itemquantity");
@@ -230,6 +256,7 @@ function autocomplete_itemname(callerrow) {
     suggestion_index = autocomplete_generic(mediviadb.items, callerrow_itemname);
     if (suggestion_index == -1) callerrow_itemprice.value = "";
     else callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
+    callerrow.setAttribute("data-itemindex", suggestion_index);
 }
 
 function autocomplete_creature_items() {
@@ -286,9 +313,52 @@ function loottable_add_creature_items() {
 // Functions pertaining to hunt info
 // ----------------------------------
 
-function huntinfo_clearplayers() {
-    while (huntinfo_playerstable.rows[1])
-        huntinfo_playerstable.rows[1].remove();
+function huntinfo_create_locationbody(name) {
+    let newtbody = document.createElement("tbody");
+    newtbody.className = "npctbody";
+
+    let newrow = newtbody.insertRow();
+    let newth = document.createElement("th");
+    newth.innerText = name;
+    newrow.appendChild(newth);
+
+    newth = document.createElement("th");
+    newth.className = "locationth-right";
+    newrow.appendChild(newth);
+
+    return newtbody;
+}
+
+// @Improvement: We can make a location table be a custom html element.
+function huntinfo_create_location_rows() {
+    function createtable(locationname) {
+        let tb = document.createElement("table");
+        tb.className = "locationtable";
+        let thead = document.createElement("thead");
+        let row = thead.insertRow();
+
+        let th = document.createElement("th");
+        th.innerText = locationname;
+        row.appendChild(th);
+
+        th = document.createElement("th");
+        th.className = "locationth-right";
+        th.innerText = "";
+        row.appendChild(th);
+
+        tb.appendChild(thead);
+        huntinfo_selllocation.appendChild(tb);
+        return tb;
+    }
+
+    for (let i = 0; i < mediviadb.locations.length; i++)
+        createtable(mediviadb.locations[i].name);
+
+    let playerstb = createtable("Players");
+    let tbody = document.createElement("tbody");
+    tbody.className = "npctbody";
+    playerstb.appendChild(tbody);
+
 }
 
 function huntinfo_calculate_loot() {
@@ -339,8 +409,9 @@ function huntinfo_calculate_loot() {
 
     // Calculate player shares
     if (players().length > 2) {
-        huntinfo_clearplayers();
-        huntinfo_playerstable.style.display = "table";
+        for (let i = huntinfo_playerstable.rows.length - 1; i > 0; i--)
+            huntinfo_playerstable.deleteRow(i);
+
         let row, plname, plsupplies, plshare;
         for (let i = 1; i < players().length; i++) {
             row = huntinfo_playerstable.insertRow();
@@ -354,10 +425,139 @@ function huntinfo_calculate_loot() {
             row.insertCell().appendChild(plsupplies);
 
             plshare = document.createElement("label");
-            plshare.innerText = gtos(parseInt(player(i).getAttribute("data-waste")) + splitprofit);
+            plshare.innerText = gtos(stoi(player(i).getAttribute("data-waste")) + splitprofit);
             row.insertCell().appendChild(plshare);
         }
+        huntinfo_playerstable.style.display = "table";
     } else huntinfo_playerstable.style.display = "none";
+
+    // Find out where to sell the loot
+    if (loottable_body.rows.length > 1 && loottable_body.rows[0].cells[LOOTTB_COLUMN.NAME].firstChild.value != "") {
+        let skipempty = false;
+        if (totalearnings > 0) skipempty = true;
+
+        // Clear npc location tables
+        for (let i = huntinfo_selllocation.children.length - 1; i > 0; i--) {
+            huntinfo_selllocation.children[i].style.display = "none";
+            for (let j = huntinfo_selllocation.children[i].tBodies.length - 1; j >= 0; j--)
+                huntinfo_selllocation.children[i].tBodies[j].remove();
+        }
+        let playerstbody = document.createElement("tbody");
+        playerstbody.className = "npctbody";
+        huntinfo_selllocation.lastChild.appendChild(playerstbody);
+
+        // Fill out location weights
+        let item_index, npc_index, location_index;
+        let locations_weights = new Array(mediviadb.locations.length);
+        locations_weights.fill(0);
+        for (let i = 0; i < loottable_body.rows.length; i++) {
+            item_index = loottable_body.rows[i].getAttribute("data-itemindex");
+            if (item_index == -1) continue;
+            if (skipempty && stoi(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value) <= 0) continue;
+
+            // For each NPC the item can be sold to
+            for (let j = 0; j < mediviadb.items[item_index].sellto.length; j++) {
+                if (mediviadb.items[item_index].sellto[j] == "Players")
+                    continue;
+
+                npc_index = mediviadb.npcs.findIndex(obj => (obj.name == mediviadb.items[item_index].sellto[j]));
+                location_index = mediviadb.locations.findIndex(obj => (obj.name == mediviadb.npcs[npc_index].location));
+                locations_weights[location_index] += 2;
+                // For each location close to the location, add weight of 1
+                for (let k = 0; k < mediviadb.locations[location_index].closeto.length; k++)
+                    locations_weights[mediviadb.locations.findIndex(obj => obj.name == mediviadb.locations[location_index].closeto[k])]++;
+            }
+        }
+        // Create an array of location indexes and sort by weight
+        let locations_weights_indexes = new Array(locations_weights.length);
+        for (let i = 0; i < locations_weights.length; i++)
+            locations_weights_indexes[i] = i;
+        let swapbuffer;
+        for (let i = locations_weights.length; i > 0; i--) {
+            for (let j = 1; j < i; j++) {
+                if (locations_weights[j] > locations_weights[j - 1]) {
+                    swapbuffer = locations_weights[j];
+                    locations_weights[j] = locations_weights[j - 1];
+                    locations_weights[j - 1] = swapbuffer;
+
+                    swapbuffer = locations_weights_indexes[j];
+                    locations_weights_indexes[j] = locations_weights_indexes[j - 1];
+                    locations_weights_indexes[j - 1] = swapbuffer;
+                }
+            }
+        }
+
+        // Fill out tables
+        let location_tbody;
+        for (let i = 0; i < loottable_body.rows.length; i++) {
+            if (loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value == "") continue;
+            if (skipempty && stoi(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value) <= 0) continue;
+            item_index = loottable_body.rows[i].getAttribute("data-itemindex");
+
+            if (item_index == -1 || mediviadb.items[item_index].sellto[0] == "Players")
+                location_tbody = huntinfo_selllocation.lastChild.tBodies[0];
+            else {
+                location_tbody = null;
+                for (let j = 0; j < locations_weights_indexes.length; j++) {
+                    for (let k = 0; k < mediviadb.items[item_index].sellto.length; k++) {
+                        npc_index = mediviadb.npcs.findIndex(obj => (obj.name == mediviadb.items[item_index].sellto[k]));
+                        location_index = mediviadb.locations.findIndex(obj => (obj.name == mediviadb.npcs[npc_index].location));
+
+                        if (location_index == locations_weights_indexes[j]) {
+                            // Check if there's a tbody for this npc, if not, create one
+                            for (let l = 0; l < huntinfo_selllocation.children[location_index + 1].tBodies.length; l++) {
+                                let lheader = huntinfo_selllocation.children[location_index + 1].tBodies[l].rows[0].firstChild;
+                                if (mediviadb.npcs[npc_index].name == lheader.innerText) {
+                                    location_tbody = huntinfo_selllocation.children[location_index + 1].tBodies[l];
+                                    break;
+                                }
+                            }
+                            if (!location_tbody) {
+                                location_tbody = huntinfo_create_locationbody(mediviadb.npcs[npc_index].name, "npctbody");
+                                huntinfo_selllocation.children[location_index + 1].appendChild(location_tbody);
+                            }
+                            break;
+                        }
+                        if (location_tbody) break;
+                    }
+                    if (location_tbody) break;
+                }
+            }
+            let newrow = location_tbody.insertRow();
+            let newlbl = document.createElement("label");
+            newlbl.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value;
+            newrow.insertCell().appendChild(newlbl);
+
+            newlbl = document.createElement("label");
+            newlbl.innerText = gtos(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * loottable_body.rows[i].cells[LOOTTB_COLUMN.PRICE].firstChild.value);
+            let newcell = newrow.insertCell();
+            newcell.className = "locationth-right";
+            newcell.appendChild(newlbl);
+
+            location_tbody.parentElement.style.display = "table";
+        }
+
+        // Calculate location totals
+        for (let i = 1; i < huntinfo_selllocation.children.length; i++) {
+            let curtable = huntinfo_selllocation.children[i];
+            let locationtotal = 0;
+            for (let j = 0; j < curtable.tBodies.length; j++) {
+                let curbody = curtable.tBodies[j];
+                let npctotal = 0;
+                let k = 1;
+                if (i == huntinfo_selllocation.children.length - 1) k = 0;
+                for (; k < curbody.rows.length; k++)
+                    npctotal += stog(curbody.rows[k].cells[LOCATIONTB_COLUMN.PRICE].firstChild.innerText);
+                // If we are on the last table, "Players", we won't have a tbody
+                if (i != huntinfo_selllocation.children.length - 1)
+                    curbody.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(npctotal);
+                locationtotal += npctotal;
+            }
+            curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(locationtotal);
+        }
+
+        huntinfo_selllocation.style.display = "block";
+    } else huntinfo_selllocation.style.display = "none";
 }
 
 // ---------------
@@ -408,7 +608,7 @@ function onkeydown_global(event) {
     if (handled) event.preventDefault();
 }
 
-// Make pageup and pagedown change rows
+// @@Make pageup and pagedown change rows
 function onkeyup_loottable(event) {
     switch (event.code) {
         case "Enter":

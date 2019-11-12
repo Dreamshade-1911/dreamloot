@@ -1,7 +1,7 @@
 *** Fix ***
+* Skip duplicate items when adding creature items
 
 *** Implement ***
-* Show where the loot is sold (sorted by NPC)
 * Fill out database.
 * Ability to navigate through autocomplete suggestions with the arrow keys
 * Hotkeys

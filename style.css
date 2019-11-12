@@ -5,10 +5,14 @@
     --secondary-text-color: #808080;
     --panel-background: #202020;
     --border-highlight: #313131;
+    --border-highlight-lighter: #444444;
     --accent-color: #233a44;
+    --accent-color-highlight: #5d8297;
     --accent-color-lighter: #335463;
     --accent-color-darker: #202b30;
     --detail-color: #cac0a4;
+
+    --table-indentsize: 20px;
 }
 
 /* - Default styles - */
@@ -28,13 +32,13 @@ button {
     color: var(--main-text-color);
     background-color: var(--accent-color);
     font-family: "Arimo", sans-serif;
-    border: 2px solid #34515c;
+    border: 1px solid #34515c;
     border-radius: 6px;
     box-shadow: 0px 3px 0px 0px var(--accent-color-darker);
     padding: 3px 6px 4px;
     margin: 4px 2px;
     min-width: 50px;
-    transition-duration: 0.2s;
+    transition-duration: 0.1s;
     transition-timing-function: ease;
 }
 
@@ -52,7 +56,7 @@ button:active {
     border-color: #233b44;
     transform: translateY(2px);
     box-shadow: 0px 0px 0px 0px var(--accent-color-darker);
-    transition-duration: 0.15s;
+    transition-duration: 0.03s;
     transition-timing-function: ease;
 }
 
@@ -140,6 +144,43 @@ table input[type=text],
 table input[type=number], 
 table input[type=number]:invalid {
     background-color: var(--panel-background);
+}
+
+
+.locationtable {
+    margin-bottom: 15px;
+}
+
+.locationtable th,
+.locationtable td {
+    text-align: left;
+}
+
+.locationtable th {
+    border-bottom-color: var(--border-highlight-lighter);
+}
+
+.locationtable .locationth-right {
+    width: 80px;
+    white-space: nowrap;
+    text-indent: 0px;
+    text-align: right;
+}
+
+.locationth-right {
+    color: var(--detail-color);
+}
+
+.npctbody th,
+.npctbody td {
+    font-size: 14px;
+    text-align: left;
+    text-indent: var(--table-indentsize);
+}
+
+.npctbody th {
+    color: var(--accent-color-highlight);
+    border-bottom-color: var(--accent-color-lighter);
 }
 
 /* - Grid related - */
@@ -294,10 +335,12 @@ table input[type=number]:invalid {
     font-size: 22px;
     font-weight: 600;
     border-radius: 6px;
-    box-shadow: 0px 4px 0px 0px var(--accent-color-darker);
+    box-shadow: 0px 2px 0px 0px var(--accent-color-darker);
     margin: 0px 0px 15px;
     padding: 5px 0px;
 }
+
+/* Buttons */
 
 .headerbutton-left {
     position: absolute;
@@ -351,6 +394,11 @@ table input[type=number]:invalid {
 #huntinfo_playerstb label {
     color: var(--detail-color);
     font-weight: bold;
+}
+
+#huntinfo_selllocation h2 {
+    font-size: 20px;
+    margin: 0px 0px;
 }
 
 /* Mobile */

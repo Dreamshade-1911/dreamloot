@@ -1,19 +1,23 @@
 {
 "locations": [
-    "Ab'Dendriel",
-    "Abukir",
-    "Carlin",
-    "Garrogat",
-    "Thais",
-    "Kazordoon",
-    "Osaris",
-    "Venore",
-    "Yehsha",
-    "Blue Djinn",
-    "Green Djinn"
+    { "name": "Blue Djinn", "closeto": ["Osaris", "Yehsha"] },
+    { "name": "Green Djinn", "closeto": ["Osaris", "Yehsha"] },
+    { "name": "Ab'Dendriel", "closeto": ["Carlin", "Garrogat", "Thais", "Yehsha"] },
+    { "name": "Abukir", "closeto": ["Garrogat", "Osaris", "Venore"] },
+    { "name": "Carlin", "closeto": ["Ab'Dendriel", "Garrogat", "Thais", "Venore"] },
+    { "name": "Garrogat", "closeto": ["Ab'Dendriel", "Thais", "Kazordoon", "Osaris", "Venore", "Yehsha"] },
+    { "name": "Thais", "closeto": ["Ab'Dendriel", "Osaris", "Venore", "Yehsha"] },
+    { "name": "Kazordoon", "closeto": ["Garrogat"] },
+    { "name": "Osaris", "closeto": ["Garrogat", "Thais", "Venore", "Yehsha"] },
+    { "name": "Venore", "closeto": ["Ab'Dendriel", "Garrogat", "Thais", "Osaris", "Yehsha"] },
+    { "name": "Yehsha", "closeto": ["Garrogat", "Thais", "Osaris", "Venore"] }
 ],
 
 "npcs": [
+    { "name": "Nah'Bob", "location": "Blue Djinn" },
+    { "name": "Haroun", "location": "Blue Djinn" },
+    { "name": "Alesar", "location": "Green Djinn" },
+    { "name": "Yaman", "location": "Green Djinn" },
     { "name": "Briasol", "location": "Ab'Dendriel" },
     { "name": "Shanar", "location": "Ab'Dendriel" },
     { "name": "Aremis", "location": "Abukir" },
@@ -42,12 +46,7 @@
     { "name": "Aadim", "location": "Yehsha" },
     { "name": "Asha", "location": "Yehsha" },
     { "name": "Noranim", "location": "Yehsha" },
-    { "name": "Nah'Bob", "location": "Blue Djinn" },
-    { "name": "Haroun", "location": "Blue Djinn" },
-    { "name": "Alesar", "location": "Green Djinn" },
-    { "name": "Yaman", "location": "Green Djinn" },
-    { "name": "Players", "location": "Players" },
-    { "name": "Unknown", "location": "Unknown" }
+    { "name": "Ziyad", "location": "Yehsha" }
 ],
 
 "runes": [
@@ -70,10 +69,12 @@
 
 "items": [
     { "name": "Amulet of Loss", "price": 45000, "weight": 4.2, "stackable": false, "sellto": ["Players"] },
+    { "name": "Ancient Amulet", "price": 500, "weight": 8.5, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Ancient Armor", "price": 75000, "weight": 185, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Ancient Boots", "price": 5000, "weight": 11, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Ancient Helmet", "price": 42000, "weight": 79, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Ancient Legs", "price": 45000, "weight": 98, "stackable": false, "sellto": ["Wulkan"] },
+    { "name": "Ancient Shield", "price": 900, "weight": 61, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Ancient Sword", "price": 40000, "weight": 95, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Ankh", "price": 100, "weight": 4.2, "stackable": false, "sellto": ["Yaman"] },
     { "name": "Arming Sword", "price": 20000, "weight": 60, "stackable": false, "sellto": ["Ziyad"] },
@@ -120,6 +121,7 @@
     { "name": "Giant Sword", "price": 17000, "weight": 180, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Golden Armor", "price": 20000, "weight": 80, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Golden Legs", "price": 50000, "weight": 56, "stackable": false, "sellto": ["Wulkan"] },
+    { "name": "Golden Staff", "price": 20000, "weight": 125, "stackable": false, "sellto": ["Draculd"] },
     { "name": "Gold Ring", "price": 8000, "weight": 1, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Guardian Halberd", "price": 8000, "weight": 110, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Halberd", "price": 400, "weight": 90, "stackable": false, "sellto": ["Risdarick", "Sam", "Turvy", "Romella"] },
@@ -150,6 +152,7 @@
     { "name": "Permafrost Longsword", "price": 900, "weight": 85, "stackable": false, "sellto": ["Draculd"] },
     { "name": "Permafrost Morningstar", "price": 1600, "weight": 55, "stackable": false, "sellto": ["Draculd"] },
     { "name": "Permafrost Stone", "price": 7000, "weight": 5, "stackable": false, "sellto": ["Draculd"] },
+    { "name": "Pharaoh Boots", "price": 0, "weight": 21, "stackable": false, "sellto": ["Players"] },
     { "name": "Plate Armor", "price": 400, "weight": 120, "stackable": false, "sellto": ["Shanar", "Risdarick", "Sam", "Turvy", "Yanni"] },
     { "name": "Plate Legs", "price": 115, "weight": 50, "stackable": false, "sellto": ["Shanar", "Kroox", "Hardek"] },
     { "name": "Plate Shield", "price": 45, "weight": 65, "stackable": false, "sellto": ["Cornelia", "Kroox", "Hasain"] },
@@ -166,6 +169,7 @@
     { "name": "Skull Staff", "price": 6000, "weight": 17, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Small Diamond", "price": 300, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
     { "name": "Small Emerald", "price": 250, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
+    { "name": "Small Ruby", "price": 250, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
     { "name": "Small Sapphire", "price": 250, "weight": 0.1, "stackable": true, "sellto": ["Briasol", "Leunaurd", "Tezila", "Ishina", "Hanna", "Odemara", "Asha"] },
     { "name": "Spike Sword", "price": 1000, "weight": 50, "stackable": false, "sellto": ["Nah'Bob"] },
     { "name": "Sphinx Claw", "price": 3000, "weight": 9, "stackable": true, "sellto": ["Arses"] },
@@ -182,6 +186,7 @@
     { "name": "Torn Quicksand Boots", "price": 10000, "weight": 8.5, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Tower Shield", "price": 8000, "weight": 82, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Two Handed Sword", "price": 450, "weight": 70, "stackable": false, "sellto": ["Risdarick", "Sam", "Romella"] },
+    { "name": "Unholy Plate Armor", "price": 15000, "weight": 245, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Vampire Shield", "price": 15000, "weight": 38, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Vanquisher", "price": 100000, "weight": 108, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Void Staff", "price": 150000, "weight": 100, "stackable": false, "sellto": ["Wulkan"] },
@@ -205,6 +210,7 @@
     { "name": "Dragon Lord", "items": ["Dragon Scale Mail", "Fire Sword", "Flaming Bow", "Small Sapphire", "Strange Helmet", "Royal Helmet", "Tower Shield"] },
     { "name": "Drake", "items": ["Burst Arrow", "Drake Scale Helmet", "Fire Hammer", "Fire Sword", "Ignited Bow", "Plate Armor", "Plate Legs", "Spike Sword"] },
     { "name": "Drake Lord", "items": ["Burst Arrow", "Fire Hammer", "Fire Sword", "Ignited Bow", "Plate Armor", "Plate Legs", "Royal Helmet"] },
+    { "name": "Forgotten Pharaoh", "items": [ "Ancient Amulet", "Ancient Shield", "Golden Staff", "Pharaoh Boots", "Small Diamond", "Small Emerald", "Small Ruby", "Unholy Plate Armor" ] },
     { "name": "Frost Dragon", "items": [ "Dragon Slayer", "Frozen Shield", "Permafrost Longsword", "Permafrost Morningstar", "Royal Helmet", "Small Sapphire", "Strange Helmet", "Tower Shield"] },
     { "name": "Frost Drake", "items": ["Crystallized Crossbow", "Frozen Shield", "Permafrost Longsword", "Plate Shield","Royal Helmet", "Small Sapphire", "Steel Helmet"] },
     { "name": "Giant Spider", "items": ["Brass Legs", "Knight Armor", "Knight Legs", "Plate Armor", "Platinum Amulet", "Steel Helmet"] },

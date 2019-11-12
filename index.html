@@ -4,10 +4,10 @@
     <title>DreamLoot</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=490, initial-scale=1">
-    <script src="scripts.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"> 
     <link href='https://fonts.googleapis.com/css?family=Arimo&display=swap' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script src="scripts.js"></script>
 </head>
 
 <body onload="init()">
@@ -52,28 +52,31 @@
             <div class="infopanel">
                 <button class="headerbutton-left" onclick="huntinfo_calculate_loot()">Calculate loot</button>
                 <h1>Hunt Info</h1>
-                <center><table id="huntinfo">
-                    <tr>
-                        <th>Total waste</th>
-                        <th>Total earnings</th>
-                        <th>Profit</th>
-                        <th>Split profit</th>
-                    </tr>
-                    <tr>
-                        <td><label id="huntinfo_totalwaste">0 gp</label></td>
-                        <td><label id="huntinfo_totalearnings">0 gp</label></td>
-                        <td><label id="huntinfo_profit">0 gp</label></td>
-                        <td><label id="huntinfo_splitprofit">0 gp</label></td>
-                    </tr>
-                </table>
-                <table id="huntinfo_playerstb" style="margin-top: 15px; display: none">
-                    <tr>
-                        <th>Player</th>
-                        <th>Supplies used</th>
-                        <th>Share</th>
-                    </tr>
-                </table></center>
-                <center style="margin-top: 4px">
+                <center>
+                    <table id="huntinfo">
+                        <tr>
+                            <th>Total waste</th>
+                            <th>Total earnings</th>
+                            <th>Profit</th>
+                            <th>Split profit</th>
+                        </tr>
+                        <tr>
+                            <td><label id="huntinfo_totalwaste">0 GP</label></td>
+                            <td><label id="huntinfo_totalearnings">0 GP</label></td>
+                            <td><label id="huntinfo_profit">0 gp</label></td>
+                            <td><label id="huntinfo_splitprofit">0 GP</label></td>
+                        </tr>
+                    </table>
+                    <table id="huntinfo_playerstb" style="margin-top: 15px; display: none">
+                        <tr>
+                            <th>Player</th>
+                            <th>Supplies used</th>
+                            <th>Share</th>
+                        </tr>
+                    </table>
+                    <div id="huntinfo_selllocation" style="margin-top: 15px; display: none">
+                        <h2>Where to sell</h2>
+                    </div>
                 </center>
             </div>
         </div>
