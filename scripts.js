@@ -29,6 +29,8 @@ var mediviadb;
 
 // Templates
 var playerpanel_template;
+var locationtable_template;
+var npctbody_template;
 
 // HTML Elements
 var players_grid;
@@ -61,6 +63,8 @@ function init() {
     });
 
     playerpanel_template = document.getElementById("playerpanel-template");
+    locationtable_template = document.getElementById("locationtable-template");
+    npctbody_template = document.getElementById("npctbody-template");
 
     players_grid = document.getElementById("playersgrid");
 
@@ -326,52 +330,20 @@ function loottable_add_creature_items() {
 // Functions pertaining to hunt info
 // ----------------------------------
 
-function huntinfo_create_locationbody(name) {
-    let newtbody = document.createElement("tbody");
-    newtbody.className = "npctbody";
-
-    let newrow = newtbody.insertRow();
-    let newth = document.createElement("th");
-    newth.innerText = name;
-    newrow.appendChild(newth);
-
-    newth = document.createElement("th");
-    newth.className = "locationth-right";
-    newrow.appendChild(newth);
-
-    return newtbody;
-}
-
 // @Improvement: We can make a location table be a custom html element.
 function huntinfo_create_location_rows() {
-    function createtable(locationname) {
-        let tb = document.createElement("table");
-        tb.className = "locationtable";
-        let thead = document.createElement("thead");
-        let row = thead.insertRow();
-
-        let th = document.createElement("th");
-        th.innerText = locationname;
-        row.appendChild(th);
-
-        th = document.createElement("th");
-        th.className = "locationth-right";
-        th.innerText = "";
-        row.appendChild(th);
-
-        tb.appendChild(thead);
-        huntinfo_selllocation.appendChild(tb);
-        return tb;
+    for (let i = 0; i < mediviadb.locations.length; i++) {
+        let newtable = document.importNode(locationtable_template.content, true).querySelector(".locationtable");
+        newtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.NAME].innerText = mediviadb.locations[i].name;
+        huntinfo_selllocation.appendChild(newtable);
     }
 
-    for (let i = 0; i < mediviadb.locations.length; i++)
-        createtable(mediviadb.locations[i].name);
-
-    let playerstb = createtable("Players");
+    let playerstb = document.importNode(locationtable_template.content, true).querySelector(".locationtable");
+    playerstb.tHead.rows[0].cells[LOCATIONTB_COLUMN.NAME].innerText = "Players";
     let tbody = document.createElement("tbody");
     tbody.className = "npctbody";
     playerstb.appendChild(tbody);
-
+    huntinfo_selllocation.appendChild(playerstb);
 }
 
 function huntinfo_calculate_loot() {
@@ -519,15 +491,18 @@ function huntinfo_calculate_loot() {
                         if (location_index == locations_weights_indexes[j]) {
                             // Check if there's a tbody for this npc, if not, create one
                             for (let l = 0; l < huntinfo_selllocation.children[location_index + 1].tBodies.length; l++) {
-                                let lheader = huntinfo_selllocation.children[location_index + 1].tBodies[l].rows[0].firstChild;
+                                let lheader = huntinfo_selllocation.children[location_index + 1].tBodies[l].rows[0].cells[LOCATIONTB_COLUMN.NAME];
                                 if (mediviadb.npcs[npc_index].name == lheader.innerText) {
                                     location_tbody = huntinfo_selllocation.children[location_index + 1].tBodies[l];
                                     break;
                                 }
                             }
                             if (!location_tbody) {
-                                location_tbody = huntinfo_create_locationbody(mediviadb.npcs[npc_index].name, "npctbody");
-                                huntinfo_selllocation.children[location_index + 1].appendChild(location_tbody);
+                                // @Hack: We do the querySelector after importing the node because the template
+                                // is surrounded by text elements.
+                                location_tbody = document.importNode(npctbody_template.content, true).querySelector(".npctbody");
+                                location_tbody.rows[0].cells[LOCATIONTB_COLUMN.NAME].innerText = mediviadb.npcs[npc_index].name;
+                                location_tbody = huntinfo_selllocation.children[location_index + 1].appendChild(location_tbody);
                             }
                             break;
                         }
