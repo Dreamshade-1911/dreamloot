@@ -578,11 +578,44 @@ function huntinfo_calculate_loot() {
 // ---------------
 
 function onkeydown_global(event) {
-    // Block keys used with the control modifier
-    if (!event.ctrlKey) return;
-    let dig = -1;
     let handled = true;
 
+    let cell_index, row_index;
+    switch (event.code) {
+        // @Bug: For some reason, shitty web standards don't let us use "setSelectionRange" with number inputs.
+        case "PageUp":
+            cell_index = event.target.parentElement.cellIndex;
+            row_index = event.target.parentElement.parentElement.sectionRowIndex;
+            if (event.target.tagName == "INPUT" &&
+                event.target.parentElement.tagName == "TD" &&
+                row_index > 0) {
+                event.target.parentElement.parentElement.parentElement.rows[row_index - 1].cells[cell_index].firstChild.focus();
+                // setSelectionRange
+            }
+            break;
+
+        case "PageDown":
+            cell_index = event.target.parentElement.cellIndex;
+            row_index = event.target.parentElement.parentElement.sectionRowIndex;
+            if (event.target.tagName == "INPUT" &&
+                event.target.parentElement.tagName == "TD" &&
+                row_index < event.target.parentElement.parentElement.parentElement.rows.length - 1) {
+                event.target.parentElement.parentElement.parentElement.rows[row_index + 1].cells[cell_index].firstChild.focus();
+                // setSelectionRange
+            }
+            break;
+
+        default: handled = false;
+    }
+
+    // Block keys used with the control modifier
+    if (handled || !event.ctrlKey) {
+        if (handled) event.preventDefault;
+        return;
+    }
+
+    handled = true;
+    let dig = -1;
     switch (event.code) {
         case "Digit1":  dig = 1;    break;
         case "Digit2":  dig = 2;    break;
