@@ -29,23 +29,23 @@ var LOCATIONTB_COLUMN = {
 var mediviadb;
 
 // Templates
-var playerpanel_template;
-var locationtable_template;
-var npctbody_template;
+var playerpanel_template,
+locationtable_template,
+npctbody_template;
 
 // HTML Elements
-var players_grid;
-var loottable;
-var loottable_body;
-var addcreature_panel;
-var addcreature_name;
-var huntinfo;
-var huntinfo_totalwaste;
-var huntinfo_totalearnings;
-var huntinfo_profit;
-var huntinfo_splitprofit;
-var huntinfo_playerstable;
-var huntinfo_selllocation;
+var players_grid,
+loottable,
+loottable_body,
+addcreature_panel,
+addcreature_name,
+huntinfo,
+huntinfo_totalwaste,
+huntinfo_totalearnings,
+huntinfo_profit,
+huntinfo_splitprofit,
+huntinfo_playerstable,
+huntinfo_selllocation;
 
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
@@ -114,6 +114,11 @@ function gtos(amount) {
     if (Math.abs(amount) < 1000) return parseInt(amount) + " GP";
     else if (Math.abs(amount) >= 1000 && Math.abs(amount) < 1000000) return (amount / 1000).toFixed(1) + " K";
     else return (Math.abs(amount) / 1000000).toFixed(3) + " KK";
+}
+
+function generate_wikilink(name) {
+    name.replace(/ /g, "_");
+    return "http://wiki.mediviastats.info/" + name;
 }
 
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
@@ -506,7 +511,23 @@ function huntinfo_calculate_loot() {
                                 // @Hack: We do the querySelector after importing the node because the template
                                 // is surrounded by text elements.
                                 location_tbody = document.importNode(npctbody_template.content, true).querySelector(".npctbody");
-                                location_tbody.rows[0].cells[LOCATIONTB_COLUMN.NAME].innerText = mediviadb.npcs[npc_index].name;
+                                let npcname = location_tbody.querySelector(".npcname");
+                                npcname.innerText = mediviadb.npcs[npc_index].name;
+                                npcname.href = generate_wikilink(mediviadb.npcs[npc_index].name);
+                                npcname.target = "_blank";
+
+                                if (mediviadb.npcs[npc_index].questlink) {
+                                    let questanchor = document.createElement("a");
+                                    questanchor.href = mediviadb.npcs[npc_index].questlink;
+                                    questanchor.target = "_blank";
+                                    questanchor.title = "Trading with this NPC requires a quest.";
+                                    let questimage = document.createElement("img");
+                                    questimage.style.marginLeft = "6px";
+                                    questimage.src = "imgs/quest.png";
+                                    questanchor.appendChild(questimage);
+                                    location_tbody.rows[0].cells[LOCATIONTB_COLUMN.NAME].appendChild(questanchor);
+                                }
+
                                 location_tbody = huntinfo_selllocation.children[location_index + 1].appendChild(location_tbody);
                             }
                             break;
@@ -517,14 +538,16 @@ function huntinfo_calculate_loot() {
                 }
             }
             let newrow = location_tbody.insertRow();
-            let newlbl = document.createElement("label");
-            newlbl.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value + " [" + stoi(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value) + "]";
-            newrow.insertCell().appendChild(newlbl);
+            let newanchor = document.createElement("a");
+            if (item_index != -1) newanchor.href = generate_wikilink(loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value);
+            newanchor.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value + " [" + stoi(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value) + "]";
+            newanchor.target = "_blank";
+            newrow.insertCell().appendChild(newanchor);
 
-            newlbl = document.createElement("label");
+            let newlbl = document.createElement("label");
             if (item_index == -1) newlbl.innerText = "0 oz";
             else newlbl.innerText = (loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * mediviadb.items[item_index].weight).toFixed(1) + " oz";
-            let newcell = newrow.insertCell();
+            newcell = newrow.insertCell();
             newcell.className = "locationth-right";
             newcell.appendChild(newlbl);
 

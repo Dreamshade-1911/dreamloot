@@ -16,14 +16,14 @@
 ],
 
 "npcs": [
-    { "name": "Nah'Bob", "location": "Blue Djinn" },
-    { "name": "Haroun", "location": "Blue Djinn" },
-    { "name": "Alesar", "location": "Green Djinn" },
-    { "name": "Yaman", "location": "Green Djinn" },
+    { "name": "Nah'Bob", "location": "Blue Djinn", "questlink": "http://wiki.mediviastats.info/The_Djinn_War_-_Marid_Faction" },
+    { "name": "Haroun", "location": "Blue Djinn", "questlink": "http://wiki.mediviastats.info/The_Djinn_War_-_Marid_Faction" },
+    { "name": "Alesar", "location": "Green Djinn", "questlink": "http://wiki.mediviastats.info/The_Djinn_War_-_Efreet_Faction" },
+    { "name": "Yaman", "location": "Green Djinn", "questlink": "http://wiki.mediviastats.info/The_Djinn_War_-_Efreet_Faction" },
     { "name": "Briasol", "location": "Ab'Dendriel" },
     { "name": "Shanar", "location": "Ab'Dendriel" },
-    { "name": "Aremis", "location": "Abukir" },
-    { "name": "Wulkan", "location": "Abukir" },
+    { "name": "Aremis", "location": "Abukir", "questlink": "http://wiki.mediviastats.info/Helping_a_friend_Aremis_Quest" },
+    { "name": "Wulkan", "location": "Abukir", "questlink": "http://wiki.mediviastats.info/Helping_a_friend_Wulkan_Quest" },
     { "name": "Cornelia", "location": "Carlin" },
     { "name": "Rachel", "location": "Carlin" },
     { "name": "Rowenna", "location": "Carlin" },
@@ -43,7 +43,7 @@
     { "name": "Horif", "location": "Osaris" },
     { "name": "Ishina", "location": "Osaris" },
     { "name": "Aldo", "location": "Venore" },
-    { "name": "Draculd", "location": "Venore" },
+    { "name": "Draculd", "location": "Venore", "questlink": "http://wiki.mediviastats.info/The_Lightbringer_Faction" },
     { "name": "Odemara", "location": "Venore" },
     { "name": "Romella", "location": "Venore" },
     { "name": "Yanni", "location": "Venore" },
@@ -52,7 +52,7 @@
     { "name": "Asha", "location": "Yehsha" },
     { "name": "Haffnal", "location": "Yehsha" },
     { "name": "Noranim", "location": "Yehsha" },
-    { "name": "Ziyad", "location": "Yehsha" }
+    { "name": "Ziyad", "location": "Yehsha", "questlink": "http://wiki.mediviastats.info/Loyality_and_Devotion_Quest" }
 ],
 
 "runes": [
