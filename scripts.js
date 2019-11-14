@@ -1,23 +1,22 @@
-// Constants
-var PLAYERS_PANEL = {
+const PLAYERS_PANEL = {
     HEADER: 0,
     RUNESTABLE: 2
 };
 
-var PLAYERSTB_COLUMN = {
+const PLAYERSTB_COLUMN = {
     NAME: 0,
     QUANTITY: 1,
     PRICE: 2
 }
 
-var LOOTTB_COLUMN = {
+const LOOTTB_COLUMN = {
     NAME: 0,
     QUANTITY: 1,
     PRICE: 2,
     DELETE: 3
 };
 
-var LOCATIONTB_COLUMN = {
+const LOCATIONTB_COLUMN = {
     NAME: 0,
     WEIGHT: 1,
     PRICE: 2
