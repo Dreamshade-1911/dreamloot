@@ -522,7 +522,7 @@ function huntinfo_calculate_loot() {
                                     questanchor.target = "_blank";
                                     questanchor.title = "Trading with this NPC requires a quest.";
                                     let questimage = document.createElement("img");
-                                    questimage.style.marginLeft = "6px";
+                                    questimage.style.margin = "0px 6px";
                                     questimage.src = "imgs/quest.png";
                                     questanchor.appendChild(questimage);
                                     location_tbody.rows[0].cells[LOCATIONTB_COLUMN.NAME].appendChild(questanchor);
