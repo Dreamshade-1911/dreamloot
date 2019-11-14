@@ -1,5 +1,4 @@
 *** Fix ***
-* Skip duplicate items when adding creature items
 
 *** Implement ***
 * Ability to navigate through autocomplete suggestions with the arrow keys
