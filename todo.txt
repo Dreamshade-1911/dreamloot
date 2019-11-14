@@ -1,4 +1,5 @@
 *** Fix ***
+* Use binary search for db arrays that are alphabetically sorted.
 
 *** Implement ***
 * Ability to navigate through autocomplete suggestions with the arrow keys
