@@ -518,7 +518,7 @@ function huntinfo_calculate_loot() {
             }
             let newrow = location_tbody.insertRow();
             let newlbl = document.createElement("label");
-            newlbl.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value + " [" + loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value + "]";
+            newlbl.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.NAME].firstChild.value + " [" + stoi(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value) + "]";
             newrow.insertCell().appendChild(newlbl);
 
             newlbl = document.createElement("label");
