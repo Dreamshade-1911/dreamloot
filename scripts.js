@@ -19,7 +19,8 @@ var LOOTTB_COLUMN = {
 
 var LOCATIONTB_COLUMN = {
     NAME: 0,
-    PRICE: 1
+    WEIGHT: 1,
+    PRICE: 2
 };
 
 // @Speed: For every access into an array item we can cache the index of the lookup.
@@ -517,8 +518,15 @@ function huntinfo_calculate_loot() {
             newrow.insertCell().appendChild(newlbl);
 
             newlbl = document.createElement("label");
-            newlbl.innerText = gtos(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * loottable_body.rows[i].cells[LOOTTB_COLUMN.PRICE].firstChild.value);
+            if (item_index == -1) newlbl.innerText = "0 oz";
+            else newlbl.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * mediviadb.items[item_index].weight + " oz";
             let newcell = newrow.insertCell();
+            newcell.className = "locationth-right";
+            newcell.appendChild(newlbl);
+
+            newlbl = document.createElement("label");
+            newlbl.innerText = gtos(loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * loottable_body.rows[i].cells[LOOTTB_COLUMN.PRICE].firstChild.value);
+            newcell = newrow.insertCell();
             newcell.className = "locationth-right";
             newcell.appendChild(newlbl);
 
@@ -528,20 +536,28 @@ function huntinfo_calculate_loot() {
         // Calculate location totals
         for (let i = 1; i < huntinfo_selllocation.children.length; i++) {
             let curtable = huntinfo_selllocation.children[i];
-            let locationtotal = 0;
+            let location_totalweight = 0,
+                location_totalprice = 0;
             for (let j = 0; j < curtable.tBodies.length; j++) {
                 let curbody = curtable.tBodies[j];
-                let npctotal = 0;
+                let npc_totalweight = 0,
+                    npc_totalprice = 0;
                 let k = 1;
                 if (i == huntinfo_selllocation.children.length - 1) k = 0;
-                for (; k < curbody.rows.length; k++)
-                    npctotal += stog(curbody.rows[k].cells[LOCATIONTB_COLUMN.PRICE].firstChild.innerText);
+                for (; k < curbody.rows.length; k++) {
+                    npc_totalweight += stoi(curbody.rows[k].cells[LOCATIONTB_COLUMN.WEIGHT].firstChild.innerText);
+                    npc_totalprice += stog(curbody.rows[k].cells[LOCATIONTB_COLUMN.PRICE].firstChild.innerText);
+                }
                 // If we are on the last table, "Players", we won't have a tbody
-                if (i != huntinfo_selllocation.children.length - 1)
-                    curbody.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(npctotal);
-                locationtotal += npctotal;
+                if (i != huntinfo_selllocation.children.length - 1) {
+                    curbody.rows[0].cells[LOCATIONTB_COLUMN.WEIGHT].innerText = npc_totalweight + " oz";
+                    curbody.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(npc_totalprice);
+                }
+                location_totalweight += npc_totalweight;
+                location_totalprice += npc_totalprice;
             }
-            curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(locationtotal);
+            curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.WEIGHT].innerText = location_totalweight + " oz";
+            curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(location_totalprice);
         }
 
         huntinfo_selllocation.style.display = "block";
