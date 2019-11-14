@@ -91,6 +91,11 @@ function stoi(str) {
     else return parseInt(str);
 }
 
+function stof(str) {
+    if (str == "") return 0;
+    else return parseFloat(str);
+}
+
 function stog(gold_text) {
     if (gold_text == "") return 0;
     let splittext = gold_text.split(" ");
@@ -518,7 +523,7 @@ function huntinfo_calculate_loot() {
 
             newlbl = document.createElement("label");
             if (item_index == -1) newlbl.innerText = "0 oz";
-            else newlbl.innerText = loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * mediviadb.items[item_index].weight + " oz";
+            else newlbl.innerText = (loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * mediviadb.items[item_index].weight).toFixed(1) + " oz";
             let newcell = newrow.insertCell();
             newcell.className = "locationth-right";
             newcell.appendChild(newlbl);
@@ -544,7 +549,7 @@ function huntinfo_calculate_loot() {
                 let k = 1;
                 if (i == huntinfo_selllocation.children.length - 1) k = 0;
                 for (; k < curbody.rows.length; k++) {
-                    npc_totalweight += stoi(curbody.rows[k].cells[LOCATIONTB_COLUMN.WEIGHT].firstChild.innerText);
+                    npc_totalweight += stof(curbody.rows[k].cells[LOCATIONTB_COLUMN.WEIGHT].firstChild.innerText);
                     npc_totalprice += stog(curbody.rows[k].cells[LOCATIONTB_COLUMN.PRICE].firstChild.innerText);
                 }
                 // If we are on the last table, "Players", we won't have a tbody
