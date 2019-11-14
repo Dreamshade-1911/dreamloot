@@ -547,7 +547,7 @@ function huntinfo_calculate_loot() {
             let newlbl = document.createElement("label");
             if (item_index == -1) newlbl.innerText = "0 oz";
             else newlbl.innerText = (loottable_body.rows[i].cells[LOOTTB_COLUMN.QUANTITY].firstChild.value * mediviadb.items[item_index].weight).toFixed(1) + " oz";
-            newcell = newrow.insertCell();
+            let newcell = newrow.insertCell();
             newcell.className = "locationth-right";
             newcell.appendChild(newlbl);
 
