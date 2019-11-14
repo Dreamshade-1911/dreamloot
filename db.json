@@ -86,6 +86,7 @@
     { "name": "Arming Sword", "price": 20000, "weight": 60, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Assassin Blade", "price": 6300, "weight": 42, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Axe Ring", "price": 400, "weight": 0.9, "stackable": false, "sellto": ["Players"] },
+    { "name": "Barbarian Axe", "price": 185, "weight": 51, "stackable": false, "sellto": ["Risdarick"] },
     { "name": "Bascinet", "price": 24000, "weight": 75, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Battle Axe", "price": 80, "weight": 50, "stackable": false, "sellto": ["Risdarick", "Romella", "Sam"] },
     { "name": "Battle Hammer", "price": 120, "weight": 68, "stackable": false, "sellto": ["Aadim", "Gamel", "Risdarick", "Romella", "Sam", "Turvy"] },
@@ -149,11 +150,13 @@
     { "name": "Heavy Halberd", "price": 35000, "weight": 120, "stackable": false, "sellto": ["Ziyad", "Wulkan"] },
     { "name": "Hellforged Armor", "price": 10000000, "weight": 270, "stackable": false, "sellto": ["Players"] },
     { "name": "Hellforged Axe", "price": 50000, "weight": 80, "stackable": false, "sellto": ["Wulkan"] },
+    { "name": "Hellforged Helmet", "price": 12000000, "weight": 380, "stackable": false, "sellto": ["Players"] },
     { "name": "Hellforged Legs", "price": 300000, "weight": 180, "stackable": false, "sellto": ["Players"] },
     { "name": "Hellforged Shield", "price": 36000, "weight": 120, "stackable": false, "sellto": ["Ziyad", "Wulkan"] },
     { "name": "Hunting Bolt", "price": 5, "weight": 0.8, "stackable": true, "sellto": ["Players"] },
     { "name": "Ice Rapier", "price": 1000, "weight": 15, "stackable": false, "sellto": ["Nah'Bob"] },
     { "name": "Ignited Bow", "price": 5000, "weight": 34, "stackable": false, "sellto": ["Aremis"] },
+    { "name": "Illumination Ring", "price": 100, "weight": 0.9, "stackable": false, "sellto": ["Aremis"] },
     { "name": "Iron Helmet", "price": 150, "weight": 30, "stackable": false, "sellto": ["Risdarick"] },
     { "name": "Knight Armor", "price": 5000, "weight": 120, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Knight Axe", "price": 2000, "weight": 59, "stackable": false, "sellto": ["Alesar"] },
@@ -235,7 +238,8 @@
     { "name": "Wand of Light", "price": 4000, "weight": 10, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "War Hammer", "price": 1200, "weight": 85, "stackable": false, "sellto": ["Nah'Bob"] },
     { "name": "Warrior Helmet", "price": 5000, "weight": 68, "stackable": false, "sellto": ["Alesar"] },
-    { "name": "White Pearl", "price": 160, "weight": 0.2, "stackable": true, "sellto": ["Asha", "Briasol", "Hanna", "Ishina", "Leunaurd", "Odemara", "Tezila"] }
+    { "name": "White Pearl", "price": 160, "weight": 0.2, "stackable": true, "sellto": ["Asha", "Briasol", "Hanna", "Ishina", "Leunaurd", "Odemara", "Tezila"] },
+    { "name": "Wooden Maul", "price": 2000, "weight": 200, "stackable": false, "sellto": ["Wulkan"] }
 ],
 
 "creatures": [
@@ -272,6 +276,9 @@
     { "name": "Minotaur Archer", "items": ["Bolt", "Brass Armor", "Chain Armor", "Chain Helmet", "Chain Legs", "Crossbow", "Hunting Bolt", "Scale Armor", "Soldier Helmet"] },
     { "name": "Minotaur Guard", "items": ["Battle Shield", "Brass Armor", "Chain Armor", "Double Axe"] },
     { "name": "Minotaur Mage", "items": ["Brass Armor", "Chain Legs", "Minotaur Tome"] },
+    { "name": "Ogre Gruntz", "items": ["Barbarian Axe", "Battle Hammer", "Club Ring", "Halberd", "Mace", "Morning Star", "Platinum Amulet", "Small Emerald", "Talon"] },
+    { "name": "Ogre Smasher", "items": ["Club Ring", "Halberd", "Illumination Ring", "Platinum Amulet", "Wooden Maul"] },
+    { "name": "Ogre Warrior", "items": ["Battle Hammer", "Club Ring", "Dragon Hammer", "Gold Ring", "Hellforged Helmet", "Illumination Ring", "Mace", "Morning Star", "Obsidian Lance", "Platinum Amulet", "Skull Staff", "Small Ruby", "War Hammer"] },
     { "name": "Queen's Follower", "items": ["Bascinet", "Blue Robe", "Demonic Axe", "Hellforged Legs", "Knight Axe", "Mercenary Sword", "Royal Plate Armor", "Shield of the Heroes"] },
     { "name": "Royalist", "items": ["Arming Sword", "Bascinet", "Platinum Amulet", "Royal Plate Armor", "Steel Boots", "Thaian Soldier Legs"] },
     { "name": "Sandbeast", "items": ["Brass Legs", "Dark Armor", "Dark Helmet", "Scimitar", "Time Ring"] },
