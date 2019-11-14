@@ -331,7 +331,6 @@ function loottable_add_creature_items() {
 // Functions pertaining to hunt info
 // ----------------------------------
 
-// @Improvement: We can make a location table be a custom html element.
 function huntinfo_create_location_rows() {
     for (let i = 0; i < mediviadb.locations.length; i++) {
         let newtable = document.importNode(locationtable_template.content, true).querySelector(".locationtable");
