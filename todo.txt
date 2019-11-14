@@ -7,3 +7,5 @@
 * Calculate how many items are in a backpack of a specific item by the weight of the backpack
 * Link to state of the tables so people can share loot calculations
 * Expand button on the players hunt info to view detailed info about supplies used and cost of each
+* Item sprites on "where to sell"
+* Predetermined hunting spots that adds all the creatures from the hunt.
