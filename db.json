@@ -66,7 +66,7 @@
 
 "players_otheritems": [
     { "name": "RoH", "price": 2000, "weight": 0.8 },
-    { "name": "BP of MFs", "price": 2000, "weight": 54 },
+    { "name": "BP of MF's", "price": 2000, "weight": 54 },
     { "name": "Arrow", "price": 2, "weight": 0.7 },
     { "name": "H-Arrow", "price": 4, "weight": 0.7 },
     { "name": "Bolt", "price": 3, "weight": 0.8 },
