@@ -255,6 +255,7 @@ table input[type=number]:invalid {
     transition-timing-function: ease;
 }
 
+.playerpanel:hover .playercontent,
 .playerpanel:focus-within .playercontent {
     clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
     transition-duration: 0.3s;
