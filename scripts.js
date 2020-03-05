@@ -177,7 +177,10 @@ function players_add_player() {
             rowprice.setAttribute("min", "0");
             rowprice.setAttribute("step", "100");
             rowprice.setAttribute("placeholder", "0");
-            rowprice.value = dbarray[i].price;
+            if (localStorage.getItem(dbarray[i].name + "_price") === null)
+                rowprice.value = dbarray[i].price;
+            else
+                rowprice.value = localStorage.getItem(dbarray[i].name + "_price");
             newrow.insertCell().appendChild(rowprice);
         }
     }
@@ -193,6 +196,22 @@ function player_delete(callerpanel) {
 function players_clear() {
     while (players().length > 1)
         players_grid.lastChild.remove();
+}
+
+function save_default_prices(callerPlayerContent) {
+
+    let runestable = callerPlayerContent.querySelector(".runestable");
+    let otherstable = callerPlayerContent.querySelector(".otherstable");
+
+    function save_table_prices(tableObject) {
+        for (let i = 1; i < tableObject.rows.length; i++) {
+            let rowName = tableObject.rows[i].cells[PLAYERSTB_COLUMN.NAME].firstChild.innerText + "_price";
+            let rowPrice = tableObject.rows[i].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value;
+            localStorage.setItem(rowName, rowPrice);
+        }
+    }
+    save_table_prices(runestable);
+    save_table_prices(otherstable);
 }
 
 // --------------------------------------
