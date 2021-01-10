@@ -595,13 +595,13 @@ function huntinfo_calculate_loot() {
                 }
                 // If we are on the last table, "Players", we won't have a tbody
                 if (i != huntinfo_selllocation.children.length - 1) {
-                    curbody.rows[0].cells[LOCATIONTB_COLUMN.WEIGHT].innerText = npc_totalweight + " oz";
+                    curbody.rows[0].cells[LOCATIONTB_COLUMN.WEIGHT].innerText = npc_totalweight.toFixed(1) + " oz";
                     curbody.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(npc_totalprice);
                 }
                 location_totalweight += npc_totalweight;
                 location_totalprice += npc_totalprice;
             }
-            curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.WEIGHT].innerText = location_totalweight + " oz";
+            curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.WEIGHT].innerText = location_totalweight.toFixed(1) + " oz";
             curtable.tHead.rows[0].cells[LOCATIONTB_COLUMN.PRICE].innerText = gtos(location_totalprice);
         }
 
