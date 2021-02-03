@@ -237,6 +237,12 @@ table input[type=number]:invalid {
     margin: 20px;
 }
 
+.fishing-warning {
+    color: #c22222;
+    text-align: center;
+    font-size: 12pt;
+}
+
 .playercontent {
     position: absolute;
     background-color: var(--background-color);
@@ -384,6 +390,14 @@ table input[type=number]:invalid {
     min-width: 20px;
 }
 
+.kb-shortcuts {
+    margin: 15px;
+}
+
+.footer-source {
+    text-align: center;
+}
+
 /* Specific elements by id */
 
 #loottb_addcreatureitems {
@@ -409,8 +423,36 @@ table input[type=number]:invalid {
 /* Mobile */
 
 @media screen and (max-width: 960px), screen and (max-device-width: 960px) {
+    :root {
+        font-size: 11pt;
+    }
+
+    label {
+        font-size: 9pt;
+    }
+
+    .title {
+        margin: 0px;
+    }
+
     .maingrid {
-        grid-template-columns: minmax(450px, auto);
+        grid-template-columns: minmax(350px, auto);
+    }
+
+    .fishing-warning {
+        font-size: 11pt;
+    }
+
+    .infopanel h1 {
+        font-size: 18px;
+    }
+
+    .infopanel th {
+        font-weight: 300;
+    }
+
+    #huntinfo_selllocation h2 {
+        font-size: 16px;
     }
 
     #playersgrid {
@@ -419,5 +461,14 @@ table input[type=number]:invalid {
 
     .playerpanel {
         max-width: 90%;
+    }
+
+    .kb-shortcuts {
+        display: none;
+    }
+
+    .footer-source {
+        margin-top: 25px;
+        font-size: 11pt;
     }
 }

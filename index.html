@@ -13,7 +13,7 @@
 <body onload="init()">
     <div style="margin-top: 15px; padding: 0px 2%">
         <h1 class="title">DreamLoot</h1>
-        <p style="color: #c22222; text-align: center">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
+        <p class="fishing-warning">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
         <div class="maingrid">
             <!-- Player waste -->
             <div id="playersgrid">
@@ -34,7 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Item name</th>
-                                <th style="width: 80px">Quantity</th>
+                                <th style="width: 60px">Quantity</th>
                                 <th style="width: 120px">Item price</th>
                                 <th style="width: 20px"></th>
                             </tr>
@@ -75,12 +75,12 @@
                         </tr>
                     </table>
                     <div id="huntinfo_selllocation" style="margin-top: 15px; display: none">
-                        <h2>Where to sell</h2>
+                        <h2 style="margin-top: 20px; margin-bottom: 5px">Where to sell</h2>
                     </div>
                 </center>
             </div>
         </div>
-        <p style="margin: 15px"><small>You can use hotkeys to make your job easier, check it out:<br>
+        <p class="kb-shortcuts"><small>You can use hotkeys to make your job easier, check it out:<br>
             <kbd>Tab</kbd> : Select next input box.<br>
             <kbd>Shift</kbd> + <kbd>Tab</kbd> : Select previous input box.<br>
             <kbd>Enter</kbd> : Accept any action on focused element.<br>
@@ -90,7 +90,7 @@
             <kbd>Ctrl</kbd> + <kbd>~</kbd> : Add player.<br>
             <kbd>PageUp</kbd> / <kbd>PageDown</kbd> : Select upper/lower input field.<br>
         </p>
-        <footer style="text-align: center"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
+        <footer class="footer-source"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
     </div>
 
     <template id="playerpanel-template">
