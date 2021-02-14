@@ -355,6 +355,13 @@ function loottable_add_creature_items() {
     autocomplete_creature_items();
 }
 
+// @HACK: Nasty bugfix - we need a major refactor on how we deal with tables
+function loottable_on_focus_out() {
+    if (loottable.rows[loottable.rows.length - 1].cells[LOOTTB_COLUMN.NAME].firstChild.value == "" &&
+        loottable.rows[loottable.rows.length - 2].cells[LOOTTB_COLUMN.NAME].firstChild.value == "")
+        loottable_delete_row(loottable.rows[loottable.rows.length - 1]);
+}
+
 // ----------------------------------
 // Functions pertaining to hunt info
 // ----------------------------------
