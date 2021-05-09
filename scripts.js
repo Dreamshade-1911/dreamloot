@@ -73,7 +73,7 @@ function init() {
 
     addcreature_panel = document.getElementById("loottb_addcreatureitems");
     addcreature_name = document.getElementById("loottb_creaturename");
-    
+
     huntinfo = document.getElementById("huntinfo");
     huntinfo_totalwaste = document.getElementById("huntinfo_totalwaste");
     huntinfo_totalearnings = document.getElementById("huntinfo_totalearnings");
@@ -165,13 +165,13 @@ function players_add_player() {
             rowlbl = document.createElement("label");
             rowlbl.innerText = dbarray[i].name;
             newrow.insertCell().appendChild(rowlbl);
-    
+
             rowquant = document.createElement("input");
             rowquant.type = "number";
             rowquant.setAttribute("min", "0");
             rowquant.setAttribute("placeholder", "0");
             newrow.insertCell().appendChild(rowquant);
-    
+
             rowprice = document.createElement("input");
             rowprice.type = "number";
             rowprice.setAttribute("min", "0");
@@ -184,7 +184,7 @@ function players_add_player() {
             newrow.insertCell().appendChild(rowprice);
         }
     }
-    
+
     return players_grid.appendChild(newpanel);
 }
 
@@ -322,18 +322,10 @@ function loottable_add_creature_items() {
     let i = 0;
     let creature = mediviadb.creatures[addcreature_autocomplete_lastindex];
 
-    // @Improvement: Instead of only checking the last row, keep adding items on empty rows until we reach the last one
-    let first_row = loottable_body.rows[loottable_body.rows.length - 1];
-    if (first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value == "") {
-        first_row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[0];
-        autocomplete_itemname(first_row);
-        i = 1;
-    }
-
-    let loottb_length = loottable_body.rows.length;
+    i = 0;
     let skip_item;
     for (; i < creature.items.length; i++) {
-        // If the item already exists in the table, skip it
+        let loottb_length = loottable_body.rows.length;
         skip_item = false;
         for (let j = 0; j < loottb_length; j++) {
             if (creature.items[i] == loottable_body.rows[j].cells[LOOTTB_COLUMN.NAME].firstChild.value) {
@@ -344,12 +336,12 @@ function loottable_add_creature_items() {
         if (skip_item) continue;
 
         autocomplete_lastsize = 0;
-        let row = loottable_add_row();
+        let row = loottable_body.rows[loottb_length - 1];
         row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[i];
         autocomplete_itemname(row);
+        loottable_add_row();
     }
 
-    loottable_add_row();
     addcreature_panel.scrollIntoView();
     addcreature_name.value = "";
     autocomplete_creature_items();
