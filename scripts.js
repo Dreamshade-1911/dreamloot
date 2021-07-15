@@ -199,6 +199,7 @@ function generate_share_link() {
     str_arr = [];
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
         let cur_row = loottable_body.rows[i]
+
         let cur_name_or_index = !cur_row.dataset.itemindex || cur_row.dataset.itemindex == -1 ?
         cur_row.cells[LOOTTB_COLUMN.NAME].firstChild.value : cur_row.dataset.itemindex;
         let cur_quant = stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value);
@@ -271,7 +272,7 @@ function parse_state_string(state) {
                     }
                 }
 
-                --cursor; // We need to back one just so that the loop register the exit
+                --cursor; // We need to back one just so that the loop registers the exit
             } break;
 
             case '}': {
