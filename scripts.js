@@ -187,10 +187,10 @@ function generate_share_link() {
             continue;
 
         let runestable = player(p).querySelector(".runestable");
-        let runes_str = getDataString(runestable);
+        let runes_str = getDataString(runestable, "runes");
 
         let otherstable = player(p).querySelector(".otherstable");
-        let others_str = getDataString(otherstable);
+        let others_str = getDataString(otherstable, "players_otheritems");
 
         if (!runes_str && !others_str) continue;
         str_arr.push(`${cur_player_name}{${runes_str};${others_str}}`);
@@ -200,33 +200,39 @@ function generate_share_link() {
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
         let cur_row = loottable_body.rows[i]
 
-        let cur_name_or_index = !cur_row.dataset.itemindex || cur_row.dataset.itemindex == -1 ?
-        cur_row.cells[LOOTTB_COLUMN.NAME].firstChild.value : cur_row.dataset.itemindex;
+        let is_index = !(!cur_row.dataset.itemindex || cur_row.dataset.itemindex == -1);
+
+        let cur_name_or_index =  is_index ? cur_row.dataset.itemindex : cur_row.cells[LOOTTB_COLUMN.NAME].firstChild.value;
         let cur_quant = stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value);
-        let cur_price = stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value);
+        let cur_price_or_default = stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value);
 
         if (cur_name_or_index == ""
             || !cur_quant || cur_quant <= 0
-            || !cur_price || cur_price <= 0)
+            || !cur_price_or_default || cur_price_or_default <= 0)
             continue;
+        console.log(cur_name_or_index, mediviadb.items.length)
+        if (is_index && cur_price_or_default == mediviadb.items[cur_name_or_index].price)
+            cur_price_or_default = "-";
 
-        str_arr.push(`${cur_name_or_index},${cur_quant},${cur_price}`)
+        str_arr.push(`${cur_name_or_index},${cur_quant},${cur_price_or_default}`)
     }
 
     let share_link = encodeURI(`${location.origin}${location.pathname}?state=${player_str};${str_arr.join("|")};`);
     copy_to_clipboard(share_link);
 
-    function getDataString(table) {
+    function getDataString(table, dbname) {
         let arr = [];
         for (let i = 1; i < table.rows.length; i++) {
             let cur_quant = stoi(table.rows[i].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
-            let cur_price = stoi(table.rows[i].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value);
+            let cur_price_or_default = stoi(table.rows[i].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value);
 
-            if (!cur_price || cur_price <= 0
+            if (!cur_price_or_default || cur_price_or_default <= 0
                 || !cur_quant || cur_quant <= 0)
                 continue;
+            if (cur_price_or_default == mediviadb[dbname][i - 1].price)
+                cur_price_or_default = "-";
 
-            arr.push(`${i},${cur_quant},${cur_price}`);
+            arr.push(`${i},${cur_quant},${cur_price_or_default}`);
         }
         if (arr.length == 0) return "";
         else return arr.join("|");
@@ -258,8 +264,12 @@ function parse_state_string(state) {
                 if (runes) {
                     let runestable = cur_player.querySelector(".runestable");
                     for (let i = 0; i < runes.length; ++i) {
-                        runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = stoi(runes[i][1]);
-                        runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value = stoi(runes[i][2]);
+                        runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = runes[i][1];
+
+                        let el = runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild;
+                        if (runes[i][2] == "-")
+                            el.value = mediviadb.runes[runes[i][0] - 1].price;
+                        else el.value = runes[i][2];
                     }
                 }
 
@@ -267,8 +277,12 @@ function parse_state_string(state) {
                 if (others) {
                     let otherstable = cur_player.querySelector(".otherstable");
                     for (let i = 0; i < others.length; ++i) {
-                        otherstable.rows[others[i][0]].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = stoi(others[i][1]);
-                        otherstable.rows[others[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value = stoi(others[i][2]);
+                        otherstable.rows[others[i][0]].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = others[i][1];
+
+                        let el = otherstable.rows[others[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild;
+                        if (others[i][2] == "-")
+                            el.value = mediviadb.players_otheritems[others[i][0] - 1].price;
+                        else el.value = others[i][2];
                     }
                 }
 
@@ -287,13 +301,19 @@ function parse_state_string(state) {
     if (loot) {
         for (let i = 0; i < loot.length; ++i) {
             let row = loottable_add_row();
+            let is_index = false;
             if (isNaN(loot[i][0])) row.cells[LOOTTB_COLUMN.NAME].firstChild.value = loot[i][0];
             else {
+                is_index = true;
                 row.dataset.itemindex = loot[i][0];
                 row.cells[LOOTTB_COLUMN.NAME].firstChild.value = mediviadb.items[stoi(loot[i][0])].name;
             }
             row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value = loot[i][1];
-            row.cells[LOOTTB_COLUMN.PRICE].firstChild.value = loot[i][2];
+
+            let el = row.cells[LOOTTB_COLUMN.PRICE].firstChild
+            if (is_index && loot[i][2] == "-")
+                el.value = mediviadb.items[loot[i][0]].price;
+            else el.value = loot[i][2];
         }
     }
 

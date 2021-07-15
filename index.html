@@ -15,11 +15,20 @@
 </head>
 
 <body onload="init()">
+    <!-- Background -->
+    <div class="background">
+        <div class="bg-noise"></div>
+        <div class="bg-rect-fade"></div>
+        <div class="bg-triangle bg-triangle-topleft"></div>
+        <div class="bg-triangle bg-triangle-topright"></div>
+    </div>
+    <!-- Background -->
+
     <nav class="floating-navbar">
         <button class="nav-button icon menu-icon" style="display: none" onclick="open_sidebar_menu()"></button><button class="nav-button icon link-icon" onclick="generate_share_link()"></button>
     </nav>
 
-    <div style="margin-top: 30px">
+    <div>
         <h1 class="title">DreamLoot</h1>
         <p class="fishing-warning">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
         <div class="maingrid">
@@ -101,6 +110,7 @@
         <footer class="footer-source"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
     </div>
 
+    <!-- Templates -->
     <template id="playerpanel-template">
         <div class="playerpanel" data-waste="0">
             <h1>
@@ -125,7 +135,7 @@
                     </tr>
                 </table>
                 <center>
-                    <button style="margin-top: 8px; width: 50%" class="square-button" onclick="save_default_prices(this.parentElement.parentElement)">Save prices</button>
+                    <button style="margin-top: 8px; padding-left: 15px; padding-right: 15px" class="square-button" onclick="save_default_prices(this.parentElement.parentElement)">Save prices</button>
                 </center>
             </div>
         </div>
