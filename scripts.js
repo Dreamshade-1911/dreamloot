@@ -65,7 +65,7 @@ function init() {
             parse_state_string(state_param);
             huntinfo_calculate_loot();
         }
-        else {
+        if (players().length <= 1) {
             players_add_player();
             player(1).querySelector(".playername").focus();
             player(1).querySelector(".playername").setSelectionRange(0, 100);
@@ -176,14 +176,14 @@ function open_sidebar_menu() {
 
 }
 
+// @TODO: insert a '-' into default prices to save characters.
+// We'll have to manually compare to the DB entry when generating, in this case.
 function generate_share_link() {
     let player_str = "";
     let str_arr = [];
     for (let p = 1; p < players().length; p++) {
         let cur_player_name = player(p).querySelector(".playername").value
-        if (!cur_player_name
-            || cur_player_name == ""
-            || cur_player_name.toLowerCase() == "new player")
+        if (!cur_player_name || cur_player_name == "")
             continue;
 
         let runestable = player(p).querySelector(".runestable");
@@ -193,7 +193,7 @@ function generate_share_link() {
         let others_str = getDataString(otherstable);
 
         if (!runes_str && !others_str) continue;
-        str_arr.push(`${cur_player_name}{${runes_str && others_str ? runes_str + ";" + others_str : others_str || runes_str}}`);
+        str_arr.push(`${cur_player_name}{${runes_str};${others_str}}`);
     }
     player_str = str_arr.join("")
     str_arr = [];
@@ -227,7 +227,7 @@ function generate_share_link() {
 
             arr.push(`${i},${cur_quant},${cur_price}`);
         }
-        if (arr.length == 0) return null;
+        if (arr.length == 0) return "";
         else return arr.join("|");
     }
 }
@@ -261,6 +261,7 @@ function parse_state_string(state) {
                         runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value = stoi(runes[i][2]);
                     }
                 }
+
                 let others = parse_items();
                 if (others) {
                     let otherstable = cur_player.querySelector(".otherstable");
@@ -292,7 +293,6 @@ function parse_state_string(state) {
             }
             row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value = loot[i][1];
             row.cells[LOOTTB_COLUMN.PRICE].firstChild.value = loot[i][2];
-
         }
     }
 
@@ -305,9 +305,10 @@ function parse_state_string(state) {
             switch (state.charAt(cursor)) {
                 case ';':
                 case '}':
-                    cur_obj.push(state.substr(cursor_start, cursor - cursor_start));
+                    let sub = state.substr(cursor_start, cursor - cursor_start);
+                    if (sub && sub != "") cur_obj.push(sub);
+                    if (cur_obj.length > 0) ret_arr.push(cur_obj);
                     cursor_start = cursor + 1;
-                    ret_arr.push(cur_obj);
                 break parse_item;
 
                 case ',':
