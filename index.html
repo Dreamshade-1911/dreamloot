@@ -15,16 +15,20 @@
 </head>
 
 <body onload="init()">
-    <div style="margin-top: 15px; padding: 0px 2%">
+    <nav class="floating-navbar">
+        <button class="nav-button icon menu-icon" style="display: none" onclick="open_sidebar_menu()"></button><button class="nav-button icon link-icon" onclick="generate_share_link()"></button>
+    </nav>
+
+    <div style="margin-top: 30px">
         <h1 class="title">DreamLoot</h1>
         <p class="fishing-warning">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
         <div class="maingrid">
             <!-- Player waste -->
             <div id="playersgrid">
-                <button id="addplayerbtn" class="square-button" style="width: 2%; font-size: 14pt" onclick="players_add_player()">+</button>
+                <button id="addplayerbtn" class="square-button font-icon" style="width: 2%" onclick="players_add_player()">+</button>
             </div>
             <!-- LootTable Infopanel -->
-            <div class="infopanel" onkeyup="onkeyup_loottable(event)">
+            <div class="infopanel" id="loottable_panel" onkeyup="onkeyup_loottable(event)">
                 <button class="headerbutton-left" onclick="loottable_clear()">Clear</button>
                 <button class="headerbutton-right" onclick="loottable_show_creature_items()">Add creature items</button>
                 <h1>Loot Table</h1>
@@ -53,7 +57,7 @@
                 </center>
             </div>
             <!-- HuntInfo Infopanel -->
-            <div class="infopanel">
+            <div class="infopanel" id="huntinfo_panel">
                 <button class="headerbutton-left" onclick="huntinfo_calculate_loot()">Calculate loot</button>
                 <h1>Hunt Info</h1>
                 <center>
@@ -101,7 +105,7 @@
         <div class="playerpanel" data-waste="0">
             <h1>
                 <input class="playername" type="text" value="New Player">
-                <button class="square-button" onclick="player_delete(parentElement.parentElement)" tabindex="-1">X</button>
+                <button class="square-button font-icon" onclick="player_delete(parentElement.parentElement)" tabindex="-1">X</button>
             </h1>
             <div class="playercontent">
                 <h2>Backpacks of runes used</h2>

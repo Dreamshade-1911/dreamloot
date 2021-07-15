@@ -35,10 +35,12 @@ npctbody_template;
 // HTML Elements
 var players_grid,
 loottable,
+loottable_panel,
 loottable_body,
 addcreature_panel,
 addcreature_name,
 huntinfo,
+huntinfo_panel,
 huntinfo_totalwaste,
 huntinfo_totalearnings,
 huntinfo_profit,
@@ -46,20 +48,29 @@ huntinfo_splitprofit,
 huntinfo_playerstable,
 huntinfo_selllocation;
 
+// Misc
+var url_params = new URLSearchParams(window.location.search);
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
 
 function init() {
-    // Fetch is async
     fetch("./db.json")
     .then((resp) => resp.json())
     .then(function(data) {
         mediviadb = data;
-        players_add_player();
-        loottable_add_row();
         huntinfo_create_location_rows();
-        player(1).querySelector(".playername").focus();
-        player(1).querySelector(".playername").setSelectionRange(0, 100);
+
+        let state_param = url_params.get('state');
+        if (state_param) {
+            parse_state_string(state_param);
+            huntinfo_calculate_loot();
+        }
+        else {
+            players_add_player();
+            player(1).querySelector(".playername").focus();
+            player(1).querySelector(".playername").setSelectionRange(0, 100);
+        }
+        loottable_add_row();
     });
 
     playerpanel_template = document.getElementById("playerpanel-template");
@@ -69,12 +80,14 @@ function init() {
     players_grid = document.getElementById("playersgrid");
 
     loottable = document.getElementById("loottb");
+    loottable_panel = document.getElementById("loottable_panel");
     loottable_body = loottable.getElementsByTagName("tbody")[0];
 
     addcreature_panel = document.getElementById("loottb_addcreatureitems");
     addcreature_name = document.getElementById("loottb_creaturename");
 
     huntinfo = document.getElementById("huntinfo");
+    huntinfo_panel = document.getElementById("huntinfo_panel");
     huntinfo_totalwaste = document.getElementById("huntinfo_totalwaste");
     huntinfo_totalearnings = document.getElementById("huntinfo_totalearnings");
     huntinfo_profit = document.getElementById("huntinfo_profit");
@@ -110,10 +123,26 @@ function stog(gold_text) {
 }
 
 function gtos(amount) {
-    if (Math.abs(amount) < 1000) return parseInt(amount) + " GP";
-    else if (Math.abs(amount) >= 1000 && Math.abs(amount) < 1000000) return (amount / 1000).toFixed(1) + " K";
-    else return (Math.abs(amount) / 1000000).toFixed(3) + " KK";
+    const abs_amount = Math.abs(amount);
+    if (abs_amount < 1000) return parseInt(amount) + " GP";
+    else if (abs_amount < 1000000) return (amount / 1000).toFixed(1) + " K";
+    else return (abs_amount / 1000000).toFixed(3) + " KK";
 }
+
+function copy_to_clipboard(text) {
+    const el = document.createElement("textarea");
+    el.value = text;
+    el.style.position = "absolute";
+    el.style.left = "-9999px";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+}
+
+// ------------------------------------------
+// General stuff
+// ------------------------------------------
 
 function generate_wikilink(name) {
     name.replace(/ /g, "_");
@@ -141,6 +170,171 @@ function autocomplete_generic(item_array, input_field) {
         }
     }
     return suggestion_index;
+}
+
+function open_sidebar_menu() {
+
+}
+
+function generate_share_link() {
+    let player_str = "";
+    let str_arr = [];
+    for (let p = 1; p < players().length; p++) {
+        let cur_player_name = player(p).querySelector(".playername").value
+        if (!cur_player_name
+            || cur_player_name == ""
+            || cur_player_name.toLowerCase() == "new player")
+            continue;
+
+        let runestable = player(p).querySelector(".runestable");
+        let runes_str = getDataString(runestable);
+
+        let otherstable = player(p).querySelector(".otherstable");
+        let others_str = getDataString(otherstable);
+
+        if (!runes_str && !others_str) continue;
+        str_arr.push(`${cur_player_name}{${runes_str && others_str ? runes_str + ";" + others_str : others_str || runes_str}}`);
+    }
+    player_str = str_arr.join("")
+    str_arr = [];
+    for (let i = 0; i < loottable_body.rows.length - 1; i++) {
+        let cur_row = loottable_body.rows[i]
+        let cur_name_or_index = !cur_row.dataset.itemindex || cur_row.dataset.itemindex == -1 ?
+        cur_row.cells[LOOTTB_COLUMN.NAME].firstChild.value : cur_row.dataset.itemindex;
+        let cur_quant = stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value);
+        let cur_price = stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value);
+
+        if (cur_name_or_index == ""
+            || !cur_quant || cur_quant <= 0
+            || !cur_price || cur_price <= 0)
+            continue;
+
+        str_arr.push(`${cur_name_or_index},${cur_quant},${cur_price}`)
+    }
+
+    let share_link = encodeURI(`${location.origin}${location.pathname}?state=${player_str};${str_arr.join("|")};`);
+    copy_to_clipboard(share_link);
+
+    function getDataString(table) {
+        let arr = [];
+        for (let i = 1; i < table.rows.length; i++) {
+            let cur_quant = stoi(table.rows[i].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
+            let cur_price = stoi(table.rows[i].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value);
+
+            if (!cur_price || cur_price <= 0
+                || !cur_quant || cur_quant <= 0)
+                continue;
+
+            arr.push(`${i},${cur_quant},${cur_price}`);
+        }
+        if (arr.length == 0) return null;
+        else return arr.join("|");
+    }
+}
+
+function parse_state_string(state) {
+    let cursor = 0;
+    let cursor_start = 0;
+
+    let cur_player_index = 0;
+    let cur_player = null;
+    parse_players:
+    while (cursor < state.length) {
+        switch (state.charAt(cursor)) {
+            case ';': {
+                ++cursor;
+                cursor_start = cursor;
+            } break parse_players;
+
+            case '{': {
+                ++cur_player_index;
+                players_add_player();
+                cur_player = player(cur_player_index);
+                cur_player.querySelector(".playername").value = state.substr(cursor_start, cursor - cursor_start);
+                cursor_start = cursor + 1;
+
+                let runes = parse_items();
+                if (runes) {
+                    let runestable = cur_player.querySelector(".runestable");
+                    for (let i = 0; i < runes.length; ++i) {
+                        runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = stoi(runes[i][1]);
+                        runestable.rows[runes[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value = stoi(runes[i][2]);
+                    }
+                }
+                let others = parse_items();
+                if (others) {
+                    let otherstable = cur_player.querySelector(".otherstable");
+                    for (let i = 0; i < others.length; ++i) {
+                        otherstable.rows[others[i][0]].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = stoi(others[i][1]);
+                        otherstable.rows[others[i][0]].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value = stoi(others[i][2]);
+                    }
+                }
+
+                --cursor; // We need to back one just so that the loop register the exit
+            } break;
+
+            case '}': {
+                cursor_start = cursor + 1;
+                cur_player = null;
+            } break;
+        }
+        ++cursor;
+    }
+
+    let loot = parse_items();
+    if (loot) {
+        for (let i = 0; i < loot.length; ++i) {
+            let row = loottable_add_row();
+            if (isNaN(loot[i][0])) row.cells[LOOTTB_COLUMN.NAME].firstChild.value = loot[i][0];
+            else {
+                row.dataset.itemindex = loot[i][0];
+                row.cells[LOOTTB_COLUMN.NAME].firstChild.value = mediviadb.items[stoi(loot[i][0])].name;
+            }
+            row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value = loot[i][1];
+            row.cells[LOOTTB_COLUMN.PRICE].firstChild.value = loot[i][2];
+
+        }
+    }
+
+    function parse_items() {
+        let ret_arr = [];
+        let cur_obj = [];
+
+        parse_item:
+        while (cursor < state.length) {
+            switch (state.charAt(cursor)) {
+                case ';':
+                case '}':
+                    cur_obj.push(state.substr(cursor_start, cursor - cursor_start));
+                    cursor_start = cursor + 1;
+                    ret_arr.push(cur_obj);
+                break parse_item;
+
+                case ',':
+                case '|':
+                    cur_obj.push(state.substr(cursor_start, cursor - cursor_start));
+                    cursor_start = cursor + 1;
+
+                    if (state.charAt(cursor) == '|') {
+                        ret_arr.push(cur_obj);
+                        cur_obj = [];
+                    }
+                break;
+            }
+            ++cursor;
+        }
+        ++cursor;
+
+        if (ret_arr.length == 0) return null;
+        return ret_arr;
+    }
+}
+
+function flash_panel(panel) {
+    panel.classList.add("panel-flash");
+    setTimeout(() => {
+        panel.classList.remove("panel-flash");
+    }, 50);
 }
 
 // ------------------------------------------
@@ -199,7 +393,6 @@ function players_clear() {
 }
 
 function save_default_prices(callerPlayerContent) {
-
     let runestable = callerPlayerContent.querySelector(".runestable");
     let otherstable = callerPlayerContent.querySelector(".otherstable");
 
@@ -273,6 +466,7 @@ function loottable_delete_row(callerrow) {
 }
 
 function loottable_clear() {
+    flash_panel(loottable_panel);
     while (loottable_body.lastChild)
         loottable_body.lastChild.remove();
     loottable_add_row();
@@ -317,14 +511,13 @@ function loottable_hide_creature_items() {
 }
 
 function loottable_add_creature_items() {
+    flash_panel(loottable_panel);
     // @Improvement: We should display an error message to the user saying that the creature name doesn't exist.
     if (addcreature_autocomplete_lastindex == -1) return;
-    let i = 0;
     let creature = mediviadb.creatures[addcreature_autocomplete_lastindex];
 
-    i = 0;
     let skip_item;
-    for (; i < creature.items.length; i++) {
+    for (let i = 0; i < creature.items.length; i++) {
         let loottb_length = loottable_body.rows.length;
         skip_item = false;
         for (let j = 0; j < loottb_length; j++) {
@@ -374,6 +567,8 @@ function huntinfo_create_location_rows() {
 }
 
 function huntinfo_calculate_loot() {
+    flash_panel(huntinfo_panel);
+
     // Calculate waste
     let totalwaste = 0;
     let playerwaste, runestable, otherstable;

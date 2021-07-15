@@ -13,6 +13,8 @@
     --detail-color: #cac0a4;
 
     --table-indentsize: 20px;
+
+    font-size: 12pt;
 }
 
 /* - Default styles - */
@@ -21,16 +23,18 @@ body {
     color: var(--main-text-color);
     background-color: var(--background-color);
     font-family: "Arimo", sans-serif;
+    padding: 0 1vw;
 }
 
 label {
     color: var(--secondary-text-color);
-    font-size: 10pt;
+    font-size: 1em;
 }
 
 button {
     color: var(--main-text-color);
     background-color: var(--accent-color);
+    font-size: 0.95em;
     font-family: "Arimo", sans-serif;
     border: 1px solid #34515c;
     border-radius: 6px;
@@ -61,6 +65,7 @@ button:active {
 }
 
 small {
+    font-size: 0.9em;
     color: var(--secondary-text-color);
 }
 
@@ -80,7 +85,7 @@ input[type=number]:invalid {
     background-color: #2b2b2b;
     text-align: center;
     font-family: "Arimo", sans-serif;
-    font-size: 10pt;
+    font-size: 0.95em;
     color: var(--main-text-color);
     border: 2px solid var(--panel-background);
     border-radius: 4px;
@@ -141,7 +146,7 @@ table td {
 }
 
 table input[type=text],
-table input[type=number], 
+table input[type=number],
 table input[type=number]:invalid {
     background-color: var(--panel-background);
 }
@@ -177,7 +182,7 @@ table input[type=number]:invalid {
 
 .npctbody th,
 .npctbody td {
-    font-size: 14px;
+    font-size: 1em;
     text-align: left;
     text-indent: var(--table-indentsize);
 }
@@ -234,13 +239,13 @@ table input[type=number]:invalid {
     font-family: "Righteous", sans-serif;
     text-align: center;
     font-weight: 600;
-    margin: 20px;
+    margin: 0.75em;
 }
 
 .fishing-warning {
     color: #c22222;
     text-align: center;
-    font-size: 12pt;
+    font-size: 1em;
 }
 
 .playercontent {
@@ -284,7 +289,7 @@ table input[type=number]:invalid {
 }
 
 .square-button {
-    font-size: 10pt;
+    font-size: 0.9em;
     font-weight: bold;
     border: 1px solid var(--accent-color);
     border-radius: 0px;
@@ -303,7 +308,7 @@ table input[type=number]:invalid {
 .playerpanel h1 input[type=text]:focus {
     background: none;
     border: none;
-    font-size: 12pt;
+    font-size: 0.7em;
     font-weight: bold;
     text-align: center;
 }
@@ -311,15 +316,14 @@ table input[type=number]:invalid {
 .playerpanel h2 {
     background-color: var(--accent-color-darker);
     text-align: center;
-    line-height: 25px;
+    line-height: 3.5ex;
     border-radius: 8px;
-    height: 25px;
     margin: 6px;
-    font-size: 11pt;
+    font-size: 0.95em;
 }
 
 .playerpanel th {
-    font-size: 10pt;
+    font-size: 0.95em;
 }
 
 .infopanel {
@@ -333,6 +337,14 @@ table input[type=number]:invalid {
     transition-timing-function: ease;
 }
 
+/* we use this many selectors to have higher
+   specificity and overwrite these properties */
+div.infopanel.panel-flash {
+    background-color: #353535;
+    border-color: #909090;
+    transition-timing-function: cubic-bezier(0,1,1,1);
+}
+
 .infopanel:hover,
 .infopanel:focus-within {
     border-color: #313131;
@@ -343,12 +355,23 @@ table input[type=number]:invalid {
 .infopanel h1 {
     text-align: center;
     background-color: var(--accent-color);
-    font-size: 22px;
+    font-size: 1.6em;
     font-weight: 600;
     border-radius: 6px;
     box-shadow: 0px 2px 0px 0px var(--accent-color-darker);
     margin: 0px 0px 15px;
     padding: 5px 0px;
+}
+
+.floating-navbar {
+    position: fixed;
+    top: 5px;
+    left: 1vw;
+    z-index: 10;
+}
+
+.font-icon {
+    font-size: 1.1rem;
 }
 
 /* Buttons */
@@ -391,11 +414,43 @@ table input[type=number]:invalid {
 }
 
 .kb-shortcuts {
+    font-size: 1em;
     margin: 15px;
 }
 
 .footer-source {
     text-align: center;
+}
+
+.nav-button {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: 5px;
+    border: none;
+    border-radius: 50%;
+}
+
+.icon {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 55%;
+    opacity: 0.80;
+}
+.icon:hover {
+    opacity: 1;
+    background-size: 70%;
+}
+.icon:active {
+    opacity: 0.6;
+    background-size: 60%;
+}
+
+.link-icon {
+    background-image: url('imgs/outline_link_white_24dp.png');
+}
+
+.menu-icon {
+    background-image: url('imgs/outline_menu_white_24dp.png');
 }
 
 /* Specific elements by id */
@@ -416,19 +471,34 @@ table input[type=number]:invalid {
 }
 
 #huntinfo_selllocation h2 {
-    font-size: 20px;
+    font-size: 1.3em;
     margin: 0px 0px;
+}
+
+/* Large screens */
+@media screen and (min-width: 2000px) {
+    :root {
+        font-size: 15pt;
+    }
+
+    body {
+        padding: 0 2vw;
+    }
+
+    .floating-navbar {
+        left: 2vw;
+    }
 }
 
 /* Mobile */
 
-@media screen and (max-width: 960px), screen and (max-device-width: 960px) {
+@media screen and (max-width: 960px) {
     :root {
-        font-size: 11pt;
+        font-size: 13pt;
     }
 
-    label {
-        font-size: 9pt;
+    body {
+        padding: 0;
     }
 
     .title {
@@ -439,20 +509,12 @@ table input[type=number]:invalid {
         grid-template-columns: minmax(350px, auto);
     }
 
-    .fishing-warning {
-        font-size: 11pt;
-    }
-
-    .infopanel h1 {
-        font-size: 18px;
+    .floating-navbar {
+        left: 5px;
     }
 
     .infopanel th {
         font-weight: 300;
-    }
-
-    #huntinfo_selllocation h2 {
-        font-size: 16px;
     }
 
     #playersgrid {
@@ -469,6 +531,5 @@ table input[type=number]:invalid {
 
     .footer-source {
         margin-top: 25px;
-        font-size: 11pt;
     }
 }
