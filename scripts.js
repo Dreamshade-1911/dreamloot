@@ -144,9 +144,8 @@ function copy_to_clipboard(text) {
 // General stuff
 // ------------------------------------------
 
-function generate_wikilink(name) {
-    name.replace(/ /g, "_");
-    return "http://wiki.mediviastats.info/" + name;
+function generate_wikilink(name) {;
+    return "http://wiki.mediviastats.info/" + name.replace(/ /g, "_");
 }
 
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
