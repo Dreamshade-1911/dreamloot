@@ -34,7 +34,8 @@ locationtable_template,
 npctbody_template;
 
 // HTML Elements
-var notification_container,
+var sidebar_menu,
+notification_container,
 players_grid,
 loottable,
 loottable_panel,
@@ -74,6 +75,11 @@ function init() {
             player(1).querySelector(".playername").setSelectionRange(0, 100);
         }
         loottable_add_row();
+
+        document.addEventListener("mousemove", evt => {
+            document.documentElement.style.setProperty("--mouse-x", `${evt.clientX}px`);
+            document.documentElement.style.setProperty("--mouse-y", `${evt.clientY}px`);
+        });
     });
 
     playerpanel_template = document.getElementById("playerpanel-template");
@@ -81,6 +87,7 @@ function init() {
     npctbody_template = document.getElementById("npctbody-template");
     notification_template = document.getElementById("notification-template");
 
+    sidebar_menu = document.querySelector(".sidebar-menu");
     notification_container = document.querySelector(".notification-container");
 
     players_grid = document.getElementById("playersgrid");
@@ -157,7 +164,7 @@ function generate_wikilink(name) {
 function remove_notification(element) {
     if (!element.wasRemoved) {
         element.wasRemoved = true;
-        element.style.transitionDuration = `0.3s`;
+        element.style.transitionDuration = "0.3s";
         element.style.transform = `translateY(calc(-${100 * notification_count}% - ${notification_count}em))`;
         setTimeout(() => {
             element.remove();
@@ -174,12 +181,12 @@ function display_notification(text) {
     let el_text = element.querySelector(".notification-text");
     el_text.innerText = text;
     notification_container.insertBefore(element, notification_container.firstChild);
-    setTimeout(() => element.style.transform = 'translateY(0)', 1);
+    setTimeout(() => element.style.transform = "translateY(0)", 1);
 
     setTimeout(() => remove_notification(element), 4000);
 }
 
-// @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
+// @Speed: We can accept a new argument being the index to begin searching since everything is ordered alphabetically.
 // Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
 function autocomplete_generic(item_array, input_field) {
     if (autocomplete_lastsize >= input_field.value.length) {
@@ -203,7 +210,11 @@ function autocomplete_generic(item_array, input_field) {
 }
 
 function open_sidebar_menu() {
+    sidebar_menu.classList.add("sidebar-menu-open");
+}
 
+function close_sidebar_menu() {
+    sidebar_menu.classList.remove("sidebar-menu-open");
 }
 
 function generate_share_link() {
@@ -782,7 +793,7 @@ function huntinfo_calculate_loot() {
                                     let questanchor = document.createElement("a");
                                     questanchor.href = mediviadb.npcs[npc_index].questlink;
                                     questanchor.target = "_blank";
-                                    questanchor.title = "Trading with this NPC requires a quest.";
+                                    questanchor.dataset.tooltip = "Trading with this NPC requires a quest. Click for more information.";
                                     let questimage = document.createElement("img");
                                     questimage.style.margin = "0px 6px";
                                     questimage.src = "imgs/quest.png";

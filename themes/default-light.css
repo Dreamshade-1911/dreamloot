@@ -8,7 +8,7 @@
     --panel-background-rgb: 178, 178, 178;
     --border-highlight: #a09595;
     --border-highlight-lighter: #7e7575;
-    --accent-color: #d3814a;
+    --accent-color: #c97943;
     --accent-color-rgb: 211, 129, 74;
     --accent-color-highlight: #a06047;
     --accent-color-lighter: #ac5f47;
@@ -23,4 +23,18 @@
     --contrast-color-dim: #303030;
     --fishing-warning-color: #970000;
     --button-highlight-color: #d69e65;
+}
+
+.npctbody a img {
+    filter: hue-rotate(180deg) brightness(50%) saturate(80%);
+}
+
+.locationtable a:hover {
+    color: var(--accent-color-darker);
+}
+
+.sidebar-grid label img,
+.sidebar-grid h1 img {
+    fill: black;
+    filter: invert();
 }

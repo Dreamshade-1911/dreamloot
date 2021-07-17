@@ -31,6 +31,46 @@
         <button class="nav-button icon-button" onclick="swap_theme()"><img src="/imgs/settings_brightness_white_24dp.svg" alt="Switch theme button"></img></button>
     </nav>
     <div class="notification-container"></div>
+    <div class="sidebar-menu">
+        <button class="nav-button icon-button" onclick="close_sidebar_menu()"><img src="/imgs/cancel_white_24dp.svg" alt="Close sidebar menu button"></img></button>
+        <div class="sidebar-grid">
+            <h1 class="span2-c">General settings</h1>
+            <label data-tooltip="Any item that has a price below this value will be ignored by autocomplete and monster items."><img src="imgs/info_white_24dp.svg"></img>Autocomplete minimum price:</label>
+            <input type="number" placeholder="0"></input>
+            <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
+                <h1 data-tooltip="Custom items will take priority when searching if an item with the same name already exists in the database."><img src="imgs/info_white_24dp.svg"></img>Custom items</h1>
+                <button class="square-button sidebar-button-fix">Add item</button>
+            </div>
+            <table id="custom-items-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Weight</th>
+                        <th>Stackable</th>
+                        <th>Sell to</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
+                <h1 data-tooltip="Custom monsters will take priority when searching if a monster with the same name already exists in the database."><img src="imgs/info_white_24dp.svg"></img>Custom monsters</h1>
+                <button class="square-button sidebar-button-fix">Add monster</button>
+            </div>
+            <table id="custom-monsters-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Items</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="sidebar-row" style="margin-top: 2em">
+                <button class="square-button">Save</button>
+                <button class="square-button">Export</button>
+                <button class="square-button">Import</button>
+            </div>
+        </div>
+    </div>
     <div>
         <h1 class="title">Dreamloot</h1>
         <p class="fishing-warning">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
