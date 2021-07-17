@@ -2,12 +2,9 @@
 * Use binary search for db arrays that are alphabetically sorted.
 
 *** Implement ***
-* Add icon to NPCs that need quests to trade with
 * Ability to navigate through autocomplete suggestions with the arrow keys
-* Sidebar menu with some options (like minimum value on loot, so that everything below that gets ignored by autocomplete and "add creature items")
 * Option to blacklist items / locations (sidebar menu)
 * Calculate how many items are in a backpack of a specific item by the weight of the backpack
-* Link to state of the tables so people can share loot calculations
 * Expand button on the players hunt info to view detailed info about supplies used and cost of each
 * Item sprites on "where to sell"
 * Predetermined hunting spots that adds all the creatures from the hunt.

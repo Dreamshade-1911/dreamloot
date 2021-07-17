@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dreamloot</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/imgs/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/imgs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/imgs/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&amp;text=Dreamloot&amp;display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css2?family=Arimo&amp;display=swap' rel='stylesheet'>
+    <script async type="text/javascript" src="scripts/active-theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/style.css"></link>
+    <script defer type="text/javascript" src="scripts/main.js"></script>
+</head>
+
+<body onload="init()">
+    <!-- Background -->
+    <div class="background">
+        <div class="bg-noise"></div>
+        <div class="bg-rect-fade"></div>
+        <div class="bg-triangle bg-triangle-topleft"></div>
+        <div class="bg-triangle bg-triangle-topright"></div>
+    </div>
+    <!-- Background -->
+    <nav class="floating-navbar">
+        <button class="nav-button icon-button" onclick="open_sidebar_menu()"><img src="/imgs/menu_white_24dp.svg" alt="Menu button"></img></button><button class="nav-button icon-button" onclick="generate_share_link()"><img src="/imgs/link_white_24dp.svg" alt="Copy share link button"></img></button>
+    </nav>
+    <nav class="navbar-right">
+        <button class="nav-button icon-button" onclick="swap_theme()"><img src="/imgs/settings_brightness_white_24dp.svg" alt="Switch theme button"></img></button>
+    </nav>
+    <div class="notification-container"></div>
+    <div class="sidebar-menu">
+        <button class="nav-button icon-button" onclick="close_sidebar_menu()"><img src="/imgs/cancel_white_24dp.svg" alt="Close sidebar menu button"></img></button>
+        <div class="sidebar-grid">
+            <h1 class="span2-c">General settings</h1>
+            <label data-tooltip="Any item that has a price below this value will be ignored by autocomplete and monster items."><img src="/imgs/info_white_24dp.svg"></img>Autocomplete minimum price:</label>
+            <input type="number" id="ac-minimum-price" placeholder="0"></input>
+            <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
+                <h1 data-tooltip="Custom items will take priority when searching if an item with the same name already exists in the database."><img src="/imgs/info_white_24dp.svg"></img>Custom items</h1>
+                <button class="square-button sidebar-button-fix" disabled>Add item</button>
+            </div>
+            <table id="custom-items-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Weight</th>
+                        <th>Stackable</th>
+                        <th>Sell to</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
+                <h1 data-tooltip="Custom monsters will take priority when searching if a monster with the same name already exists in the database."><img src="/imgs/info_white_24dp.svg"></img>Custom monsters</h1>
+                <button class="square-button sidebar-button-fix" disabled>Add monster</button>
+            </div>
+            <table id="custom-monsters-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Items</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="sidebar-row" style="margin-top: 2em">
+                <button class="square-button" onclick="save_config()">Save</button>
+                <button class="square-button" onclick="load_config(true)">Restore</button>
+                <button class="square-button" disabled>Export</button>
+                <button class="square-button" disabled>Import</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h1 class="title">Dreamloot</h1>
+        <p class="fishing-warning">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>
+        <div class="maingrid">
+            <!-- Player waste -->
+            <div id="playersgrid">
+                <button id="addplayerbtn" class="square-button font-icon" style="width: 2%" onclick="players_add_player()">+</button>
+            </div>
+            <!-- LootTable Infopanel -->
+            <div class="infopanel" id="loottable_panel" onkeyup="onkeyup_loottable(event)">
+                <button class="headerbutton-left" onclick="loottable_clear()">Clear</button>
+                <button class="headerbutton-right" onclick="loottable_show_creature_items()">Add creature items</button>
+                <h1>Loot Table</h1>
+                <center>
+                    <form onsubmit="loottable_add_creature_items(); return false;" onkeyup="onkeyup_creature_items(event)" id="loottb_addcreatureitems">
+                        <label>Creature name: </label>
+                        <input type="text" id="loottb_creaturename" autocomplete="off" oninput="autocomplete_creature_items()"/>
+                        <div><button type="submit">Add</button><button type="reset" onclick="loottable_hide_creature_items()">Cancel</button></div>
+                    </form>
+                    <table id="loottb">
+                        <thead>
+                            <tr>
+                                <th>Item name</th>
+                                <th style="width: 60px">Quantity</th>
+                                <th style="width: 120px">Item price</th>
+                                <th style="width: 20px"></th>
+                            </tr>
+                            <tr>
+                                <td><label>Gold Coin</label></td>
+                                <td><input type="number" id="loottb_gold_itemquantity" placeholder="0"/></td>
+                                <td><label>1</label></td>
+                            </tr>
+                        </thead>
+                        <tbody onfocusout="loottable_on_focus_out()"></tbody>
+                    </table>
+                </center>
+            </div>
+            <!-- HuntInfo Infopanel -->
+            <div class="infopanel" id="huntinfo_panel">
+                <button class="headerbutton-left" onclick="huntinfo_calculate_loot()">Calculate loot</button>
+                <h1>Hunt Info</h1>
+                <center>
+                    <table id="huntinfo">
+                        <tr>
+                            <th>Total waste</th>
+                            <th>Total earnings</th>
+                            <th>Profit</th>
+                            <th>Split profit</th>
+                        </tr>
+                        <tr>
+                            <td><label id="huntinfo_totalwaste">0 GP</label></td>
+                            <td><label id="huntinfo_totalearnings">0 GP</label></td>
+                            <td><label id="huntinfo_profit">0 GP</label></td>
+                            <td><label id="huntinfo_splitprofit">0 GP</label></td>
+                        </tr>
+                    </table>
+                    <table id="huntinfo_playerstb" style="margin-top: 15px; display: none">
+                        <tr>
+                            <th>Player</th>
+                            <th>Supplies used</th>
+                            <th>Share</th>
+                        </tr>
+                    </table>
+                    <div id="huntinfo_selllocation" style="margin-top: 15px; display: none">
+                        <h2 style="margin-top: 20px; margin-bottom: 5px">Where to sell</h2>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <p class="kb-shortcuts"><small>You can use hotkeys to make your job easier, check it out:<br>
+            <kbd>Tab</kbd> : Select next input box.<br>
+            <kbd>Shift</kbd> + <kbd>Tab</kbd> : Select previous input box.<br>
+            <kbd>Enter</kbd> : Accept any action on focused element.<br>
+            <kbd>Esc</kbd> : Cancel any action or clear focused element.<br>
+            <kbd>Ctrl</kbd> + <kbd>M</kbd> : Add creature items.<br>
+            <kbd>Ctrl</kbd> + <kbd>1-9</kbd> : Select player 1-9.<br>
+            <kbd>Ctrl</kbd> + <kbd>~</kbd> : Add player.<br>
+            <kbd>PageUp</kbd> / <kbd>PageDown</kbd> : Select upper/lower input field.<br>
+        </p>
+        <footer class="footer-source"><small>You can check out the source-code of this project at <a href="https://github.com/Dreamshade-1911/dreamloot">Github</a>.</small></footer>
+    </div>
+
+    <!-- Templates -->
+    <template id="notification-template">
+        <div class="notification" onclick="remove_notification(this)">
+            <p class="notification-text"></p>
+        </div>
+    </template>
+
+    <template id="playerpanel-template">
+        <div class="playerpanel" data-waste="0">
+            <h1>
+                <input class="playername" type="text" value="New Player">
+                <button class="square-button font-icon" onclick="player_delete(parentElement.parentElement)" tabindex="-1">X</button>
+            </h1>
+            <div class="playercontent">
+                <h2>Backpacks of runes used</h2>
+                <table class="runestable">
+                    <tr>
+                        <th>Rune</th>
+                        <th style="width: 15%">Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </table>
+                <h2>Other items used</h2>
+                <table class="otherstable">
+                    <tr>
+                        <th>Name</th>
+                        <th style="width: 18%">Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </table>
+                <center>
+                    <button style="margin-top: 8px; padding-left: 15px; padding-right: 15px" class="square-button" onclick="save_default_prices(this.parentElement.parentElement)">Save prices</button>
+                </center>
+            </div>
+        </div>
+    </template>
+
+    <template id="locationtable-template">
+        <table class="locationtable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="locationth-right"></th>
+                    <th class="locationth-right"></th>
+                </tr>
+            </thead>
+        </table>
+    </template>
+
+    <template id="npctbody-template">
+        <tbody class="npctbody">
+            <tr>
+                <th><a class="npcname"></a></th>
+                <th class="locationth-right"></th>
+                <th class="locationth-right"></th>
+            </tr>
+        </tbody>
+    </template>
+</body>
+</html>
