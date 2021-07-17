@@ -60,7 +60,7 @@ var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
 
 function init() {
-    fetch("/db.json")
+    fetch(`../db.json`)
     .then((resp) => resp.json())
     .then(function(data) {
         mediviadb = data;
