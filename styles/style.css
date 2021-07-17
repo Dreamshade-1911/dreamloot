@@ -340,7 +340,7 @@ table td {
     pointer-events: fill;
 }
 .notification:hover {
-    color: white;
+    color: var(--contrast-color);
     border-color: var(--accent-color-highlight);
     transition-duration: 0s;
 }
