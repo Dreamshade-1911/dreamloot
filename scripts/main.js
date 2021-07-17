@@ -150,7 +150,7 @@ function copy_to_clipboard(text) {
 // General stuff
 // ------------------------------------------
 
-function generate_wikilink(name) {;
+function generate_wikilink(name) {
     return "https://wiki.mediviastats.info/" + name.replace(/ /g, "_");
 }
 
