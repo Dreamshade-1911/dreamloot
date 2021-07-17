@@ -28,12 +28,14 @@ const LOCATIONTB_COLUMN = {
 var mediviadb;
 
 // Templates
-var playerpanel_template,
+var notification_template,
+playerpanel_template,
 locationtable_template,
 npctbody_template;
 
 // HTML Elements
-var players_grid,
+var notification_container,
+players_grid,
 loottable,
 loottable_panel,
 loottable_body,
@@ -50,6 +52,7 @@ huntinfo_selllocation;
 
 // Misc
 var url_params = new URLSearchParams(window.location.search);
+var notification_count = 0;
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
 
@@ -76,6 +79,9 @@ function init() {
     playerpanel_template = document.getElementById("playerpanel-template");
     locationtable_template = document.getElementById("locationtable-template");
     npctbody_template = document.getElementById("npctbody-template");
+    notification_template = document.getElementById("notification-template");
+
+    notification_container = document.querySelector(".notification-container");
 
     players_grid = document.getElementById("playersgrid");
 
@@ -145,7 +151,32 @@ function copy_to_clipboard(text) {
 // ------------------------------------------
 
 function generate_wikilink(name) {;
-    return "http://wiki.mediviastats.info/" + name.replace(/ /g, "_");
+    return "https://wiki.mediviastats.info/" + name.replace(/ /g, "_");
+}
+
+function remove_notification(element) {
+    if (!element.wasRemoved) {
+        element.wasRemoved = true;
+        element.style.transitionDuration = `0.3s`;
+        element.style.transform = `translateY(calc(-${100 * notification_count}% - ${notification_count}em))`;
+        setTimeout(() => {
+            element.remove();
+        }, 300);
+        --notification_count;
+    }
+}
+
+function display_notification(text) {
+    let element = document.importNode(notification_template.content, true).querySelector(".notification");
+    ++notification_count;
+    element.style.transitionDuration = `0.3s`;
+    element.style.transform = `translateY(calc(-${100 * notification_count}% - ${notification_count}em))`;
+    let el_text = element.querySelector(".notification-text");
+    el_text.innerText = text;
+    notification_container.insertBefore(element, notification_container.firstChild);
+    setTimeout(() => element.style.transform = 'translateY(0)', 1);
+
+    setTimeout(() => remove_notification(element), 4000);
 }
 
 // @Speed: We can keep track of the last used db index so that we start to search for a suggestion at that index instead of index 0 (since the db is ordered alphabetically anyways), and clear it once the user backspaces, which should be the first if block.
@@ -175,8 +206,6 @@ function open_sidebar_menu() {
 
 }
 
-// @TODO: insert a '-' into default prices to save characters.
-// We'll have to manually compare to the DB entry when generating, in this case.
 function generate_share_link() {
     let player_str = "";
     let str_arr = [];
@@ -209,7 +238,6 @@ function generate_share_link() {
             || !cur_quant || cur_quant <= 0
             || !cur_price_or_default || cur_price_or_default <= 0)
             continue;
-        console.log(cur_name_or_index, mediviadb.items.length)
         if (is_index && cur_price_or_default == mediviadb.items[cur_name_or_index].price)
             cur_price_or_default = "-";
 
@@ -218,6 +246,7 @@ function generate_share_link() {
 
     let share_link = encodeURI(`${location.origin}${location.pathname}?state=${player_str};${str_arr.join("|")};`);
     copy_to_clipboard(share_link);
+    display_notification("The link to the current state has been copied to your clipboard");
 
     function getDataString(table, dbname) {
         let arr = [];
@@ -615,7 +644,7 @@ function huntinfo_calculate_loot() {
     totalearnings += stoi(document.getElementById("loottb_gold_itemquantity").value);
 
     let cur_row;
-    for (let i = 0; i < loottable_body.rows.length - 1; i++) {
+    for (let i = 0; i < loottable_body.rows.length; i++) {
         cur_row = loottable_body.rows[i];
         totalearnings += stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value * stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value));
     }
@@ -828,33 +857,44 @@ function huntinfo_calculate_loot() {
 // Input handling
 // ---------------
 
+function select_upper_input(target) {
+    let cell_index = target.parentElement.cellIndex;
+    let row_index = target.parentElement.parentElement.sectionRowIndex;
+    if (target.tagName == "INPUT" &&
+        target.parentElement.tagName == "TD" &&
+        row_index > 0) {
+        target.parentElement.parentElement.parentElement.rows[row_index - 1].cells[cell_index].firstChild.focus();
+        // setSelectionRange
+        return true;
+    }
+    return false;
+}
+
+function select_lower_input(target) {
+    let cell_index = target.parentElement.cellIndex;
+    let row_index = target.parentElement.parentElement.sectionRowIndex;
+    if (target.tagName == "INPUT" &&
+        target.parentElement.tagName == "TD" &&
+        row_index < target.parentElement.parentElement.parentElement.rows.length - 1) {
+        target.parentElement.parentElement.parentElement.rows[row_index + 1].cells[cell_index].firstChild.focus();
+        // setSelectionRange
+        return true;
+    }
+    return false;
+}
+
 function onkeydown_global(event) {
     let handled = true;
 
-    let cell_index, row_index;
     switch (event.code) {
         // @Bug: For some reason, shitty web standards don't let us use "setSelectionRange" with number inputs.
-        case "PageUp":
-            cell_index = event.target.parentElement.cellIndex;
-            row_index = event.target.parentElement.parentElement.sectionRowIndex;
-            if (event.target.tagName == "INPUT" &&
-                event.target.parentElement.tagName == "TD" &&
-                row_index > 0) {
-                event.target.parentElement.parentElement.parentElement.rows[row_index - 1].cells[cell_index].firstChild.focus();
-                // setSelectionRange
-            }
-            break;
+        case "PageUp": {
+            select_upper_input(event.target);
+        } break;
 
-        case "PageDown":
-            cell_index = event.target.parentElement.cellIndex;
-            row_index = event.target.parentElement.parentElement.sectionRowIndex;
-            if (event.target.tagName == "INPUT" &&
-                event.target.parentElement.tagName == "TD" &&
-                row_index < event.target.parentElement.parentElement.parentElement.rows.length - 1) {
-                event.target.parentElement.parentElement.parentElement.rows[row_index + 1].cells[cell_index].firstChild.focus();
-                // setSelectionRange
-            }
-            break;
+        case "PageDown": {
+            select_lower_input(event.target);
+        } break;
 
         default: handled = false;
     }
@@ -912,7 +952,8 @@ function onkeyup_loottable(event) {
             break;
 
         case "Escape":
-            loottable_clear();
+            select_lower_input(event.target);
+            loottable_delete_row(event.target.parentElement.parentElement);
             break;
     }
 }

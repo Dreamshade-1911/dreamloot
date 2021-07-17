@@ -1,17 +1,4 @@
 :root {
-    --background-color: #181818;
-    --main-text-color: #dbdbdb;
-    --main-text-highlight-color: #ffffff;
-    --secondary-text-color: #808080;
-    --panel-background: #202020;
-    --border-highlight: #313131;
-    --border-highlight-lighter: #444444;
-    --accent-color: #233a44;
-    --accent-color-highlight: #5d8297;
-    --accent-color-lighter: #335463;
-    --accent-color-darker: #202b30;
-    --detail-color: #cebd8f;
-
     --fast-bezier: cubic-bezier(0,1,1,1);
 
     --bg-triangle-size: 20vw;
@@ -26,7 +13,7 @@
 
 /* - Background - */
 .background * {
-    z-index: -1;
+    z-index: -100;
 }
 
 .bg-noise {
@@ -45,7 +32,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-image: url("imgs/256x256_noise.png");
+    background-image: url("/imgs/256x256_noise.png");
     background-blend-mode: overlay;
 }
 
@@ -56,7 +43,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(0deg, #000000FF 0%, #00000000 100%);
+    background: linear-gradient(0deg, rgba(var(--contrast-color), 1) 0%, rgba(var(--contrast-color), 0) 100%);
 }
 
 .bg-triangle {
@@ -84,6 +71,11 @@ label {
 }
 
 /* - Default styles - */
+::selection {
+    color: var(--contrast-color);
+    background-color: var(--button-highlight-color);
+}
+
 body {
     color: var(--main-text-color);
     background-color: var(--background-color);
@@ -96,32 +88,29 @@ button {
     font-size: 0.95em;
     font-family: "Arimo", sans-serif;
     line-height: 1.5;
-    border: 1px solid #34515c;
+    border: 1px solid var(--accent-color-lighter);
     border-radius: 6px;
     box-shadow: 0px 3px 0px 0px var(--accent-color-darker);
     padding: 3px 6px 4px;
     margin: 4px 2px;
     min-width: 50px;
-    transition-duration: 0.1s;
+    transition-duration: 0.4s;
     transition-timing-function: ease;
 }
 
 button:hover {
     color: var(--main-text-highlight-color);
-    background-color: #3c6469;
-    border-color: #51939e;
-    transition-duration: 0.15s;
-    transition-timing-function: ease;
+    background-color: var(--button-highlight-color);
+    border-color: var(--accent-color-highlight);
+    transition-duration: 0s;
 }
 
 button:active {
-    color: #a3a3a3;
-    background-color: #172b33;
-    border-color: #233b44;
+    color: var(--contrast-color-dim);
+    background-color: var(--accent-color-darker);
+    border-color: var(--accent-color-lighter);
     transform: translateY(2px);
     box-shadow: 0px 0px 0px 0px var(--accent-color-darker);
-    transition-duration: 0.03s;
-    transition-timing-function: ease;
 }
 
 small {
@@ -153,13 +142,13 @@ input[type=text],
 input[type=number],
 input[type=number]:invalid {
     width: 100%;
-    background-color: var(--panel-background);
+    background-color: rgba(var(--contrast-color-rgb), 0.05);
     text-align: center;
     font-family: "Arimo", sans-serif;
     font-size: 0.95em;
     line-height: 1.5;
     color: var(--main-text-color);
-    border: 2px solid var(--panel-background);
+    border: 2px solid rgba(var(--panel-background-rgb), 0);
     border-radius: 4px;
     box-shadow: none;
     transition-duration: 0.3s;
@@ -186,8 +175,8 @@ input[type="number"]:hover::-webkit-outer-spin-button {
 input[type=text]:hover,
 input[type=number]:hover,
 input[type=number]:hover:invalid {
-    background-color: #FFFFFF13;
-    border-color: var(--accent-color);
+    background-color: rgba(var(--contrast-color-rgb), 0.08);
+    border-color: rgba(var(--accent-color-rgb), 1);
     transition-duration: 0s;
     transition-timing-function: ease;
 }
@@ -195,9 +184,9 @@ input[type=number]:hover:invalid {
 input[type=text]:focus,
 input[type=number]:focus,
 input[type=number]:focus:invalid {
-    background-color: #FFFFFF13;
-    border-color: var(--accent-color-lighter);
-    outline: 1px solid #FFFFFF00;
+    background-color: rgba(var(--contrast-color-rgb), 0.07);
+    border-color: rgba(var(--accent-color-lighter-rgb), 1);
+    outline: 1px solid rgba(var(--contrast-color-rgb), 0);
     transition-duration: 0.2s;
     transition-timing-function: ease;
 }
@@ -212,7 +201,7 @@ table th,
 table td {
     text-align: center;
     padding: 5px 12px 5px 4px;
-    border-bottom: 2px solid var(--border-highlight);
+    border-bottom: 2px solid rgba(var(--contrast-color-rgb), 0.12);
 }
 
 table th {
@@ -227,7 +216,7 @@ table td {
 :where(.infopanel) input[type=text],
 :where(.infopanel) input[type=number],
 :where(.infopanel) input[type=number]:invalid {
-    background-color: #00000000;
+    background-color: rgba(var(--contrast-color-rgb), 0);
 }
 
 .locationtable {
@@ -249,7 +238,7 @@ table td {
     transition-duration: 0.4s;
 }
 .locationtable a:hover {
-    color: #DDDDDD;
+    color: var(--main-text-color);
     transition-duration: 0s;
 }
 
@@ -323,11 +312,49 @@ table td {
     text-align: center;
     font-weight: 600;
     margin: 0.6em;
+    user-select: none;
+}
+
+.notification-container {
+    position: fixed;
+    top: 1vh;
+    left: 50vw;
+    transform: translateX(-50%);
+    width: calc(60vw + (30vh - 30vw));
+    align-items: center;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+}
+
+.notification {
+    color: var(--detail-color);
+    background: linear-gradient(0deg, var(--accent-color-darker) 0%, var(--accent-color) 100%);
+    padding: 0.5em 1em;
+    margin-bottom: 1em;
+    border: 2px solid var(--accent-color-lighter);
+    border-radius: 1em;
+    box-shadow: 0 0.3em 0.6em rgba(0, 0, 0, 0.5);
+    transition-timing-function: var(--fast-bezier);
+    pointer-events: fill;
+}
+.notification:hover {
+    color: white;
+    border-color: var(--accent-color-highlight);
+    transition-duration: 0s;
+}
+
+.notification-text {
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+    user-select: none;
 }
 
 .fishing-warning {
     font-size: 1em;
-    color: #c22222;
+    color: var(--fishing-warning-color);
     text-align: center;
 }
 
@@ -345,14 +372,14 @@ table td {
     padding: 6px;
     padding-bottom: 15px;
     clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
-    transition-duration: 0.3s;
+    transition-duration: 0.2s;
     transition-timing-function: ease;
 }
 
 .playerpanel:hover .playercontent,
 .playerpanel:focus-within .playercontent {
     clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
-    transition-duration: 0.3s;
+    transition-duration: 0.2s;
     transition-timing-function: ease;
 }
 
@@ -413,9 +440,9 @@ table td {
 .infopanel {
     position: relative;
     background-color: var(--panel-background);
-    border: 2px solid #202020;
+    border: 2px solid var(--background-color);
     border-radius: 10px;
-    box-shadow: 0px 6px 0px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 6px 0px 2px rgba(var(--no-contrast-color-rgb), 0.3);
     padding: 2px 2px 20px;
     margin-bottom: 1em;
     transition-duration: 0.4s;
@@ -425,15 +452,15 @@ table td {
 /* we use this many selectors to have higher
    specificity and overwrite these properties */
 div.infopanel.panel-flash {
-    background-color: #353535;
-    border-color: #909090;
+    background-color: var(--background-color-dim);
+    border-color: var(--contrast-color-dim);
     transition-duration: 0s;
     transition-timing-function: var(--fast-bezier);
 }
 
 .infopanel:hover,
 .infopanel:focus-within {
-    border-color: #313131;
+    border-color: var(--background-color-dim);
     transition-duration: 0.4s;
     transition-timing-function: ease;
 }
@@ -454,6 +481,20 @@ div.infopanel.panel-flash {
     top: 5px;
     left: 1vw;
     z-index: 10;
+    pointer-events: none;
+}
+.floating-navbar * {
+    pointer-events: initial;
+}
+
+.navbar-right {
+    position: absolute;
+    top: 5px;
+    right: 1vw;
+    pointer-events: none;
+}
+.navbar-right * {
+    pointer-events: initial;
 }
 
 .font-icon {
@@ -516,27 +557,23 @@ div.infopanel.panel-flash {
     border-radius: 50%;
 }
 
-.icon {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 55%;
-    opacity: 0.80;
+.icon-button {
+    line-height: normal;
+    opacity: 0.8;
 }
-.icon:hover {
+.icon-button img {
+    padding-top: 4px;
+    width: 75%;
+    overflow: hidden;
+}
+.icon-button:hover {
     opacity: 1;
-    background-size: 70%;
 }
-.icon:active {
-    opacity: 0.6;
-    background-size: 60%;
+.icon-button:hover img {
+    width: 80%;
 }
-
-.link-icon {
-    background-image: url('imgs/outline_link_white_24dp.png');
-}
-
-.menu-icon {
-    background-image: url('imgs/outline_menu_white_24dp.png');
+.icon-button:active img {
+    width: 70%;
 }
 
 /* Specific elements by id */
@@ -551,6 +588,7 @@ div.infopanel.panel-flash {
 
 #huntinfo label,
 #huntinfo_playerstb label {
+    cursor: text;
     color: var(--detail-color);
     font-weight: bold;
 }
@@ -573,12 +611,16 @@ div.infopanel.panel-flash {
     .floating-navbar {
         left: 5vw;
     }
+
+    .navbar-right {
+        right: 5vw;
+    }
 }
 
 /* Mobile */
 @media screen and (max-width: 960px) {
     :root {
-        font-size: 12.5pt;
+        font-size: 11pt;
     }
 
     body {
@@ -595,6 +637,10 @@ div.infopanel.panel-flash {
 
     .floating-navbar {
         left: 5px;
+    }
+
+    .navbar-right {
+        right: 5px;
     }
 
     #playersgrid {
