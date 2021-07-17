@@ -1,0 +1,474 @@
+:root {
+    --background-color: #171717;
+    --main-text-color: #dbdbdb;
+    --main-text-highlight-color: #ffffff;
+    --secondary-text-color: #808080;
+    --panel-background: #202020;
+    --border-highlight: #313131;
+    --border-highlight-lighter: #444444;
+    --accent-color: #233a44;
+    --accent-color-highlight: #5d8297;
+    --accent-color-lighter: #335463;
+    --accent-color-darker: #202b30;
+    --detail-color: #cac0a4;
+
+    --table-indentsize: 20px;
+}
+
+/* - Default styles - */
+
+body {
+    color: var(--main-text-color);
+    background-color: var(--background-color);
+    font-family: "Arimo", sans-serif;
+}
+
+label {
+    color: var(--secondary-text-color);
+    font-size: 10pt;
+}
+
+button {
+    color: var(--main-text-color);
+    background-color: var(--accent-color);
+    font-family: "Arimo", sans-serif;
+    border: 1px solid #34515c;
+    border-radius: 6px;
+    box-shadow: 0px 3px 0px 0px var(--accent-color-darker);
+    padding: 3px 6px 4px;
+    margin: 4px 2px;
+    min-width: 50px;
+    transition-duration: 0.1s;
+    transition-timing-function: ease;
+}
+
+button:hover {
+    color: var(--main-text-highlight-color);
+    background-color: #3c6469;
+    border-color: #51939e;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+}
+
+button:active {
+    color: #a3a3a3;
+    background-color: #172b33;
+    border-color: #233b44;
+    transform: translateY(2px);
+    box-shadow: 0px 0px 0px 0px var(--accent-color-darker);
+    transition-duration: 0.03s;
+    transition-timing-function: ease;
+}
+
+small {
+    color: var(--secondary-text-color);
+}
+
+kbd {
+    color: var(--main-text-highlight-color);
+    background-color: var(--accent-color-darker);
+    border-color: var(--accent-color-darker);
+    border-style: solid;
+    border-width: 2px 6px;
+    border-radius: 4px;
+}
+
+input[type=text],
+input[type=number],
+input[type=number]:invalid {
+    width: 100%;
+    background-color: #2b2b2b;
+    text-align: center;
+    font-family: "Arimo", sans-serif;
+    font-size: 10pt;
+    color: var(--main-text-color);
+    border: 2px solid var(--panel-background);
+    border-radius: 4px;
+    box-shadow: none;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    -moz-appearance: textfield; /* Only applies to number. Separate if more inputs get added to the same group. */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance:none;
+    margin: 0;
+}
+
+input[type="number"]:hover::-webkit-inner-spin-button,
+input[type="number"]:hover::-webkit-outer-spin-button {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance:none;
+    margin:0;
+}
+
+input[type=text]:hover,
+input[type=number]:hover {
+    background-color: #2b2b2b;
+    border-color: var(--accent-color);
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+input[type=text]:focus,
+input[type=number]:focus {
+    background-color: var(--border-highlight);
+    border-color: var(--accent-color-lighter);
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+/* Tables */
+
+table {
+    width: 98%;
+}
+
+table th,
+table td {
+    text-align: center;
+    padding: 4px 5px 6px;
+    border-bottom: 2px solid var(--border-highlight);
+}
+
+table td {
+    border-bottom-width: 1px;
+    color: var(--secondary-text-color);
+}
+
+table input[type=text],
+table input[type=number], 
+table input[type=number]:invalid {
+    background-color: var(--panel-background);
+}
+
+.locationtable {
+    margin-bottom: 15px;
+}
+
+.locationtable th,
+.locationtable td {
+    text-align: left;
+}
+
+.locationtable th {
+    border-bottom-color: var(--border-highlight-lighter);
+}
+
+.locationtable a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.locationtable .locationth-right {
+    width: 80px;
+    white-space: nowrap;
+    text-indent: 0px;
+    text-align: right;
+}
+
+.locationth-right {
+    color: var(--detail-color);
+}
+
+.npctbody th,
+.npctbody td {
+    font-size: 14px;
+    text-align: left;
+    text-indent: var(--table-indentsize);
+}
+
+.npctbody th {
+    color: var(--accent-color-highlight);
+    border-bottom-color: var(--accent-color-lighter);
+}
+
+/* - Grid related - */
+
+.maingrid {
+    margin-top: 25px;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(2, minmax(450px, auto));
+    align-items: flex-start;
+}
+
+#playersgrid {
+    grid-area: auto / span 2;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    justify-content: center;
+    position: relative;
+}
+
+.playerpanel {
+    background-color: var(--background-color);
+    position: relative;
+    flex-grow: 1;
+    flex-basis: 250px;
+    min-width: 250px;
+    max-width: 30%;
+    border-top: 3px solid var(--border-highlight);
+    border-right: 1px solid var(--panel-background);
+    border-left: 1px solid var(--border-highlight);
+    box-shadow: inset 0px 0px var(--panel-background);
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+.playerpanel:hover,
+.playerpanel:focus-within {
+    box-shadow: inset 0px 40px var(--panel-background);
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+}
+
+/* - Classes - */
+
+.title {
+    font-family: "Righteous", sans-serif;
+    text-align: center;
+    font-weight: 600;
+    margin: 20px;
+}
+
+.fishing-warning {
+    color: #c22222;
+    text-align: center;
+    font-size: 12pt;
+}
+
+.playercontent {
+    position: absolute;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-highlight);
+    box-sizing: border-box;
+    z-index: 1;
+    width: 100%;
+    border-top-width: 0px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.6);
+    padding: 6px;
+    padding-bottom: 15px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+.playerpanel:hover .playercontent,
+.playerpanel:focus-within .playercontent {
+    clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+.playercontent label {
+    font-weight: bold;
+}
+
+.playerpanel h1 {
+    margin: 2px 10px;
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: auto max-content;
+}
+
+#playerfirstpanel.playerpanel h1 {
+    grid-template-columns: max-content auto max-content;
+}
+
+.square-button {
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid var(--accent-color);
+    border-radius: 0px;
+    margin: 4px;
+    min-width: 30px;
+    background: var(--accent-color-darker);
+}
+
+.square-button:hover {
+    border-color: var(--accent-color-lighter);
+    background: var(--accent-color);
+}
+
+.playerpanel h1 input[type=text],
+.playerpanel h1 input[type=text]:hover,
+.playerpanel h1 input[type=text]:focus {
+    background: none;
+    border: none;
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.playerpanel h2 {
+    background-color: var(--accent-color-darker);
+    text-align: center;
+    line-height: 25px;
+    border-radius: 8px;
+    height: 25px;
+    margin: 6px;
+    font-size: 11pt;
+}
+
+.playerpanel th {
+    font-size: 10pt;
+}
+
+.infopanel {
+    position: relative;
+    background-color: var(--panel-background);
+    border: 2px solid #202020;
+    border-radius: 10px;
+    box-shadow: 0px 6px 0px 2px rgba(0, 0, 0, 0.2);
+    padding: 2px 2px 20px;
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+}
+
+.infopanel:hover,
+.infopanel:focus-within {
+    border-color: #313131;
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+}
+
+.infopanel h1 {
+    text-align: center;
+    background-color: var(--accent-color);
+    font-size: 22px;
+    font-weight: 600;
+    border-radius: 6px;
+    box-shadow: 0px 2px 0px 0px var(--accent-color-darker);
+    margin: 0px 0px 15px;
+    padding: 5px 0px;
+}
+
+/* Buttons */
+
+.headerbutton-left {
+    position: absolute;
+    left: 4px;
+}
+
+.headerbutton-right {
+    position: absolute;
+    right: 4px;
+}
+
+.red-button {
+    background-color: #aa3030;
+    border: 2px solid #ce5353;
+    border-radius: 6px;
+    box-shadow: 0px 3px 0px 0px #792828;
+}
+
+.red-button:hover {
+    color: var(--main-text-highlight-color);
+    background-color: #c04343;
+    border-color: #d86c6c;
+    box-shadow: 0px 3px 0px 0px #aa3030;
+}
+
+.red-button:active {
+    background-color: #aa3030;
+    border-color: #ce5353;
+    box-shadow: 0px 0px 0px 0px #792828;
+}
+
+.loottable-button {
+    border-width: 1px;
+    padding: 1px 8px;
+    margin: 0px;
+    min-width: 20px;
+}
+
+.kb-shortcuts {
+    margin: 15px;
+}
+
+.footer-source {
+    text-align: center;
+}
+
+/* Specific elements by id */
+
+#loottb_addcreatureitems {
+    display: none;
+    margin-bottom: 10px;
+    grid-gap: 10px;
+    grid-template-columns: auto minmax(200px, 30%) auto auto;
+    justify-content: center;
+    align-items: center;
+}
+
+#huntinfo label,
+#huntinfo_playerstb label {
+    color: var(--detail-color);
+    font-weight: bold;
+}
+
+#huntinfo_selllocation h2 {
+    font-size: 20px;
+    margin: 0px 0px;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 960px), screen and (max-device-width: 960px) {
+    :root {
+        font-size: 11pt;
+    }
+
+    label {
+        font-size: 9pt;
+    }
+
+    .title {
+        margin: 0px;
+    }
+
+    .maingrid {
+        grid-template-columns: minmax(350px, auto);
+    }
+
+    .fishing-warning {
+        font-size: 11pt;
+    }
+
+    .infopanel h1 {
+        font-size: 18px;
+    }
+
+    .infopanel th {
+        font-weight: 300;
+    }
+
+    #huntinfo_selllocation h2 {
+        font-size: 16px;
+    }
+
+    #playersgrid {
+        grid-area: auto;
+    }
+
+    .playerpanel {
+        max-width: 90%;
+    }
+
+    .kb-shortcuts {
+        display: none;
+    }
+
+    .footer-source {
+        margin-top: 25px;
+        font-size: 11pt;
+    }
+}
