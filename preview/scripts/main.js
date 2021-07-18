@@ -1003,6 +1003,14 @@ function onkeydown_global(event) {
     if (handled) event.preventDefault();
 }
 
+function onkeyup_sidebar(event) {
+    switch (event.code) {
+        case "Escape":
+            close_sidebar_menu();
+            break;
+    }
+}
+
 function onkeyup_loottable(event) {
     switch (event.code) {
         case "Enter":
