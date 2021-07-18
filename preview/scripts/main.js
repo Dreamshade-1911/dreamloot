@@ -938,7 +938,7 @@ function onkeydown_global(event) {
 
     // Block keys used with the control modifier
     if (handled || !event.ctrlKey) {
-        if (handled) event.preventDefault;
+        if (handled) event.preventDefault();
         return;
     }
 
