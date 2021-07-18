@@ -51,13 +51,15 @@ huntinfo_playerstable,
 huntinfo_selllocation;
 
 // Config HTML Elements
-var ac_minimum_price;
+var ac_minimum_price,
+ac_minimum_weight;
 
 // Misc
 var url_params = new URLSearchParams(window.location.search);
 var notification_count = 0;
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
+var ui_dirty = true; // We use this to only update the mouse position css variable between vblanks
 
 function init() {
     fetch("db.json")
@@ -78,11 +80,6 @@ function init() {
         }
         loottable_add_row();
         load_config();
-
-        document.addEventListener("mousemove", evt => {
-            document.documentElement.style.setProperty("--mouse-x", `${evt.clientX}px`);
-            document.documentElement.style.setProperty("--mouse-y", `${evt.clientY}px`);
-        });
     });
 
     playerpanel_template = document.getElementById("playerpanel-template");
@@ -112,8 +109,20 @@ function init() {
     huntinfo_selllocation = document.getElementById("huntinfo_selllocation");
 
     ac_minimum_price = document.getElementById("ac-minimum-price");
+    ac_minimum_weight = document.getElementById("ac-minimum-weight");
 
     document.body.addEventListener("keydown", onkeydown_global);
+    document.addEventListener("pointermove", evt => {
+        if (!ui_dirty) return;
+        ui_dirty = false;
+        requestAnimationFrame(() => {
+            document.documentElement.style.setProperty("--mouse-x", evt.clientX + "px");
+            document.documentElement.style.setProperty("--mouse-y", evt.clientY + "px");
+
+            document.documentElement.style.setProperty("--tooltip-translation", `translate(${evt.clientX < window.innerWidth / 2 ? "2%" : "-108%"}, ${evt.clientY < window.innerHeight / 2 ? "+10%" : "-110%"})`);
+            ui_dirty = true;
+        });
+    });
 }
 
 function stoi(str) {
@@ -168,12 +177,19 @@ function generate_wikilink(name) {
 
 function save_config() {
     localStorage.setItem("ac-minimum-price", stoi(ac_minimum_price.value));
+    localStorage.setItem("ac-minimum-weight", stof(ac_minimum_weight.value));
     display_notification("Configuration saved successfully");
 }
 
 function load_config(display_message = false) {
-    ac_minimum_price.value = localStorage.getItem('ac-minimum-price');
+    load(ac_minimum_price, 'ac-minimum-price');
+    load(ac_minimum_weight, 'ac-minimum-weight');
     if (display_message) display_notification("Configuration loaded successfully");
+
+    function load(el, key) {
+        let val = localStorage.getItem(key);
+        if (val && val != "0") el.value = val;
+    }
 }
 
 function remove_notification(element) {
@@ -192,6 +208,7 @@ function display_notification(text) {
     let element = document.importNode(notification_template.content, true).querySelector(".notification");
     ++notification_count;
     element.style.transitionDuration = `0.3s`;
+    element.style.willChange = "transform";
     element.style.transform = `translateY(calc(-${100 * notification_count}% - ${notification_count}em))`;
     let el_text = element.querySelector(".notification-text");
     el_text.innerText = text;
@@ -201,11 +218,19 @@ function display_notification(text) {
     setTimeout(() => remove_notification(element), 4000);
 }
 
-// @Speed: We can accept a new argument being the index to begin searching since everything is ordered alphabetically.
+function open_sidebar_menu() {
+    sidebar_menu.style.setProperty("display", "block");
+    setTimeout(() => sidebar_menu.classList.add("sidebar-menu-open"), 1);
+}
+
+function close_sidebar_menu() {
+    sidebar_menu.classList.remove("sidebar-menu-open");
+    setTimeout(() => sidebar_menu.style.setProperty("display", "none"), 300);
+}
+
 // Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
-function autocomplete_generic(item_array, input_field, key = null, threshold = null) {
+function autocomplete_generic(item_array, input_field, validate_item = null) {
     if (autocomplete_lastsize >= input_field.value.length) {
-        input_field.removeAttribute("data-acindex");
         autocomplete_lastsize = input_field.value.length;
         return -1;
     }
@@ -213,10 +238,10 @@ function autocomplete_generic(item_array, input_field, key = null, threshold = n
     autocomplete_lastsize = input_field.value.length;
     let inputlen = input_field.value.length;
     let suggestion_index = -1;
-    for (let i = input_field.dataset.acindex || 0; i < item_array.length; i++) {
+    for (let i = 0; i < item_array.length; i++) {
         if (inputlen > item_array[i].name.length) continue;
-        if (key && threshold && item_array[i][key] != 0 && item_array[i][key] < threshold) continue;
         if (input_field.value.toLowerCase() == item_array[i].name.substr(0, inputlen).toLowerCase()) {
+            if (validate_item && !validate_item(item_array[i])) continue;
             input_field.value = item_array[i].name;
             input_field.setSelectionRange(inputlen, item_array[i].name.length);
             suggestion_index = i;
@@ -224,14 +249,6 @@ function autocomplete_generic(item_array, input_field, key = null, threshold = n
         }
     }
     return suggestion_index;
-}
-
-function open_sidebar_menu() {
-    sidebar_menu.classList.add("sidebar-menu-open");
-}
-
-function close_sidebar_menu() {
-    sidebar_menu.classList.remove("sidebar-menu-open");
 }
 
 function generate_share_link() {
@@ -554,18 +571,22 @@ function loottable_clear() {
     gold_quant.focus();
 }
 
-function autocomplete_itemname(callerrow, enable_min_price = true) {
+function autocomplete_itemname(callerrow) {
     let callerrow_itemname = callerrow.cells[LOOTTB_COLUMN.NAME].firstChild;
     let callerrow_itemprice = callerrow.cells[LOOTTB_COLUMN.PRICE].firstChild;
-    let suggestion_index = -1;
+    let index = -1;
 
-    if (enable_min_price) {
-        suggestion_index = autocomplete_generic(mediviadb.items, callerrow_itemname, "price", stoi(ac_minimum_price.value));
-    } else suggestion_index = autocomplete_generic(mediviadb.items, callerrow_itemname);
-    if (suggestion_index == -1) callerrow_itemprice.value = "";
-    else callerrow_itemprice.value = mediviadb.items[suggestion_index].price;
-    callerrow.setAttribute("data-itemindex", suggestion_index);
-    return suggestion_index;
+    if (stoi(ac_minimum_price.value) > 0) {
+        index = autocomplete_generic(mediviadb.items, callerrow_itemname, (item) => {
+            if (item.weight < stof(ac_minimum_weight.value)) return true;
+            else return item.price < stoi(ac_minimum_price.value) ? false : true;
+        });
+    } else index = autocomplete_generic(mediviadb.items, callerrow_itemname);
+
+    if (index == -1) callerrow_itemprice.value = "";
+    else callerrow_itemprice.value = mediviadb.items[index].price;
+    callerrow.setAttribute("data-itemindex", index);
+    return index;
 }
 
 function autocomplete_creature_items() {
@@ -615,8 +636,8 @@ function loottable_add_creature_items() {
         autocomplete_lastsize = 0;
         let row = loottable_body.rows[loottb_length - 1];
         row.cells[LOOTTB_COLUMN.NAME].firstChild.value = creature.items[i];
-        let index = autocomplete_itemname(row, false);
-        if (mediviadb.items[index].price != 0 && mediviadb.items[index].price < stoi(ac_minimum_price.value)) {
+        let index = autocomplete_itemname(row);
+        if (index == -1) {
             loottable_body.deleteRow(row.sectionRowIndex);
         }
         loottable_add_row();

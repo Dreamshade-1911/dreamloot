@@ -34,9 +34,14 @@
     <div class="sidebar-menu">
         <button class="nav-button icon-button" onclick="close_sidebar_menu()"><img src="imgs/cancel_white_24dp.svg" alt="Close sidebar menu button"></img></button>
         <div class="sidebar-grid">
-            <h1 class="span2-c">General settings</h1>
-            <label data-tooltip="Any item that has a price below this value will be ignored by autocomplete and monster items."><img src="imgs/info_white_24dp.svg"></img>Autocomplete minimum price:</label>
+
+            <h1 class="span2-c">Autocomplete</h1>
+            <label data-tooltip="Any item that has a price below this value will be ignored by autocomplete and monster items."><img src="imgs/info_white_24dp.svg"></img>Minimum price:</label>
             <input type="number" id="ac-minimum-price" placeholder="0"></input>
+
+            <label data-tooltip="The 'minimum price' is valid only when the item is above this weight. (Use this to prevent excluding items like small sapphires, talons, etc.)"><img src="imgs/info_white_24dp.svg"></img>Price minimum weight:</label>
+            <input type="number" id="ac-minimum-weight" placeholder="0"></input>
+
             <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
                 <h1 data-tooltip="Custom items will take priority when searching if an item with the same name already exists in the database."><img src="imgs/info_white_24dp.svg"></img>Custom items</h1>
                 <button class="square-button sidebar-button-fix" disabled>Add item</button>

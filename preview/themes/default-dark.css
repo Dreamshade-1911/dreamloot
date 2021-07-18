@@ -1,5 +1,6 @@
 :root {
     --background-color: #181818;
+    --background-color-rgb: 24, 24, 24;
     --background-color-dim: #353535;
     --main-text-color: #dbdbdb;
     --main-text-highlight-color: #FFFFFF;
