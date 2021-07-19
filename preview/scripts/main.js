@@ -59,6 +59,7 @@ var url_params = new URLSearchParams(window.location.search);
 var notification_count = 0;
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
+var is_sidebar_open = false;
 var ui_dirty = true; // We use this to only update the mouse position css variable between vblanks
 
 function init() {
@@ -221,11 +222,13 @@ function display_notification(text) {
 function open_sidebar_menu() {
     sidebar_menu.style.setProperty("display", "block");
     setTimeout(() => sidebar_menu.classList.add("sidebar-menu-open"), 1);
+    is_sidebar_open = true;
 }
 
 function close_sidebar_menu() {
     sidebar_menu.classList.remove("sidebar-menu-open");
     setTimeout(() => sidebar_menu.style.setProperty("display", "none"), 300);
+    is_sidebar_open = false;
 }
 
 // Takes an array of objects with a 'name' field to be searched and returns the index that was found, or -1 on failure.
@@ -954,6 +957,11 @@ function onkeydown_global(event) {
             select_lower_input(event.target);
         } break;
 
+        case "Escape": {
+            if (is_sidebar_open) close_sidebar_menu();
+            else handled = false;
+        } break;
+
         default: handled = false;
     }
 
@@ -1001,14 +1009,6 @@ function onkeydown_global(event) {
         }
     }
     if (handled) event.preventDefault();
-}
-
-function onkeyup_sidebar(event) {
-    switch (event.code) {
-        case "Escape":
-            close_sidebar_menu();
-            break;
-    }
 }
 
 function onkeyup_loottable(event) {

@@ -8,12 +8,18 @@
     --default-font-family: "Arimo", sans-serif;
     --mouse-x: 0;
     --mouse-y: 0;
-
     --tooltip-translation: 0;
+    --transparent-bg-opacity: 0.5;
 
     font-family: var(--default-font-family);
     font-size: 11.5pt;
     line-height: var(--default-line-height);
+}
+
+@supports not (backdrop-filter: blur(0)) {
+    :root {
+        --transparent-bg-opacity: 1;
+    }
 }
 
 /* - Background - */
@@ -336,8 +342,8 @@ table td {
 .sidebar-menu {
     position: fixed;
     display: none;
-    background-color: rgba(var(--accent-color-rgb), 0.9);
-    backdrop-filter: blur(6px);
+    background-color: rgba(var(--accent-color-rgb), var(--transparent-bg-opacity));
+    backdrop-filter: blur(15px);
     top: 0;
     right: min(39vw - (48vh - 48vw), 70vw);
     bottom: 0;
@@ -439,7 +445,7 @@ table td {
     transform: translateX(-50%);
     width: calc(60vw + (30vh - 30vw));
     align-items: center;
-    z-index: 200;
+    z-index: 500;
     display: flex;
     flex-direction: column;
     pointer-events: none;
@@ -447,11 +453,11 @@ table td {
 
 .notification {
     color: var(--accent-color);
-    background: rgba(var(--contrast-color-rgb), 0.7);
+    background: rgba(var(--contrast-color-rgb), var(--transparent-bg-opacity));
     padding: 0.5em 1em;
     margin-bottom: 1em;
     border: 1px solid rgba(var(--contrast-color-rgb), 0.4);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(10px);
     border-radius: 1em;
     transition-timing-function: var(--fast-bezier);
     pointer-events: fill;
@@ -637,9 +643,9 @@ div.infopanel.panel-flash {
     text-align: center;
     border-left: 0.4em solid var(--accent-color);
     border-right: 2px solid var(--contrast-color-dim);
-    background-color: rgba(var(--background-color-rgb), 0.9);
-    backdrop-filter: blur(5px);
-    z-index: 150;
+    background-color: rgba(var(--background-color-rgb), var(--transparent-bg-opacity));
+    backdrop-filter: blur(12px);
+    z-index: 200;
 }
 [data-tooltip]:hover:before {
     display: block;
