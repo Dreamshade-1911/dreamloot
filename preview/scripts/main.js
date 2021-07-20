@@ -692,10 +692,11 @@ function huntinfo_copy_as_text() {
     let profit = document.getElementById("huntinfo_profit").innerText;
     let split_profit = document.getElementById("huntinfo_splitprofit").innerText;
     let player_info_rows = document.getElementById("huntinfo_playerstb").rows;
-    const max_line_length = 120;
+    const max_line_length = 72;
     const divider = "-".repeat(max_line_length + 4);
 
-    let output_string = `${get_table_line(["Total Waste", "Total Earnings", "Profit", "Split Profit"], "-")}
+    let output_string = `\`\`\`
+${get_table_line(["Total Waste", "Total Earnings", "Profit", "Split Profit"], "-")}
 ${get_table_line([total_waste, total_earnings, profit, split_profit], " ")}
 ${get_table_line(["Player", "Supplies Used", "Share"], "-")}`;
 
@@ -707,7 +708,7 @@ ${get_table_line(["Player", "Supplies Used", "Share"], "-")}`;
             row.cells[2].firstChild.innerText,
         ], i % 2 == 1 ? " " : ":");
     }
-    output_string += "\n" + divider;
+    output_string += "\n" + divider + "\n```";
 
     copy_to_clipboard(output_string);
     display_notification("Table info has been copied to your clipboard as text");
@@ -721,14 +722,17 @@ ${get_table_line(["Player", "Supplies Used", "Share"], "-")}`;
 
             if (i == values[i].length - 1) ++el_length;
             if (i == 0) output_string += " ";
-            if (el_length % 2 == 1) output_string += separator;
+            if (el_length % 2 == 1) {
+                output_string += separator;
+                ++el_length;
+            }
 
             output_string += separator.repeat((max_div_length - el_length) / 2) + " " + values[i] +
                              " " + separator.repeat((max_div_length - el_length) / 2);
 
             if (i == values.length - 1) output_string += " ";
         }
-        output_string += "-"
+        output_string += "-".repeat(max_line_length % values.length + 1)
         return output_string;
     }
 }
