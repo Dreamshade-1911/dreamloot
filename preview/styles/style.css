@@ -432,8 +432,9 @@ table td {
 
 .sidebar-row {
     display: flex;
+    margin-top: 2em;
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     grid-column: span 2;
 }
@@ -576,11 +577,11 @@ table td {
 
 /* we use this many selectors to have higher
    specificity and overwrite these properties */
-div.infopanel.panel-flash {
-    background-color: var(--background-color-dim);
-    border-color: var(--contrast-color-dim);
-    transition-duration: 0s;
-    transition-timing-function: var(--fast-bezier);
+.panel-flash {
+    background-color: var(--background-color-dim) !important;
+    border-color: var(--contrast-color-dim) !important;
+    transition-duration: 0s !important;
+    transition-timing-function: var(--fast-bezier) !important;
 }
 
 .infopanel:hover,

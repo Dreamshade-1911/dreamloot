@@ -42,9 +42,11 @@
             <label data-tooltip="The 'minimum price' is valid only when the item is above this weight. (Use this to prevent excluding items like small sapphires, talons, etc.)"><img src="imgs/info_white_24dp.svg"></img>Price minimum weight:</label>
             <input type="number" id="ac-minimum-weight" placeholder="0"></input>
 
-            <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
+            <div class="sidebar-row">
                 <h1 data-tooltip="Custom items will take priority when searching if an item with the same name already exists in the database."><img src="imgs/info_white_24dp.svg"></img>Custom items</h1>
-                <button class="square-button sidebar-button-fix" disabled>Add item</button>
+                <div>
+                    <button class="square-button sidebar-button-fix" disabled>Export</button><button class="square-button sidebar-button-fix" disabled>Add item</button>
+                </div>
             </div>
             <table id="custom-items-table">
                 <thead>
@@ -57,9 +59,11 @@
                     </tr>
                 </thead>
             </table>
-            <div class="sidebar-row" style="margin-top: 2em; justify-content: space-between">
+            <div class="sidebar-row">
                 <h1 data-tooltip="Custom monsters will take priority when searching if a monster with the same name already exists in the database."><img src="imgs/info_white_24dp.svg"></img>Custom monsters</h1>
-                <button class="square-button sidebar-button-fix" disabled>Add monster</button>
+                <div>
+                    <button class="square-button sidebar-button-fix" disabled>Export</button><button class="square-button sidebar-button-fix" disabled>Add monster</button>
+                </div>
             </div>
             <table id="custom-monsters-table">
                 <thead>
@@ -69,7 +73,7 @@
                     </tr>
                 </thead>
             </table>
-            <div class="sidebar-row" style="margin-top: 2em">
+            <div class="sidebar-row" style="justify-content: center">
                 <button class="square-button" onclick="save_config()">Save</button>
                 <button class="square-button" onclick="load_config(true)">Restore</button>
                 <button class="square-button" disabled>Export</button>
@@ -117,6 +121,7 @@
             <!-- HuntInfo Infopanel -->
             <div class="infopanel" id="huntinfo_panel">
                 <button class="headerbutton-left" onclick="huntinfo_calculate_loot()">Calculate loot</button>
+                <button class="headerbutton-right" onclick="huntinfo_copy_as_text()">Copy as text</button>
                 <h1>Hunt Info</h1>
                 <center>
                     <table id="huntinfo">
@@ -191,6 +196,7 @@
                 </table>
                 <center>
                     <button style="margin-top: 8px; padding-left: 15px; padding-right: 15px" class="square-button" onclick="save_default_prices(this.parentElement.parentElement)">Save prices</button>
+                    <button style="margin-top: 8px; padding-left: 15px; padding-right: 15px" class="square-button" onclick="clear_player_items(this.parentElement.parentElement)">Clear</button>
                 </center>
             </div>
         </div>

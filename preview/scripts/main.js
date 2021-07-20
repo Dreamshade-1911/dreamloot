@@ -490,19 +490,28 @@ function players_clear() {
         players_grid.lastChild.remove();
 }
 
-function save_default_prices(callerPlayerContent) {
-    let runestable = callerPlayerContent.querySelector(".runestable");
-    let otherstable = callerPlayerContent.querySelector(".otherstable");
-
-    function save_table_prices(tableObject) {
-        for (let i = 1; i < tableObject.rows.length; i++) {
-            let rowName = tableObject.rows[i].cells[PLAYERSTB_COLUMN.NAME].firstChild.innerText + "_price";
-            let rowPrice = tableObject.rows[i].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value;
+function save_default_prices(player_content) {
+    save_table_prices(player_content.querySelector(".runestable"));
+    save_table_prices(player_content.querySelector(".otherstable"));
+    function save_table_prices(table) {
+        for (let i = 1; i < table.rows.length; ++i) {
+            let rowName = table.rows[i].cells[PLAYERSTB_COLUMN.NAME].firstChild.innerText + "_price";
+            let rowPrice = table.rows[i].cells[PLAYERSTB_COLUMN.PRICE].firstChild.value;
             localStorage.setItem(rowName, rowPrice);
         }
     }
-    save_table_prices(runestable);
-    save_table_prices(otherstable);
+    display_notification("Prices were saved succesfully");
+    flash_panel(player_content);
+}
+
+function clear_player_items(player_content) {
+    clear_table_quantity(player_content.querySelector(".runestable"))
+    clear_table_quantity(player_content.querySelector(".otherstable"))
+    function clear_table_quantity(table) {
+        for (let i = 1; i < table.rows.length; ++i)
+            table.rows[i].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value = "";
+    }
+    flash_panel(player_content);
 }
 
 // --------------------------------------
@@ -675,6 +684,53 @@ function huntinfo_create_location_rows() {
     tbody.className = "npctbody";
     playerstb.appendChild(tbody);
     huntinfo_selllocation.appendChild(playerstb);
+}
+
+function huntinfo_copy_as_text() {
+    let total_waste = document.getElementById("huntinfo_totalwaste").innerText;
+    let total_earnings = document.getElementById("huntinfo_totalearnings").innerText;
+    let profit = document.getElementById("huntinfo_profit").innerText;
+    let split_profit = document.getElementById("huntinfo_splitprofit").innerText;
+    let player_info_rows = document.getElementById("huntinfo_playerstb").rows;
+    const max_line_length = 120;
+    const divider = "-".repeat(max_line_length + 4);
+
+    let output_string = `${get_table_line(["Total Waste", "Total Earnings", "Profit", "Split Profit"], "-")}
+${get_table_line([total_waste, total_earnings, profit, split_profit], " ")}
+${get_table_line(["Player", "Supplies Used", "Share"], "-")}`;
+
+    for (let i = 1; i < player_info_rows.length; ++i) {
+        let row = player_info_rows[i];
+        output_string += "\n" + get_table_line([
+            row.cells[0].firstChild.innerText,
+            row.cells[1].firstChild.innerText,
+            row.cells[2].firstChild.innerText,
+        ], i % 2 == 1 ? " " : ":");
+    }
+    output_string += "\n" + divider;
+
+    copy_to_clipboard(output_string);
+    display_notification("Table info has been copied to your clipboard as text");
+
+    function get_table_line(values, separator) {
+        let output_string = "-";
+        let max_div_length = (max_line_length) / values.length;
+
+        for (let i = 0; i < values.length; ++i) {
+            let el_length = values[i].length + 2;
+
+            if (i == values[i].length - 1) ++el_length;
+            if (i == 0) output_string += " ";
+            if (el_length % 2 == 1) output_string += separator;
+
+            output_string += separator.repeat((max_div_length - el_length) / 2) + " " + values[i] +
+                             " " + separator.repeat((max_div_length - el_length) / 2);
+
+            if (i == values.length - 1) output_string += " ";
+        }
+        output_string += "-"
+        return output_string;
+    }
 }
 
 function huntinfo_calculate_loot() {
