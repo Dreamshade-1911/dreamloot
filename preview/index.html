@@ -32,6 +32,8 @@
         <button class="nav-button icon-button" onclick="swap_theme()"><img src="imgs/settings_brightness_white_24dp.svg" alt="Switch theme button"></img></button>
     </nav>
     <div class="notification-container"></div>
+
+    <!-- Sidebar -->
     <div class="sidebar-menu">
         <button class="nav-button icon-button" onclick="close_sidebar_menu()"><img src="imgs/cancel_white_24dp.svg" alt="Close sidebar menu button"></img></button>
         <div class="sidebar-grid">
@@ -59,6 +61,7 @@
                         <th>Sell to</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
             <div class="sidebar-row">
                 <h1 data-tooltip="Custom monsters will take priority when searching if a monster with the same name already exists in the database."><img src="imgs/info_white_24dp.svg"></img>Custom monsters</h1>
@@ -73,6 +76,7 @@
                         <th>Items</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
             <div class="sidebar-row" style="justify-content: center">
                 <button class="square-button" onclick="save_config()">Save</button>
@@ -82,9 +86,9 @@
             </div>
         </div>
     </div>
+    <!-- Sidebar -->
 
-    <!-- Loading -->
-    <div class="lds-dual-ring" id="loading-icon"></div>
+    <div class="lds-dual-ring" id="loading-icon"></div> <!-- Loading -->
     <div id="main-container" style="display: none">
         <h1 class="title">Dreamloot</h1>
         <p class="fishing-warning">This page will NEVER ask for your account information! It has no integration with any medivia-related website or service.</p>

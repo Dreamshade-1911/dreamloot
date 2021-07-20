@@ -700,16 +700,18 @@ function huntinfo_copy_as_text() {
 
     let output_string = `\`\`\`
 ${get_table_line(["Total Waste", "Total Earnings", "Profit", "Split Profit"], "-")}
-${get_table_line([total_waste, total_earnings, profit, split_profit], " ")}
-${get_table_line(["Player", "Supplies Used", "Share"], "-")}`;
+${get_table_line([total_waste, total_earnings, profit, split_profit], " ")}`;
 
-    for (let i = 1; i < player_info_rows.length; ++i) {
-        let row = player_info_rows[i];
-        output_string += "\n" + get_table_line([
-            row.cells[0].firstChild.innerText,
-            row.cells[1].firstChild.innerText,
-            row.cells[2].firstChild.innerText,
-        ], i % 2 == 1 ? " " : ":");
+    if (player_info_rows.length > 1) {
+        output_string += "\n" + get_table_line(["Player", "Supplies Used", "Share"], "-");
+        for (let i = 1; i < player_info_rows.length; ++i) {
+            let row = player_info_rows[i];
+            output_string += "\n" + get_table_line([
+                row.cells[0].firstChild.innerText,
+                row.cells[1].firstChild.innerText,
+                row.cells[2].firstChild.innerText,
+            ], i % 2 == 1 ? " " : ":");
+        }
     }
     output_string += "\n" + divider + "\n```";
 
