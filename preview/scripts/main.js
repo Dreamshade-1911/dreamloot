@@ -81,6 +81,9 @@ function init() {
         }
         loottable_add_row();
         load_config();
+
+        document.getElementById("loading-icon").remove();
+        document.getElementById("main-container").style.display = "block";
     });
 
     playerpanel_template = document.getElementById("playerpanel-template");

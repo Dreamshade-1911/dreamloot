@@ -22,6 +22,34 @@
     }
 }
 
+.lds-dual-ring {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+  }
+  .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    opacity: 0.5;
+    width: 25vmin;
+    height: 25vmin;
+    margin: 0.2em;
+    border-radius: 50%;
+    border: 1.5vmin solid var(--contrast-color);
+    border-color: var(--contrast-color) transparent var(--contrast-color) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
 /* - Background - */
 .background * {
     z-index: -100;
