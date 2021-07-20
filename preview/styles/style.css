@@ -738,6 +738,7 @@ table td {
 }
 
 .text-button {
+    font-weight: bold;
     border-radius: 1em;
     padding-left: 1em;
     padding-right: 1em;
