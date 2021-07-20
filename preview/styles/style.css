@@ -615,6 +615,7 @@ table td {
 
 .navbar-right {
     position: absolute;
+    display: flex;
     top: 5px;
     right: 1vw;
     pointer-events: none;
@@ -706,6 +707,13 @@ table td {
     margin: 5px;
     border: none;
     border-radius: 50%;
+}
+
+.text-button {
+    border-radius: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: unset;
 }
 
 .icon-button {
