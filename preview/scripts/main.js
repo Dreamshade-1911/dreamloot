@@ -260,6 +260,8 @@ function autocomplete_generic(item_array, input_field, validate_item = null) {
 function generate_share_link() {
     let player_str = "";
     let str_arr = [];
+    let gold_quant = stoi(document.getElementById("loottb_gold_itemquantity").value)
+
     for (let p = 1; p < players().length; p++) {
         let cur_player_name = player(p).querySelector(".playername").value
         if (!cur_player_name || cur_player_name == "")
@@ -277,11 +279,14 @@ function generate_share_link() {
     player_str = str_arr.join("")
     str_arr = [];
     for (let i = 0; i < loottable_body.rows.length - 1; i++) {
-        let cur_row = loottable_body.rows[i]
+        let cur_row = loottable_body.rows[i];
 
         let is_index = !(!cur_row.dataset.itemindex || cur_row.dataset.itemindex == -1);
 
-        let cur_name_or_index =  is_index ? cur_row.dataset.itemindex : cur_row.cells[LOOTTB_COLUMN.NAME].firstChild.value;
+        let cur_name_or_index;
+        if (is_index) cur_name_or_index = cur_row.dataset.itemindex;
+        else cur_name_or_index = cur_row.cells[LOOTTB_COLUMN.NAME].firstChild.value.replaceAll(" ", "+");
+
         let cur_quant = stoi(cur_row.cells[LOOTTB_COLUMN.QUANTITY].firstChild.value);
         let cur_price_or_default = stoi(cur_row.cells[LOOTTB_COLUMN.PRICE].firstChild.value);
 
@@ -295,7 +300,7 @@ function generate_share_link() {
         str_arr.push(`${cur_name_or_index},${cur_quant},${cur_price_or_default}`)
     }
 
-    let share_link = encodeURI(`${location.origin}${location.pathname}?state=${player_str};${str_arr.join("|")};`);
+    let share_link = encodeURI(`${location.origin}${location.pathname}?state=${gold_quant};${player_str};${str_arr.join(":")}`);
     copy_to_clipboard(share_link);
     display_notification("The link to the current state has been copied to your clipboard");
 
@@ -314,25 +319,30 @@ function generate_share_link() {
             arr.push(`${i},${cur_quant},${cur_price_or_default}`);
         }
         if (arr.length == 0) return "";
-        else return arr.join("|");
+        else return arr.join(":");
     }
 }
 
 function parse_state_string(state) {
+    state += ";"
     let cursor = 0;
-    let cursor_start = 0;
-
     let cur_player_index = 0;
     let cur_player = null;
+
+    cursor = state.indexOf(";");
+    let gold_quant = state.substr(0, cursor);
+    if (gold_quant > 0) document.getElementById("loottb_gold_itemquantity").value = gold_quant;
+    let cursor_start = ++cursor;
+
     parse_players:
     while (cursor < state.length) {
         switch (state.charAt(cursor)) {
-            case ';': {
+            case ";": {
                 ++cursor;
                 cursor_start = cursor;
             } break parse_players;
 
-            case '{': {
+            case "{": {
                 ++cur_player_index;
                 players_add_player();
                 cur_player = player(cur_player_index);
@@ -368,7 +378,7 @@ function parse_state_string(state) {
                 --cursor; // We need to back one just so that the loop registers the exit
             } break;
 
-            case '}': {
+            case "}": {
                 cursor_start = cursor + 1;
                 cur_player = null;
             } break;
@@ -403,20 +413,20 @@ function parse_state_string(state) {
         parse_item:
         while (cursor < state.length) {
             switch (state.charAt(cursor)) {
-                case ';':
-                case '}':
+                case ";":
+                case "}":
                     let sub = state.substr(cursor_start, cursor - cursor_start);
                     if (sub && sub != "") cur_obj.push(sub);
                     if (cur_obj.length > 0) ret_arr.push(cur_obj);
                     cursor_start = cursor + 1;
                 break parse_item;
 
-                case ',':
-                case '|':
+                case ",":
+                case ":":
                     cur_obj.push(state.substr(cursor_start, cursor - cursor_start));
                     cursor_start = cursor + 1;
 
-                    if (state.charAt(cursor) == '|') {
+                    if (state.charAt(cursor) == ":") {
                         ret_arr.push(cur_obj);
                         cur_obj = [];
                     }
