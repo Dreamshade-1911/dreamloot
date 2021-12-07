@@ -6,9 +6,6 @@
     --default-line-height: 1.3;
 
     --default-font-family: "Arimo", sans-serif;
-    --mouse-x: 0;
-    --mouse-y: 0;
-    --tooltip-translation: 0;
     --transparent-bg-opacity: 0.5;
 
     font-family: var(--default-font-family);
@@ -603,8 +600,6 @@ table td {
     transition-timing-function: ease;
 }
 
-/* we use this many selectors to have higher
-   specificity and overwrite these properties */
 .panel-flash {
     background-color: var(--background-color-dim) !important;
     border-color: var(--contrast-color-dim) !important;
@@ -657,17 +652,12 @@ table td {
     line-height: 1;
 }
 
-[data-tooltip]:before {
+.tooltip {
     display: none;
     color: var(--detail-color);
     font-size: 1rem;
     font-weight: normal;
-    content: attr(data-tooltip);
     position: fixed;
-    top: var(--mouse-y);
-    left: var(--mouse-x);
-    transform: var(--tooltip-translation);
-    margin-left: 1em;
     width: 25em;
     padding: 0.8em;
     text-align: center;
@@ -676,9 +666,6 @@ table td {
     background-color: rgba(var(--background-color-rgb), var(--transparent-bg-opacity));
     backdrop-filter: blur(12px);
     z-index: 200;
-}
-[data-tooltip]:hover:before {
-    display: block;
 }
 
 /* Buttons */

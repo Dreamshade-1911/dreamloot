@@ -33,7 +33,8 @@ locationtable_template,
 npctbody_template;
 
 // HTML Elements
-var sidebar_menu,
+var tooltip,
+sidebar_menu,
 notification_container,
 players_grid,
 loottable,
@@ -60,7 +61,12 @@ var notification_count = 0;
 var autocomplete_lastsize = 0;
 var addcreature_autocomplete_lastindex = -1;
 var is_sidebar_open = false;
-var ui_dirty = true; // We use this to only update the mouse position css variable between vblanks
+
+function clamp(value, min, max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
 
 function init() {
     fetch("db.json")
@@ -91,6 +97,7 @@ function init() {
     npctbody_template = document.getElementById("npctbody-template");
     notification_template = document.getElementById("notification-template");
 
+    tooltip = document.querySelector(".tooltip");
     sidebar_menu = document.querySelector(".sidebar-menu");
     notification_container = document.querySelector(".notification-container");
 
@@ -116,17 +123,27 @@ function init() {
     ac_minimum_weight = document.getElementById("ac-minimum-weight");
 
     document.body.addEventListener("keydown", onkeydown_global);
-    document.addEventListener("pointermove", evt => {
-        if (!ui_dirty) return;
-        ui_dirty = false;
-        requestAnimationFrame(() => {
-            document.documentElement.style.setProperty("--mouse-x", evt.clientX + "px");
-            document.documentElement.style.setProperty("--mouse-y", evt.clientY + "px");
 
-            document.documentElement.style.setProperty("--tooltip-translation", `translate(${evt.clientX < window.innerWidth / 2 ? "2%" : "-108%"}, ${evt.clientY < window.innerHeight / 2 ? "+10%" : "-110%"})`);
-            ui_dirty = true;
-        });
-    });
+    // Tooltip.
+    setInterval(() => {
+        const hovered_elements = document.querySelectorAll(":hover");
+        const hovered_element = hovered_elements[hovered_elements.length - 1];
+        if (hovered_element == tooltip) return;
+
+        if (hovered_element) {
+            if (hovered_element.dataset.tooltip) {
+                tooltip.innerText = hovered_element.dataset.tooltip;
+                if (tooltip.style.display == "none") tooltip.style.display = "block";
+                const element_rect = hovered_element.getBoundingClientRect();
+                let tooltipX = clamp(parseInt(element_rect.x), 0, document.body.clientWidth - element_rect.width);
+                let tooltipY = clamp(parseInt(element_rect.y - tooltip.offsetHeight), 0, document.body.clientHeight - element_rect.height);
+                tooltip.style.left = `${tooltipX}px`;
+                tooltip.style.top = `${tooltipY}px`;
+            } else {
+                tooltip.style.display = "none";
+            }
+        }
+    }, 500);
 }
 
 function stoi(str) {
@@ -268,10 +285,10 @@ function generate_share_link() {
             continue;
 
         let runestable = player(p).querySelector(".runestable");
-        let runes_str = getDataString(runestable, "runes");
+        let runes_str = get_data_string(runestable, "runes");
 
         let otherstable = player(p).querySelector(".otherstable");
-        let others_str = getDataString(otherstable, "players_otheritems");
+        let others_str = get_data_string(otherstable, "players_otheritems");
 
         if (!runes_str && !others_str) continue;
         str_arr.push(`${cur_player_name}{${runes_str};${others_str}}`);
@@ -304,7 +321,7 @@ function generate_share_link() {
     copy_to_clipboard(share_link);
     display_notification("The link to the current state has been copied to your clipboard");
 
-    function getDataString(table, dbname) {
+    function get_data_string(table, dbname) {
         let arr = [];
         for (let i = 1; i < table.rows.length; i++) {
             let cur_quant = stoi(table.rows[i].cells[PLAYERSTB_COLUMN.QUANTITY].firstChild.value);
@@ -918,10 +935,10 @@ function huntinfo_calculate_loot() {
                                     let questanchor = document.createElement("a");
                                     questanchor.href = mediviadb.npcs[npc_index].questlink;
                                     questanchor.target = "_blank";
-                                    questanchor.dataset.tooltip = "Trading with this NPC requires a quest. Click for more information.";
                                     let questimage = document.createElement("img");
                                     questimage.style.margin = "0px 6px";
                                     questimage.src = "imgs/quest.png";
+                                    questimage.dataset.tooltip = "Trading with this NPC requires a quest. Click for more information.";
                                     questanchor.appendChild(questimage);
                                     location_tbody.rows[0].cells[LOCATIONTB_COLUMN.NAME].appendChild(questanchor);
                                 }
