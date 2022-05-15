@@ -1,0 +1,42 @@
+:root {
+    --background-color: #B8B8B8;
+    --background-color-rgb: 184, 184, 184;
+    --background-color-dim: #838383;
+    --main-text-color: #2b2b2b;
+    --main-text-highlight-color: #404040;
+    --secondary-text-color: #202020;
+    --panel-background: #B2B2B2;
+    --panel-background-rgb: 178, 178, 178;
+    --border-highlight: #a09595;
+    --border-highlight-lighter: #7e7575;
+    --accent-color: #c97943;
+    --accent-color-rgb: 211, 129, 74;
+    --accent-color-highlight: #a06047;
+    --accent-color-lighter: #ac5f47;
+    --accent-color-lighter-rgb: 172, 95, 71;
+    --accent-color-darker: #b85f44;
+    --accent-color-darker-rgb: 184, 95, 68;
+    --detail-color: #233f52;
+    --no-contrast-color: #FFFFFF;
+    --no-contrast-color-rgb: 255, 255, 255;
+    --contrast-color: #000000;
+    --contrast-color-rgb: 0, 0, 0;
+    --contrast-color-dim: #303030;
+    --contrast-color-dim-rgb: 48, 48, 48;
+    --fishing-warning-color: #970000;
+    --button-highlight-color: #d69e65;
+}
+
+.npctbody a img {
+    filter: hue-rotate(180deg) brightness(50%) saturate(80%);
+}
+
+.locationtable a:hover {
+    color: var(--accent-color-darker);
+}
+
+.sidebar-grid label img,
+.sidebar-grid h1 img {
+    fill: black;
+    filter: invert();
+}

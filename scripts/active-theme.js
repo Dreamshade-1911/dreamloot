@@ -1,6 +1,6 @@
 var themes = [
-    { name: "Default Dark", file: "default-dark.css" },
-    { name: "Default Light", file: "default-light.css" },
+    { name: "Default Dark", file: "default-dark" },
+    { name: "Default Light", file: "default-light" },
 ];
 var default_theme = themes[0];
 var active_theme = null;
@@ -11,10 +11,10 @@ function set_theme(theme) {
     if (!theme_link_tag) {
         document.getElementsByTagName("head")[0].insertAdjacentHTML(
             "beforeend",
-            `<link id="theme-link-tag" rel="stylesheet" href="themes/${theme.file}"></link>`
+            `<link id="theme-link-tag" rel="stylesheet" href="themes/${theme.file}.css"></link>`
         );
         theme_link_tag = document.getElementById("theme-link-tag");
-    } else theme_link_tag.href = `themes/${theme.file}`;
+    } else theme_link_tag.href = `themes/${theme.file}.css`;
     active_theme = theme;
     localStorage.setItem('theme', theme.name);
 }

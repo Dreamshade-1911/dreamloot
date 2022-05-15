@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Quick dirty page to edit db.json without going insane. -->
+<head>
+    <title>Dreamloot</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/imgs/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/imgs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/imgs/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&amp;text=Dreamloot&amp;display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css2?family=Arimo&amp;display=swap' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="/themes/default-dark.css"></link>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css"></link>
+
+<style>
+    .main-grid {
+        padding: 0 1.5em;
+    }
+
+    .main-section {
+        padding-bottom: 1em;
+    }
+
+    .main-section input[type=text],
+    .main-section input[type=number] {
+        background: var(--background-color-dim) !important;
+        margin-right: 2em;
+    }
+</style>
+
+<script>
+    function copy_to_clipboard(text) {
+        const el = document.createElement("textarea");
+        el.value = text;
+        el.style.position = "absolute";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+    }
+
+    function create_json(obj) {
+        return "{ " + JSON.stringify(obj)
+            .replaceAll("\":", "\": ")
+            .replaceAll(/([:,])(")/gm, "$1 $2")
+            .replaceAll(/(["\]])}/gm, "$1 }")
+            .slice(1);
+    }
+
+    function sort_alphabetically(arr) {
+        return arr.sort((a, b) => {
+            return a.localeCompare(b);
+        });
+    }
+
+    function create_npc() {
+        copy_to_clipboard(create_json({
+            name: document.getElementById("npc_name").value.trim(),
+            location: document.getElementById("npc_location").value.trim(),
+            questlink: document.getElementById("npc_questlink").value.trim(),
+        }));
+    }
+
+    function create_item() {
+        copy_to_clipboard(create_json({
+            name: document.getElementById("item_name").value.trim(),
+            price: Number(document.getElementById("item_price").value),
+            weight: Number(document.getElementById("item_weight").value),
+            stackable: document.getElementById("item_stackable").checked,
+            sellto: sort_alphabetically(document.getElementById("item_sellto").value.trim().split(",")),
+        }));
+    }
+
+    function create_creature() {
+        copy_to_clipboard(create_json({
+            name: document.getElementById("creature_name").value.trim(),
+            items: sort_alphabetically(document.getElementById("creature_items").value.trim().split(",")),
+        }));
+    }
+</script>
+</head>
+
+<body>
+    <!-- Background -->
+    <div class="background">
+        <div class="bg-noise"></div>
+        <div class="bg-rect-fade"></div>
+        <div class="bg-triangle bg-triangle-topleft"></div>
+        <div class="bg-triangle bg-triangle-topright"></div>
+    </div>
+    <!-- Background -->
+
+    <h1 class="title">Dreamloot</h1>
+    <div class="main-grid infopanel">
+        <h2>Add NPC</h2>
+        <div class="main-section">
+            <label for="npc_name">Name:</label>
+            <input type="text" id="npc_name" name="npc_name" />
+            <label for="npc_location">Location:</label>
+            <input type="text" id="npc_location" name="npc_location" />
+            <label for="npc_questlink">Quest Link:</label>
+            <input type="text" id="npc_questlink" name="npc_questlink" />
+        </div>
+        <button onclick="create_npc()">Create</button>
+
+        <h2>Add Item</h2>
+        <div class="main-section">
+            <label for="item_name">Name:</label>
+            <input type="text" id="item_name" name="item_name" />
+            <label for="item_price">Price:</label>
+            <input type="number" id="item_price" name="item_price" />
+            <label for="item_weight">Weight:</label>
+            <input type="number" id="item_weight" name="item_weight" />
+            <label for="item_sellto">Sellable to:</label>
+            <input type="text" id="item_sellto" name="sellto" />
+            <input type="checkbox" id="item_stackable" name="item_stackable" />
+            <label for="item_stackable">Stackable</label>
+        </div>
+        <button onclick="create_item()">Create</button>
+
+        <h2>Add Creature</h2>
+        <div class="main-section">
+            <label for="creature_name">Name:</label>
+            <input type="text" id="creature_name" name="creature_name" />
+            <label for="creature_items">Items:</label>
+            <input type="text" id="creature_items" name="creature_items" />
+        </div>
+        <button onclick="create_creature()">Create</button>
+    </div>
+</body>
+</html>
