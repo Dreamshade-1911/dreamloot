@@ -557,7 +557,7 @@ function loottable_add_row() {
     itemname.setAttribute("oninput", "autocomplete_itemname(parentElement.parentElement)");
     itemname.setAttribute("onfocusin", "loottable_check_add_row(parentElement.parentElement)");
     itemname.setAttribute("onfocusout", "autocomplete_lastsize = 0;");
-    if (row_index >= 0)
+    if (row_index > 0)
         loottable_body.rows[row_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.removeAttribute("onfocusin");
     row.insertCell().appendChild(itemname);
 
