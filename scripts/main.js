@@ -576,12 +576,15 @@ function loottable_add_row() {
 
     // Add a delete button if it's not the first row
     if (row_index >= 0) {
-        let deletebutton = document.createElement("button");
-        deletebutton.className = "red-button loottable-button";
-        deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
-        deletebutton.innerText = "X";
-        deletebutton.tabIndex = -1;
-        row.insertCell().appendChild(deletebutton);
+        let rowToInsertDelete = row.parentElement.lastChild.previousElementSibling;
+        if (rowToInsertDelete && rowToInsertDelete.childElementCount != 4) {
+            let deletebutton = document.createElement("button");
+            deletebutton.className = "red-button loottable-button";
+            deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
+            deletebutton.innerText = "X";
+            deletebutton.tabIndex = -1;
+            rowToInsertDelete.insertCell().appendChild(deletebutton);
+        }
     }
     row.setAttribute("data-itemindex", -1);
     return row;
@@ -600,6 +603,8 @@ function loottable_delete_row(callerrow) {
         else return;
     }
     loottable_body.deleteRow(callerrow.sectionRowIndex);
+    if (loottable_body.rows[loottable_body.rows.length - 1].childElementCount === 4)
+        loottable_body.rows[loottable_body.rows.length - 1].lastElementChild.remove();
 }
 
 function loottable_clear() {
@@ -692,9 +697,10 @@ function loottable_add_creature_items() {
 
 // @HACK: Nasty bugfix - we need a major refactor on how we deal with tables
 function loottable_on_focus_out() {
+    console.log('Focus out on table');
     if (loottable.rows[loottable.rows.length - 1].cells[LOOTTB_COLUMN.NAME].firstChild.value == "" &&
         loottable.rows[loottable.rows.length - 2].cells[LOOTTB_COLUMN.NAME].firstChild.value == "")
-        loottable_delete_row(loottable.rows[loottable.rows.length - 1]);
+        loottable_delete_row(loottable.rows[loottable.rows.length - 2]);
 }
 
 // ----------------------------------
