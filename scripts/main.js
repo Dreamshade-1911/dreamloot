@@ -557,7 +557,7 @@ function loottable_add_row() {
     itemname.setAttribute("oninput", "autocomplete_itemname(parentElement.parentElement)");
     itemname.setAttribute("onfocusin", "loottable_check_add_row(parentElement.parentElement)");
     itemname.setAttribute("onfocusout", "autocomplete_lastsize = 0;");
-    if (row_index > 0)
+    if (row_index >= 0)
         loottable_body.rows[row_index - 1].cells[LOOTTB_COLUMN.NAME].firstChild.removeAttribute("onfocusin");
     row.insertCell().appendChild(itemname);
 
@@ -575,7 +575,7 @@ function loottable_add_row() {
     row.insertCell().appendChild(itemprice);
 
     // Add a delete button if it's not the first row
-    if (row_index > 0) {
+    if (row_index >= 0) {
         let deletebutton = document.createElement("button");
         deletebutton.className = "red-button loottable-button";
         deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
