@@ -603,8 +603,6 @@ function loottable_delete_row(callerrow) {
         else return;
     }
     loottable_body.deleteRow(callerrow.sectionRowIndex);
-    if (loottable_body.rows[loottable_body.rows.length - 1].childElementCount === 4)
-        loottable_body.rows[loottable_body.rows.length - 1].lastElementChild.remove();
 }
 
 function loottable_clear() {
