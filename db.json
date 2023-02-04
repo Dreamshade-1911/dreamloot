@@ -50,7 +50,8 @@
     { "name": "Asha", "location": "Yehsha" },
     { "name": "Haffnal", "location": "Yehsha" },
     { "name": "Noranim", "location": "Yehsha" },
-    { "name": "Ziyad", "location": "Yehsha", "questlink": "http://wiki.mediviastats.info/Loyality_and_Devotion_Quest" }
+    { "name": "Ziyad", "location": "Yehsha", "questlink": "http://wiki.mediviastats.info/Loyality_and_Devotion_Quest" },
+    { "name": "Eliane", "location": "Eschen" }
 ],
 
 "runes": [
@@ -231,6 +232,7 @@
     { "name": "Morning Star", "price": 54, "weight": 2, "stackable": false, "sellto": ["Aadim", "Cord", "Glorin", "Horif"] },
     { "name": "Mystic Turban", "price": 1000, "weight": 8.5, "stackable": false, "sellto": ["Ziyad"] },
     { "name": "Nether Shield", "price": 6600, "weight": 40, "stackable": false, "sellto": ["Ziyad"] },
+    { "name": "Nether Spider Doll", "price": 8000, "weight": 9.4, "stackable": false, "sellto": ["Eliane"] },
     { "name": "Noble Armor", "price": 900, "weight": 120, "stackable": false, "sellto": ["Nah'Bob"] },
     { "name": "Obsidian Lance", "price": 500, "weight": 80, "stackable": false, "sellto": ["Nah'Bob"] },
     { "name": "Orb", "price": 750, "weight": 8, "stackable": false, "sellto": ["Haroun"] },
@@ -292,6 +294,7 @@
     { "name": "Soldier Helmet", "price": 16, "weight": 32, "stackable": false, "sellto": ["P.K."] },
     { "name": "Soul Dagger", "price": 200, "weight": 18.5, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Soul Reaper", "price": 7500, "weight": 60, "stackable": false, "sellto": ["Draculd"] },
+    { "name": "Spider Silk", "price": 40, "weight": 0.1, "stackable": true, "sellto": ["Eliane"] },
     { "name": "Spider Silk Armor", "price": 2000, "weight": 48, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Spike Sword", "price": 1000, "weight": 50, "stackable": false, "sellto": ["Nah'Bob"] },
     { "name": "Sphinx Claw", "price": 3000, "weight": 9, "stackable": true, "sellto": ["Arses"] },
@@ -405,7 +408,7 @@
     { "name": "Lich", "items": ["Black Pearl", "Blue Robe", "Mind Stone", "Platinum Amulet","Ring of Healing", "Strange Helmet", "White Pearl"] },
     { "name": "Lightbringer Hero", "items": ["Bascinet", "Executioner's Sword", "Heavy Halberd", "Hellforged Legs", "Lightbringer Helmet", "Steel Boots"] },
     { "name": "Lightbringer Knight", "items": ["Hellforged Shield", "Knight Armor", "Knight Legs", "Silver Mace", "Swinging Demolisher"] },
-    { "name": "Nether Spider", "items": ["Brass Legs", "Nether Shield", "Obsidian Lance", "Plate Armor", "Platinum Amulet", "Poisoned Bow", "Steel Helmet", "Time Ring"] },
+    { "name": "Nether Spider", "items": ["Brass Legs", "Nether Shield", "Nether Spider Doll", "Obsidian Lance", "Plate Armor", "Platinum Amulet", "Poisoned Bow", "Spider Silk", "Steel Helmet", "Time Ring"] },
     { "name": "Manticore", "items": ["Ancient Boots", "Ancient Legs", "Crown Armor", "Gold Ring", "Halberd", "Hellforged Shield", "Knight Axe", "Orb", "Poisoned Bow", "Scorpid Hood", "Serpent Sword", "Small Emerald", "The Stinger", "Vanquisher"] },
     { "name": "Minotaur", "items": ["Brass Helmet", "Chain Armor", "Chain Helmet", "Mace", "Plate Shield", "Sword"] },
     { "name": "Minotaur Archer", "items": ["Bolt", "Brass Armor", "Chain Armor", "Chain Helmet", "Chain Legs", "Crossbow", "Hunting Bolt", "Scale Armor", "Soldier Helmet"] },

@@ -575,13 +575,16 @@ function loottable_add_row() {
     row.insertCell().appendChild(itemprice);
 
     // Add a delete button if it's not the first row
-    if (row_index > 0) {
-        let deletebutton = document.createElement("button");
-        deletebutton.className = "red-button loottable-button";
-        deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
-        deletebutton.innerText = "X";
-        deletebutton.tabIndex = -1;
-        row.insertCell().appendChild(deletebutton);
+    if (row_index >= 0) {
+        let rowToInsertDelete = row.parentElement.lastChild.previousElementSibling;
+        if (rowToInsertDelete && rowToInsertDelete.childElementCount != 4) {
+            let deletebutton = document.createElement("button");
+            deletebutton.className = "red-button loottable-button";
+            deletebutton.setAttribute("onclick", "loottable_delete_row(parentElement.parentElement)");
+            deletebutton.innerText = "X";
+            deletebutton.tabIndex = -1;
+            rowToInsertDelete.insertCell().appendChild(deletebutton);
+        }
     }
     row.setAttribute("data-itemindex", -1);
     return row;
@@ -694,7 +697,7 @@ function loottable_add_creature_items() {
 function loottable_on_focus_out() {
     if (loottable.rows[loottable.rows.length - 1].cells[LOOTTB_COLUMN.NAME].firstChild.value == "" &&
         loottable.rows[loottable.rows.length - 2].cells[LOOTTB_COLUMN.NAME].firstChild.value == "")
-        loottable_delete_row(loottable.rows[loottable.rows.length - 1]);
+        loottable_delete_row(loottable.rows[loottable.rows.length - 2]);
 }
 
 // ----------------------------------
