@@ -139,6 +139,7 @@
     { "name": "Dark Helmet", "price": 250, "weight": 46, "stackable": false, "sellto": ["Alesar"] },
     { "name": "Dawnlight", "price": 0, "weight": 0.2, "stackable": false, "sellto": ["Players"] },
     { "name": "Demon Shield", "price": 30000, "weight": 26, "stackable": false, "sellto": ["Ziyad"] },
+    { "name": "Demon Helmet", "price": 45000, "weight": 29.5, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Demonbone Armor", "price": 40000, "weight": 35, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Demonbone Boots", "price": 14000, "weight": 15, "stackable": false, "sellto": ["Wulkan"] },
     { "name": "Demonbone Helmet", "price": 9000, "weight": 25, "stackable": false, "sellto": ["Wulkan"] },
