@@ -4028,6 +4028,16 @@
             ]
         },
         {
+            "name": "Blighted Dwarf",
+            "items": [
+                "Angry Soul",
+                "Knight Axe",
+                "Polished Amethyst",
+                "Small Amethyst",
+                "Steel Boots"
+            ]
+        },
+        {
             "name": "Blood Sphinx",
             "items": [
                 "Ancient Helmet",
@@ -4500,6 +4510,22 @@
                 "Dragon Shield",
                 "Fireweaver",
                 "Orb"
+            ]
+        },
+        {
+            "name": "Feralwood Druid",
+            "items": [
+                "Boots of Haste",
+                "Crystallized Crossbow",
+                "Crystallized Shield",
+                "Envenomed Crossbow",
+                "Frostwarden",
+                "Permafrost Crystal",
+                "Polished Emerald",
+                "Ring of the Sky",
+                "Serpent Scepter",
+                "Small Emerald",
+                "Small Sapphire"
             ]
         },
         {
